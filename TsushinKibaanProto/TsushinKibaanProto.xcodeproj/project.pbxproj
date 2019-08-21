@@ -16,6 +16,10 @@
 		2356F69A22FDB9CF002A2047 /* HTTPConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2356F69922FDB9CF002A2047 /* HTTPConnection.swift */; };
 		2356F69C22FDB9E2002A2047 /* ConnectionSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2356F69B22FDB9E2002A2047 /* ConnectionSpec.swift */; };
 		2356F69E22FDBAA3002A2047 /* ConnectionListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2356F69D22FDBAA3002A2047 /* ConnectionListener.swift */; };
+		403188A7230D0587000AAABA /* KeyValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403188A6230D0587000AAABA /* KeyValue.swift */; };
+		403188A9230D082C000AAABA /* URLEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403188A8230D082C000AAABA /* URLEncoder.swift */; };
+		403188AB230D0A71000AAABA /* URLQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403188AA230D0A71000AAABA /* URLQuery.swift */; };
+		403188AD230D0E93000AAABA /* HTTPConnectionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403188AC230D0E93000AAABA /* HTTPConnectionError.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +34,10 @@
 		2356F69922FDB9CF002A2047 /* HTTPConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPConnection.swift; sourceTree = "<group>"; };
 		2356F69B22FDB9E2002A2047 /* ConnectionSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionSpec.swift; sourceTree = "<group>"; };
 		2356F69D22FDBAA3002A2047 /* ConnectionListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionListener.swift; sourceTree = "<group>"; };
+		403188A6230D0587000AAABA /* KeyValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyValue.swift; sourceTree = "<group>"; };
+		403188A8230D082C000AAABA /* URLEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLEncoder.swift; sourceTree = "<group>"; };
+		403188AA230D0A71000AAABA /* URLQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLQuery.swift; sourceTree = "<group>"; };
+		403188AC230D0E93000AAABA /* HTTPConnectionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPConnectionError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +88,10 @@
 				2356F69922FDB9CF002A2047 /* HTTPConnection.swift */,
 				2356F69B22FDB9E2002A2047 /* ConnectionSpec.swift */,
 				2356F69D22FDBAA3002A2047 /* ConnectionListener.swift */,
+				403188A6230D0587000AAABA /* KeyValue.swift */,
+				403188A8230D082C000AAABA /* URLEncoder.swift */,
+				403188AA230D0A71000AAABA /* URLQuery.swift */,
+				403188AC230D0E93000AAABA /* HTTPConnectionError.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -161,6 +173,10 @@
 				2356F69E22FDBAA3002A2047 /* ConnectionListener.swift in Sources */,
 				2356F68522FDB980002A2047 /* AppDelegate.swift in Sources */,
 				2356F69A22FDB9CF002A2047 /* HTTPConnection.swift in Sources */,
+				403188AB230D0A71000AAABA /* URLQuery.swift in Sources */,
+				403188A9230D082C000AAABA /* URLEncoder.swift in Sources */,
+				403188AD230D0E93000AAABA /* HTTPConnectionError.swift in Sources */,
+				403188A7230D0587000AAABA /* KeyValue.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -13,9 +13,11 @@ class HTTPConnection {
     var connector: HTTPConnector
     var listeners: [ConnectionListener] = []
     let spec: ConnectionSpec<Any>
-    
-    init(_ spec: ConnectionSpec<Any>) {
+    var urlEncoder: URLEncoder
+
+    init(_ spec: ConnectionSpec<Any>, urlEncoder: URLEncoder = DefaultURLEncoder()) {
         self.spec = spec
+        self.urlEncoder = urlEncoder
     }
 
     func addListener(_ listener: ConnectionListener) {
@@ -23,18 +25,18 @@ class HTTPConnection {
     }
     
     func connect<Response>(success: ((Response) -> Void)? = nil,
-                 error: (() -> Void)? = nil,
+                 error: ((HTTPConnectionError) -> Void)? = nil,
                  end: (() -> Void)? = nil) {
         var urlStr = spec.url
         
-        prepareRequest()
-        
+        if let urlQuery = spec.urlQuery {
+            urlStr += "?" + urlQuery.stringValue(encoder: urlEncoder)
+        }
+
         // クエリを作成
         var httpBody: Data?
         if spec.httpMethod == "POST" || spec.httpMethod == "PUT" {
             httpBody = spec.makePostData()
-        } else if let query = spec.makeQueryString() {
-            urlStr += "?" + query
         }
         
         guard let url = URL(string: urlStr) else {
@@ -50,23 +52,88 @@ class HTTPConnection {
         
         // ヘッダー付与
         let headers = spec.headers
-        if let userAgent = HTTPConnection.defaultUserAgent, !headers.keys.map({ $0.lowercased() }).contains("user-agent") {
-            request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
-        }
         for (key, value) in headers {
             request.setValue(value, forHTTPHeaderField: key)
         }
-        
+
+        listeners.forEach { $0.onStart() }
+
         // 通信する
-//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        
-        connector.timeoutIntervalForRequest = timeoutIntervalForRequest
-        connector.timeoutIntervalForResource = timeoutIntervalForResource
-        connector.execute(request: request as URLRequest, completionHandler: {  [weak self] (data, resp, err) in
-            self?.complete(data: data, response: resp, error: err)
+        connector.execute(request: request as URLRequest, complete: {  [weak self] (data, resp, err) in
+            self?.complete(success: success, data: data, response: resp, error: err)
         })
-        
-//        ConnectionHolder.add(self)
-//        updateIndicator(referenceCount: 1)
+    }
+
+    /// 通信完了時の処理
+    private func complete<Response>(success: ((Response) -> Void)?,
+                          data: Data?,
+                          response: URLResponse?,
+                          error: Error?) {
+
+        defer {
+            DispatchQueue.main.async(execute: {
+                self.listeners.forEach { $0.onEnd() }
+            })
+        }
+
+        // TODO キャンセル済みの場合
+        if connector.isCancelled {
+            return
+        }
+
+        guard let response = response as? HTTPURLResponse else {
+            handleConnectionError(.network, error: error)
+            return
+        }
+
+        // 通信エラーをチェック
+        if error != nil {
+            handleConnectionError(.network, error: error, response: response)
+            return
+        }
+
+        guard let data = data else {
+            handleConnectionError(.network, error: error, response: response)
+            return
+        }
+
+        // ステータスコードをチェック
+        if !spec.isValidStatusCode(response.statusCode) {
+            statusCodeError(response: response, data: data)
+            return
+        }
+
+        handleResponseData(success: success, data: data, response: response)
+    }
+
+    open func handleResponseData<Response>(success: ((Response) -> Void)?, data: Data, response: HTTPURLResponse) {
+
+        // データをパース
+        let result: Response
+        do {
+            result = spec.parseResponse(data: data) as? Response
+        } catch {
+            DispatchQueue.main.async(execute: {
+                self.handleError(.parse, result: nil, response: response, data: data)
+            })
+            return
+        }
+
+        if isValidResponse(result) {
+            DispatchQueue.main.async(execute: {
+                self.handleValidResponse(result: result)
+            })
+        } else {
+            DispatchQueue.main.async(execute: {
+                self.handleError(.invalidResponse, result: result, response: response, data: data)
+            })
+        }
+    }
+
+    /// 通信エラーを処理する
+    open func handleConnectionError(_ type: HTTPConnectionError, error: Error? = nil, response: HTTPURLResponse? = nil, data: Data? = nil) {
+        // Override
+        let message = error?.localizedDescription ?? ""
+        print("[ConnectionError] Type= \(type.description), NativeMessage=\(message)")
     }
 }

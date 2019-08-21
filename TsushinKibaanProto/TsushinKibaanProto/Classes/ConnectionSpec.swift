@@ -13,6 +13,7 @@ class ConnectionSpec<Response> {
     var url: String { return "" }
     var httpMethod: String { return "GET" }
     var headers: [String: String] { return [:] }
+    var urlQuery: URLQuery? { return nil }
     
     func makePostData() -> Data? {
         return nil
@@ -22,7 +23,7 @@ class ConnectionSpec<Response> {
         return code == 200
     }
     
-    func parseResponse(data: Data) -> Response? {
+    func parseResponse(data: Data) -> Response? throws {
         return nil
     }
     
