@@ -8,26 +8,19 @@
 
 import Foundation
 
-class ConnectionSpec<Response> {
+protocol ConnectionSpec {
+    associatedtype Response
+
+    var url: String { get }
+    var httpMethod: String { get }
+    var headers: [String: String] { get }
+    var urlQuery: URLQuery? { get }
     
-    var url: String { return "" }
-    var httpMethod: String { return "GET" }
-    var headers: [String: String] { return [:] }
-    var urlQuery: URLQuery? { return nil }
+    func makePostData() -> Data?
     
-    func makePostData() -> Data? {
-        return nil
-    }
+    func isValidStatusCode(_ code: Int) -> Bool
     
-    func isValidStatusCode(_ code: Int) -> Bool {
-        return code == 200
-    }
+    func parseResponse(data: Data) throws -> Response
     
-    func parseResponse(data: Data) -> Response? throws {
-        return nil
-    }
-    
-    func isValidResponse(_ data: Response) -> Bool {
-        return true
-    }
+    func isValidResponse(_ data: Response) -> Bool
 }

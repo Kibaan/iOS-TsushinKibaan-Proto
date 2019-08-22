@@ -8,14 +8,14 @@
 
 import Foundation
 
-class HTTPConnection {
+class HTTPConnection<Response> {
     
     var connector: HTTPConnector
     var listeners: [ConnectionListener] = []
-    let spec: ConnectionSpec<Any>
+    let spec: ConnectionSpec<Response>
     var urlEncoder: URLEncoder
 
-    init(_ spec: ConnectionSpec<Any>, urlEncoder: URLEncoder = DefaultURLEncoder()) {
+    init(_ spec: ConnectionSpec<Response>, urlEncoder: URLEncoder = DefaultURLEncoder()) {
         self.spec = spec
         self.urlEncoder = urlEncoder
     }
@@ -24,7 +24,7 @@ class HTTPConnection {
         listeners.append(listener)
     }
     
-    func connect<Response>(success: ((Response) -> Void)? = nil,
+    func connect(success: ((Response) -> Void)? = nil,
                  error: ((HTTPConnectionError) -> Void)? = nil,
                  end: (() -> Void)? = nil) {
         var urlStr = spec.url
@@ -99,7 +99,7 @@ class HTTPConnection {
 
         // ステータスコードをチェック
         if !spec.isValidStatusCode(response.statusCode) {
-            statusCodeError(response: response, data: data)
+// TODO            statusCodeError(response: response, data: data)
             return
         }
 
@@ -111,22 +111,17 @@ class HTTPConnection {
         // データをパース
         let result: Response
         do {
-            result = spec.parseResponse(data: data) as? Response
+            let result = try spec.parseResponse(data: data)
+            success?(result)
         } catch {
-            DispatchQueue.main.async(execute: {
-                self.handleError(.parse, result: nil, response: response, data: data)
-            })
+            handleError(.parse, result: nil, response: response, data: data)
             return
         }
 
-        if isValidResponse(result) {
-            DispatchQueue.main.async(execute: {
-                self.handleValidResponse(result: result)
-            })
+        if spec.isValidResponse(result) {
+            handleValidResponse(result: result)
         } else {
-            DispatchQueue.main.async(execute: {
-                self.handleError(.invalidResponse, result: result, response: response, data: data)
-            })
+            handleError(.invalidResponse, result: result, response: response, data: data)
         }
     }
 
