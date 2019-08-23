@@ -12,7 +12,7 @@ protocol ConnectionSpec {
     associatedtype Response
 
     var url: String { get }
-    var httpMethod: String { get }
+    var httpMethod: HTTPMethod { get }
     var headers: [String: String] { get }
     var urlQuery: URLQuery? { get }
     
@@ -28,7 +28,7 @@ protocol ConnectionSpec {
 class ConnectionSpec2<Response> {
 
     var url: String { return "" }
-    var httpMethod: String { return "GET" }
+    var httpMethod: HTTPMethod { return .get }
     var headers: [String: String] { return [:] }
     var urlQuery: URLQuery? { return nil }
 

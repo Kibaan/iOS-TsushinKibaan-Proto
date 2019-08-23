@@ -21,6 +21,10 @@ class Connection<Response> {
         self.connector = connector
     }
 
+    func connect2<T: ConnectionSpec>(spec: T, success: (T.Response) -> Void) {
+
+    }
+
     func addListener(_ listener: ConnectionListener) {
         listeners.append(listener)
     }
@@ -129,5 +133,15 @@ class Connection<Response> {
         // Override
         let message = error?.localizedDescription ?? ""
         print("[ConnectionError] Type= \(type.description), NativeMessage=\(message)")
+    }
+}
+
+class Connection2<Response> {
+
+    init<T: ConnectionSpec>(spec: T) where T.Response == Response {
+    }
+
+    func test(callback: (Response) -> Void) {
+        
     }
 }

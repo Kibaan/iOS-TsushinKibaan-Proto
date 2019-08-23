@@ -12,10 +12,60 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
 
+        let con = Connection2(spec: HogeSpec())
+
+        con.test(callback: { response in
+            print(response.mmm)
+        })
+    }
+}
+
+struct HogeResponse {
+    let mmm: String
+}
+
+class HogeSpec: ConnectionSpec {
+    typealias Response = HogeResponse
+
+    var url: String {
+        return ""
+    }
+
+    var httpMethod: String{
+        return ""
+    }
+
+    var headers: [String : String]{
+        return [:]
+    }
+
+    var urlQuery: URLQuery? {
+        return nil
     }
 
 
+    init() {}
+
+    func makePostData() -> Data? {
+        return nil
+    }
+
+    func isValidStatusCode(_ code: Int) -> Bool {
+        return true
+    }
+
+    func parseResponse(data: Data) throws -> HogeResponse {
+        return HogeResponse(mmm: "test")
+    }
+
+    func isValidResponse(_ data: HogeResponse) -> Bool {
+        return true
+    }
+
+}
+
+class HogeSpec2: ConnectionSpec2<String> {
+    
 }
 

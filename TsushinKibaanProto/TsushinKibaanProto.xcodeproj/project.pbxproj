@@ -20,6 +20,7 @@
 		403188A9230D082C000AAABA /* URLEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403188A8230D082C000AAABA /* URLEncoder.swift */; };
 		403188AB230D0A71000AAABA /* URLQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403188AA230D0A71000AAABA /* URLQuery.swift */; };
 		403188AD230D0E93000AAABA /* ConnectionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403188AC230D0E93000AAABA /* ConnectionError.swift */; };
+		403188B1230FF3AD000AAABA /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403188B0230FF3AD000AAABA /* HTTPMethod.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +39,7 @@
 		403188A8230D082C000AAABA /* URLEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLEncoder.swift; sourceTree = "<group>"; };
 		403188AA230D0A71000AAABA /* URLQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLQuery.swift; sourceTree = "<group>"; };
 		403188AC230D0E93000AAABA /* ConnectionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionError.swift; sourceTree = "<group>"; };
+		403188B0230FF3AD000AAABA /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +86,7 @@
 		2356F69622FDB995002A2047 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				403188B0230FF3AD000AAABA /* HTTPMethod.swift */,
 				2356F69722FDB9AC002A2047 /* HTTPConnector.swift */,
 				2356F69922FDB9CF002A2047 /* Connection.swift */,
 				2356F69B22FDB9E2002A2047 /* ConnectionSpec.swift */,
@@ -170,6 +173,7 @@
 				2356F69C22FDB9E2002A2047 /* ConnectionSpec.swift in Sources */,
 				2356F69822FDB9AC002A2047 /* HTTPConnector.swift in Sources */,
 				2356F68722FDB980002A2047 /* ViewController.swift in Sources */,
+				403188B1230FF3AD000AAABA /* HTTPMethod.swift in Sources */,
 				2356F69E22FDBAA3002A2047 /* ConnectionListener.swift in Sources */,
 				2356F68522FDB980002A2047 /* AppDelegate.swift in Sources */,
 				2356F69A22FDB9CF002A2047 /* Connection.swift in Sources */,
