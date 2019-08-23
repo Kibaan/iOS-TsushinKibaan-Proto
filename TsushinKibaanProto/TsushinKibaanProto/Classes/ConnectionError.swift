@@ -1,5 +1,5 @@
 //
-//  HTTPConnectionError.swift
+//  ConnectionError.swift
 //  TsushinKibaanProto
 //
 //  Created by Keita Yamamoto on 2019/08/21.
@@ -9,7 +9,7 @@
 import Foundation
 
 /// HTTP通信のエラー種別
-public enum HTTPConnectionError {
+public enum ConnectionError {
     // URL不正
     case invalidURL
     // オフライン、タイムアウトなどの通信エラー

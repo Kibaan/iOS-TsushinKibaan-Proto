@@ -13,13 +13,13 @@
 		2356F68C22FDB981002A2047 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2356F68B22FDB981002A2047 /* Assets.xcassets */; };
 		2356F68F22FDB981002A2047 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2356F68D22FDB981002A2047 /* LaunchScreen.storyboard */; };
 		2356F69822FDB9AC002A2047 /* HTTPConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2356F69722FDB9AC002A2047 /* HTTPConnector.swift */; };
-		2356F69A22FDB9CF002A2047 /* HTTPConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2356F69922FDB9CF002A2047 /* HTTPConnection.swift */; };
+		2356F69A22FDB9CF002A2047 /* Connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2356F69922FDB9CF002A2047 /* Connection.swift */; };
 		2356F69C22FDB9E2002A2047 /* ConnectionSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2356F69B22FDB9E2002A2047 /* ConnectionSpec.swift */; };
 		2356F69E22FDBAA3002A2047 /* ConnectionListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2356F69D22FDBAA3002A2047 /* ConnectionListener.swift */; };
 		403188A7230D0587000AAABA /* KeyValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403188A6230D0587000AAABA /* KeyValue.swift */; };
 		403188A9230D082C000AAABA /* URLEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403188A8230D082C000AAABA /* URLEncoder.swift */; };
 		403188AB230D0A71000AAABA /* URLQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403188AA230D0A71000AAABA /* URLQuery.swift */; };
-		403188AD230D0E93000AAABA /* HTTPConnectionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403188AC230D0E93000AAABA /* HTTPConnectionError.swift */; };
+		403188AD230D0E93000AAABA /* ConnectionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403188AC230D0E93000AAABA /* ConnectionError.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,13 +31,13 @@
 		2356F68E22FDB981002A2047 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2356F69022FDB981002A2047 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2356F69722FDB9AC002A2047 /* HTTPConnector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPConnector.swift; sourceTree = "<group>"; };
-		2356F69922FDB9CF002A2047 /* HTTPConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPConnection.swift; sourceTree = "<group>"; };
+		2356F69922FDB9CF002A2047 /* Connection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Connection.swift; sourceTree = "<group>"; };
 		2356F69B22FDB9E2002A2047 /* ConnectionSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionSpec.swift; sourceTree = "<group>"; };
 		2356F69D22FDBAA3002A2047 /* ConnectionListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionListener.swift; sourceTree = "<group>"; };
 		403188A6230D0587000AAABA /* KeyValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyValue.swift; sourceTree = "<group>"; };
 		403188A8230D082C000AAABA /* URLEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLEncoder.swift; sourceTree = "<group>"; };
 		403188AA230D0A71000AAABA /* URLQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLQuery.swift; sourceTree = "<group>"; };
-		403188AC230D0E93000AAABA /* HTTPConnectionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPConnectionError.swift; sourceTree = "<group>"; };
+		403188AC230D0E93000AAABA /* ConnectionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,13 +85,13 @@
 			isa = PBXGroup;
 			children = (
 				2356F69722FDB9AC002A2047 /* HTTPConnector.swift */,
-				2356F69922FDB9CF002A2047 /* HTTPConnection.swift */,
+				2356F69922FDB9CF002A2047 /* Connection.swift */,
 				2356F69B22FDB9E2002A2047 /* ConnectionSpec.swift */,
 				2356F69D22FDBAA3002A2047 /* ConnectionListener.swift */,
 				403188A6230D0587000AAABA /* KeyValue.swift */,
 				403188A8230D082C000AAABA /* URLEncoder.swift */,
 				403188AA230D0A71000AAABA /* URLQuery.swift */,
-				403188AC230D0E93000AAABA /* HTTPConnectionError.swift */,
+				403188AC230D0E93000AAABA /* ConnectionError.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -172,10 +172,10 @@
 				2356F68722FDB980002A2047 /* ViewController.swift in Sources */,
 				2356F69E22FDBAA3002A2047 /* ConnectionListener.swift in Sources */,
 				2356F68522FDB980002A2047 /* AppDelegate.swift in Sources */,
-				2356F69A22FDB9CF002A2047 /* HTTPConnection.swift in Sources */,
+				2356F69A22FDB9CF002A2047 /* Connection.swift in Sources */,
 				403188AB230D0A71000AAABA /* URLQuery.swift in Sources */,
 				403188A9230D082C000AAABA /* URLEncoder.swift in Sources */,
-				403188AD230D0E93000AAABA /* HTTPConnectionError.swift in Sources */,
+				403188AD230D0E93000AAABA /* ConnectionError.swift in Sources */,
 				403188A7230D0587000AAABA /* KeyValue.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

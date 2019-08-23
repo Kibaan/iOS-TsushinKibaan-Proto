@@ -8,16 +8,17 @@
 
 import Foundation
 
-class HTTPConnection<Response> {
+class Connection<Response> {
     
     var connector: HTTPConnector
     var listeners: [ConnectionListener] = []
-    let spec: ConnectionSpec<Response>
+    let spec: ConnectionSpec2<Response>
     var urlEncoder: URLEncoder
 
-    init(_ spec: ConnectionSpec<Response>, urlEncoder: URLEncoder = DefaultURLEncoder()) {
+    init(_ spec: ConnectionSpec2<Response>, urlEncoder: URLEncoder = DefaultURLEncoder(), connector: HTTPConnector) {
         self.spec = spec
         self.urlEncoder = urlEncoder
+        self.connector = connector
     }
 
     func addListener(_ listener: ConnectionListener) {
@@ -25,7 +26,7 @@ class HTTPConnection<Response> {
     }
     
     func connect(success: ((Response) -> Void)? = nil,
-                 error: ((HTTPConnectionError) -> Void)? = nil,
+                 error: ((ConnectionError) -> Void)? = nil,
                  end: (() -> Void)? = nil) {
         var urlStr = spec.url
         
@@ -65,7 +66,7 @@ class HTTPConnection<Response> {
     }
 
     /// 通信完了時の処理
-    private func complete<Response>(success: ((Response) -> Void)?,
+    private func complete(success: ((Response) -> Void)?,
                           data: Data?,
                           response: URLResponse?,
                           error: Error?) {
@@ -106,27 +107,25 @@ class HTTPConnection<Response> {
         handleResponseData(success: success, data: data, response: response)
     }
 
-    open func handleResponseData<Response>(success: ((Response) -> Void)?, data: Data, response: HTTPURLResponse) {
+    open func handleResponseData(success: ((Response) -> Void)?, data: Data, response: HTTPURLResponse) {
 
-        // データをパース
-        let result: Response
         do {
-            let result = try spec.parseResponse(data: data)
-            success?(result)
-        } catch {
-            handleError(.parse, result: nil, response: response, data: data)
-            return
-        }
+            let response = try spec.parseResponse(data: data)
 
-        if spec.isValidResponse(result) {
-            handleValidResponse(result: result)
-        } else {
-            handleError(.invalidResponse, result: result, response: response, data: data)
+            if spec.isValidResponse(response) {
+//            handleValidResponse(result: result)
+                success?(response)
+            } else {
+//            handleError(.invalidResponse, result: result, response: response, data: data)
+            }
+        } catch {
+//            handleError(.parse, result: nil, response: response, data: data)
+//            return
         }
     }
 
     /// 通信エラーを処理する
-    open func handleConnectionError(_ type: HTTPConnectionError, error: Error? = nil, response: HTTPURLResponse? = nil, data: Data? = nil) {
+    open func handleConnectionError(_ type: ConnectionError, error: Error? = nil, response: HTTPURLResponse? = nil, data: Data? = nil) {
         // Override
         let message = error?.localizedDescription ?? ""
         print("[ConnectionError] Type= \(type.description), NativeMessage=\(message)")
