@@ -60,7 +60,7 @@ class Connection<Spec: ConnectionSpec> {
         listeners.forEach { $0.onStart() }
 
         // 通信する
-        connector.execute(request: request as URLRequest, complete: {  [weak self] (data, resp, err) in
+        connector.execute(request: request as URLRequest, complete: { [weak self] (data, resp, err) in
             self?.complete(success: success, data: data, response: resp, error: err)
         })
     }
