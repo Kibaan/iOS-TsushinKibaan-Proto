@@ -8,28 +8,24 @@
 
 import Foundation
 
-class Connection<Response> {
+class Connection<Spec: ConnectionSpec> {
     
     var connector: HTTPConnector
     var listeners: [ConnectionListener] = []
-    let spec: ConnectionSpec2<Response>
+    let spec: Spec
     var urlEncoder: URLEncoder
 
-    init(_ spec: ConnectionSpec2<Response>, urlEncoder: URLEncoder = DefaultURLEncoder(), connector: HTTPConnector) {
+    init(spec: Spec, urlEncoder: URLEncoder = DefaultURLEncoder(), connector: HTTPConnector) {
         self.spec = spec
         self.urlEncoder = urlEncoder
         self.connector = connector
-    }
-
-    func connect2<T: ConnectionSpec>(spec: T, success: (T.Response) -> Void) {
-
     }
 
     func addListener(_ listener: ConnectionListener) {
         listeners.append(listener)
     }
     
-    func connect(success: ((Response) -> Void)? = nil,
+    func connect(success: ((Spec.Response) -> Void)? = nil,
                  error: ((ConnectionError) -> Void)? = nil,
                  end: (() -> Void)? = nil) {
         var urlStr = spec.url
@@ -40,7 +36,7 @@ class Connection<Response> {
 
         // クエリを作成
         var httpBody: Data?
-        if spec.httpMethod == "POST" || spec.httpMethod == "PUT" {
+        if spec.httpMethod == .post || spec.httpMethod == .put {
             httpBody = spec.makePostData()
         }
         
@@ -52,7 +48,7 @@ class Connection<Response> {
         // リクエスト作成
         let request = NSMutableURLRequest(url: url)
         request.cachePolicy = .reloadIgnoringCacheData
-        request.httpMethod = spec.httpMethod
+        request.httpMethod = spec.httpMethod.stringValue
         request.httpBody = httpBody
         
         // ヘッダー付与
@@ -70,7 +66,7 @@ class Connection<Response> {
     }
 
     /// 通信完了時の処理
-    private func complete(success: ((Response) -> Void)?,
+    private func complete(success: ((Spec.Response) -> Void)?,
                           data: Data?,
                           response: URLResponse?,
                           error: Error?) {
@@ -111,10 +107,10 @@ class Connection<Response> {
         handleResponseData(success: success, data: data, response: response)
     }
 
-    open func handleResponseData(success: ((Response) -> Void)?, data: Data, response: HTTPURLResponse) {
+    open func handleResponseData(success: ((Spec.Response) -> Void)?, data: Data, response: HTTPURLResponse) {
 
         do {
-            let response = try spec.parseResponse(data: data)
+            let response = try spec.parseResponse(data: data, statusCode: response.statusCode)
 
             if spec.isValidResponse(response) {
 //            handleValidResponse(result: result)

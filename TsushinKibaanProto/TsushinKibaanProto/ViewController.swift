@@ -26,14 +26,15 @@ struct HogeResponse {
 }
 
 class HogeSpec: ConnectionSpec {
+    
     typealias Response = HogeResponse
 
     var url: String {
         return ""
     }
 
-    var httpMethod: String{
-        return ""
+    var httpMethod: HTTPMethod {
+        return .get
     }
 
     var headers: [String : String]{
@@ -55,7 +56,7 @@ class HogeSpec: ConnectionSpec {
         return true
     }
 
-    func parseResponse(data: Data) throws -> HogeResponse {
+    func parseResponse(data: Data, statusCode: Int) throws -> HogeResponse {
         return HogeResponse(mmm: "test")
     }
 
@@ -64,8 +65,3 @@ class HogeSpec: ConnectionSpec {
     }
 
 }
-
-class HogeSpec2: ConnectionSpec2<String> {
-    
-}
-
