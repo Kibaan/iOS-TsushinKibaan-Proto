@@ -10,9 +10,10 @@ import Foundation
 
 class Connection<Spec: ConnectionSpec> {
     
-    var connector: HTTPConnector
-    var listeners: [ConnectionListener] = []
     let spec: Spec
+    var listeners: [ConnectionListener] = []
+    var events: [ConnectionEvent] = []
+    var connector: HTTPConnector
     var urlEncoder: URLEncoder
 
     init(spec: Spec, urlEncoder: URLEncoder = DefaultURLEncoder(), connector: HTTPConnector) {
@@ -61,7 +62,11 @@ class Connection<Spec: ConnectionSpec> {
 
         // 通信する
         connector.execute(request: request as URLRequest, complete: { [weak self] (data, resp, err) in
+            // TODO weakにするとConnectionをローカル変数にしたとき開放されてしまうかもしれない
             self?.complete(success: success, data: data, response: resp, error: err)
+            DispatchQueue.main.async(execute: {
+                self?.listeners.forEach { $0.onEnd() }
+            })
         })
     }
 
@@ -70,13 +75,6 @@ class Connection<Spec: ConnectionSpec> {
                           data: Data?,
                           response: URLResponse?,
                           error: Error?) {
-
-        defer {
-            DispatchQueue.main.async(execute: {
-                self.listeners.forEach { $0.onEnd() }
-            })
-        }
-
         // TODO キャンセル済みの場合
         if connector.isCancelled {
             return

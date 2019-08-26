@@ -1,5 +1,5 @@
 //
-//  ConnectionEventListener.swift
+//  ConnectionEvent.swift
 //  TsushinKibaanProto
 //
 //  Created by 山本敬太 on 2019/08/25.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol ConnectionEventListener {
+protocol ConnectionEvent {
     func onReceived()
     func afterParse()
     func beforSuccessCallback()
