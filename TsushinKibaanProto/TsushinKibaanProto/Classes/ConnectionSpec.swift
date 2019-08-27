@@ -17,10 +17,8 @@ protocol ConnectionSpec {
     var urlQuery: URLQuery? { get }
     
     func makePostData() -> Data?
-    
-    func isValidStatusCode(_ code: Int) -> Bool
-    
     func parseResponse(data: Data, statusCode: Int) throws -> Response
     
+    func isValidStatusCode(_ code: Int) -> Bool
     func isValidResponse(_ data: Response) -> Bool
 }

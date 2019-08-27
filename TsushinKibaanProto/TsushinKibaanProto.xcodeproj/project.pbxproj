@@ -23,6 +23,9 @@
 		403188AD230D0E93000AAABA /* ConnectionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403188AC230D0E93000AAABA /* ConnectionError.swift */; };
 		403188B1230FF3AD000AAABA /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403188B0230FF3AD000AAABA /* HTTPMethod.swift */; };
 		403188B32313A643000AAABA /* EventChain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403188B22313A643000AAABA /* EventChain.swift */; };
+		403188B62314B84E000AAABA /* MTSSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403188B52314B84E000AAABA /* MTSSpec.swift */; };
+		403188B82314B942000AAABA /* MTSResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403188B72314B942000AAABA /* MTSResponse.swift */; };
+		403188BA2314BA0C000AAABA /* HogeSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403188B92314BA0C000AAABA /* HogeSpec.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +47,9 @@
 		403188AC230D0E93000AAABA /* ConnectionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionError.swift; sourceTree = "<group>"; };
 		403188B0230FF3AD000AAABA /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
 		403188B22313A643000AAABA /* EventChain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventChain.swift; sourceTree = "<group>"; };
+		403188B52314B84E000AAABA /* MTSSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTSSpec.swift; sourceTree = "<group>"; };
+		403188B72314B942000AAABA /* MTSResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTSResponse.swift; sourceTree = "<group>"; };
+		403188B92314BA0C000AAABA /* HogeSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HogeSpec.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +82,7 @@
 		2356F68322FDB980002A2047 /* TsushinKibaanProto */ = {
 			isa = PBXGroup;
 			children = (
+				403188B42314B811000AAABA /* MTSSample */,
 				2356F69622FDB995002A2047 /* Classes */,
 				2356F68422FDB980002A2047 /* AppDelegate.swift */,
 				2356F68622FDB980002A2047 /* ViewController.swift */,
@@ -103,6 +110,16 @@
 				403188B22313A643000AAABA /* EventChain.swift */,
 			);
 			path = Classes;
+			sourceTree = "<group>";
+		};
+		403188B42314B811000AAABA /* MTSSample */ = {
+			isa = PBXGroup;
+			children = (
+				403188B52314B84E000AAABA /* MTSSpec.swift */,
+				403188B72314B942000AAABA /* MTSResponse.swift */,
+				403188B92314BA0C000AAABA /* HogeSpec.swift */,
+			);
+			path = MTSSample;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -177,10 +194,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				2356F69C22FDB9E2002A2047 /* ConnectionSpec.swift in Sources */,
+				403188B62314B84E000AAABA /* MTSSpec.swift in Sources */,
 				2356F69822FDB9AC002A2047 /* HTTPConnector.swift in Sources */,
 				403188B32313A643000AAABA /* EventChain.swift in Sources */,
 				2356F68722FDB980002A2047 /* ViewController.swift in Sources */,
+				403188B82314B942000AAABA /* MTSResponse.swift in Sources */,
 				403188B1230FF3AD000AAABA /* HTTPMethod.swift in Sources */,
+				403188BA2314BA0C000AAABA /* HogeSpec.swift in Sources */,
 				2356F69E22FDBAA3002A2047 /* ConnectionListener.swift in Sources */,
 				2356F68522FDB980002A2047 /* AppDelegate.swift in Sources */,
 				2356F69A22FDB9CF002A2047 /* Connection.swift in Sources */,

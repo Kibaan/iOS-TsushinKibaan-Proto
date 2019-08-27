@@ -9,8 +9,16 @@
 import Foundation
 
 protocol ConnectionEvent {
+    var useMainThread: Bool { get }
+    
     func onReceived()
+
+    func beforeParse(chain: EventChain)
     func afterParse()
-    func beforSuccessCallback()
+
+    func beforSuccessCallback(chain: EventChain)
     func afterSuccessCallback()
+
+    func beforErrorCallback(chain: EventChain)
+    func afterErrorCallback()
 }
