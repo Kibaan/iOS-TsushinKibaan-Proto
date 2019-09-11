@@ -8,13 +8,14 @@
 
 import Foundation
 
-class Connection<Spec: ConnectionSpec> {
+class Connection<Spec: ConnectionSpec>: Cancellable {
     
     let spec: Spec
     var listeners: [ConnectionListener] = []
     var events: [ConnectionEvent] = []
     var connector: HTTPConnector
     var urlEncoder: URLEncoder
+    var holder = ConnectionHolder.shared
 
     init(spec: Spec, urlEncoder: URLEncoder = DefaultURLEncoder(), connector: HTTPConnector) {
         self.spec = spec
@@ -128,14 +129,12 @@ class Connection<Spec: ConnectionSpec> {
         let message = error?.localizedDescription ?? ""
         print("[ConnectionError] Type= \(type.description), NativeMessage=\(message)")
     }
+    
+    open func cancel() {
+        // TODO キャンセルする
+    }
 }
 
-class Connection2<Response> {
-
-    init<T: ConnectionSpec>(spec: T) where T.Response == Response {
-    }
-
-    func test(callback: (Response) -> Void) {
-        
-    }
+protocol Cancellable {
+    func cancel()
 }
