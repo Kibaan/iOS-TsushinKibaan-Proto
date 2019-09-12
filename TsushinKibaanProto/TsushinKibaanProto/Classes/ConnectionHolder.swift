@@ -15,4 +15,8 @@ class ConnectionHolder {
     func add(connection: Cancellable) {
         connections.append(connection)
     }
+
+    func remove(connection: Cancellable?) {
+        connections.removeAll{ $0 === connection }
+    }
 }

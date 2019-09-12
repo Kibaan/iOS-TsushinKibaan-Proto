@@ -9,16 +9,16 @@
 import Foundation
 
 /// HTTP通信のエラー種別
-public enum ConnectionError {
-    // URL不正
+public enum ConnectionError: Error {
+    /// URL不正
     case invalidURL
-    // オフライン、タイムアウトなどの通信エラー
+    /// オフライン、タイムアウトなどの通信エラー
     case network
-    // HTTPステータスコードが既定ではないエラー
+    /// HTTPステータスコードが既定ではないエラー
     case statusCode
-    // レスポンスのパースに失敗
+    /// レスポンスのパースに失敗
     case parse
-    // レスポンスは取得できたが内容がエラー
+    /// レスポンスデータの内容が不正
     case invalidResponse
 
     public var description: String {
@@ -32,7 +32,7 @@ public enum ConnectionError {
         case .parse:
             return "レスポンスデータのパースに失敗しました。"
         case .invalidResponse:
-            return "レスポンスデータのバリデーションエラーです。"
+            return "レスポンスデータの内容が不正です。"
         }
     }
 }

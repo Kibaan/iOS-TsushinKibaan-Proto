@@ -15,7 +15,8 @@ class Connection<Spec: ConnectionSpec>: Cancellable {
     var events: [ConnectionEvent] = []
     var connector: HTTPConnector
     var urlEncoder: URLEncoder
-    var holder = ConnectionHolder.shared
+    weak var holder = ConnectionHolder.shared
+    var isCancelled = false
 
     init(spec: Spec, urlEncoder: URLEncoder = DefaultURLEncoder(), connector: HTTPConnector) {
         self.spec = spec
@@ -43,31 +44,28 @@ class Connection<Spec: ConnectionSpec>: Cancellable {
         }
         
         guard let url = URL(string: urlStr) else {
-            handleConnectionError(.invalidURL)
+            handleError(.invalidURL)
             return
         }
         
         // リクエスト作成
-        let request = NSMutableURLRequest(url: url)
-        request.cachePolicy = .reloadIgnoringCacheData
-        request.httpMethod = spec.httpMethod.stringValue
-        request.httpBody = httpBody
-        
-        // ヘッダー付与
-        let headers = spec.headers
-        for (key, value) in headers {
-            request.setValue(value, forHTTPHeaderField: key)
-        }
+        let request = Request(url: url, method: spec.httpMethod)
+        request.body = httpBody
+        request.headers = spec.headers
 
         listeners.forEach { $0.onStart() }
 
+        // このインスタンスが通信完了まで開放されないよう保持する必要がある
+        holder?.add(connection: self)
+
         // 通信する
-        connector.execute(request: request as URLRequest, complete: { [weak self] (data, resp, err) in
-            // TODO weakにするとConnectionをローカル変数にしたとき開放されてしまうかもしれない
+        connector.execute(request: request, complete: { [weak self] (data, resp, err) in
+            // TODO メインスレッドでやらなくていい？
             self?.complete(success: success, data: data, response: resp, error: err)
             DispatchQueue.main.async(execute: {
                 self?.listeners.forEach { $0.onEnd() }
             })
+            self?.holder?.remove(connection: self)
         })
     }
 
@@ -76,24 +74,23 @@ class Connection<Spec: ConnectionSpec>: Cancellable {
                           data: Data?,
                           response: URLResponse?,
                           error: Error?) {
-        // TODO キャンセル済みの場合
-        if connector.isCancelled {
+        if isCancelled {
             return
         }
 
         guard let response = response as? HTTPURLResponse else {
-            handleConnectionError(.network, error: error)
+            handleError(.network, error: error)
             return
         }
 
         // 通信エラーをチェック
         if error != nil {
-            handleConnectionError(.network, error: error, response: response)
+            handleError(.network, error: error, response: response)
             return
         }
 
         guard let data = data else {
-            handleConnectionError(.network, error: error, response: response)
+            handleError(.network, error: error, response: response)
             return
         }
 
@@ -123,18 +120,19 @@ class Connection<Spec: ConnectionSpec>: Cancellable {
         }
     }
 
-    /// 通信エラーを処理する
-    open func handleConnectionError(_ type: ConnectionError, error: Error? = nil, response: HTTPURLResponse? = nil, data: Data? = nil) {
+    /// エラーを処理する
+    open func handleError(_ type: ConnectionError, error: Error? = nil, response: HTTPURLResponse? = nil, data: Data? = nil) {
         // Override
         let message = error?.localizedDescription ?? ""
         print("[ConnectionError] Type= \(type.description), NativeMessage=\(message)")
     }
     
     open func cancel() {
+        isCancelled = true
         // TODO キャンセルする
     }
 }
 
-protocol Cancellable {
+public protocol Cancellable: class {
     func cancel()
 }

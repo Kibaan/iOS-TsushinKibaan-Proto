@@ -8,10 +8,15 @@
 
 import Foundation
 
-enum HTTPMethod: String {
+public enum HTTPMethod: String {
     case get
     case post
     case put
+    case delete
+    case head
+    case options
+    case trace
+    case connect
     
     var stringValue: String {
         return rawValue.uppercased()

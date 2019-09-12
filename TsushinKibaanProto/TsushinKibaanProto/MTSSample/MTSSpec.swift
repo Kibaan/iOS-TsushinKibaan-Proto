@@ -27,8 +27,7 @@ class MTSSpec<T: MTSResponse>: ConnectionSpec {
         return nil
     }
 
-    init() {
-    }
+    init() {}
 
     func makePostData() -> Data? {
         return nil
