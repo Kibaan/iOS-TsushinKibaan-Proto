@@ -8,40 +8,56 @@
 
 import Foundation
 
+/// HTTP通信の実行処理
 protocol HTTPConnector {
     var isCancelled: Bool { get }
     func execute(request: Request, complete: @escaping (Data?, URLResponse?, Error?) -> Void)
     func cancel()
 }
 
-//class DefaultHTTPConnector: HTTPConnector {
-//
-//    open func execute(request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) {
-//        isCancelled = false
-//        let config = URLSessionConfiguration.default
-//        config.urlCache = nil
-//        config.timeoutIntervalForRequest = timeoutIntervalForRequest
-//        config.timeoutIntervalForResource = timeoutIntervalForResource
-// request.cachePolicy = .reloadIgnoringCacheData
-// ヘッダー付与
-//let headers = spec.headers
-//for (key, value) in headers {
-//    request.setValue(value, forHTTPHeaderField: key)
-//}
-//        let session = URLSession(configuration: config)
-//        urlSessionTask = session.dataTask(with: request, completionHandler: { [weak self] (data, resp, err) in
-//            completionHandler(data, resp, err)
-//            self?.urlSessionTask = nil
-//            // 一部のアプリでは以下の処理を入れないとメモリリークが発生する。
-//            // 発生しないアプリもあり再現条件は不明だが明示的に破棄しておく
-//            session.invalidateAndCancel()
-//        })
-//        urlSessionTask?.resume()
-//    }
-//
-//    open func cancel() {
-//        urlSessionTask?.cancel()
-//        urlSessionTask = nil
-//        isCancelled = true
-//    }
-//}
+public class DefaultHTTPConnector: HTTPConnector {
+
+    var isCancelled: Bool = false
+
+    var urlSessionTask: URLSessionTask?
+
+    func execute(request: Request, complete: @escaping (Data?, URLResponse?, Error?) -> Void) {
+        isCancelled = false
+
+        let config = URLSessionConfiguration.default
+        config.urlCache = nil // この指定がないとHTTPSでも平文でレスポンスが端末にキャッシュされてしまう
+        config.timeoutIntervalForRequest = request.timeoutIntervalShort
+        config.timeoutIntervalForResource = request.timeoutInterval
+
+        let urlRequest = toURLRequest(request: request)
+
+        let session = URLSession(configuration: config)
+        urlSessionTask = session.dataTask(with: urlRequest, completionHandler: { [weak self] (data, resp, err) in
+            complete(data, resp, err)
+            self?.urlSessionTask = nil
+            // 一部のアプリでは以下の処理を入れないとメモリリークが発生する。
+            // 発生しないアプリもあり再現条件は不明だが明示的に破棄しておく
+            session.invalidateAndCancel()
+        })
+        urlSessionTask?.resume()
+    }
+
+    func cancel() {
+        urlSessionTask?.cancel()
+        urlSessionTask = nil
+        isCancelled = true
+    }
+
+    private func toURLRequest(request: Request) -> URLRequest {
+        let urlRequest = NSMutableURLRequest(url: request.url)
+        urlRequest.cachePolicy = .reloadIgnoringCacheData
+        urlRequest.httpMethod = request.method.stringValue
+        urlRequest.httpBody = request.body
+
+        for (key, value) in request.headers {
+            urlRequest.setValue(value, forHTTPHeaderField: key)
+        }
+
+        return urlRequest as URLRequest
+    }
+}
