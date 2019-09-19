@@ -8,11 +8,14 @@
 
 import Foundation
 
-protocol ConnectionEvent {
+public protocol ConnectionEvent {
     var useMainThread: Bool { get }
-    
-    func onReceived()
 
+    // spec: Spec
+
+    func onReceived<T: ConnectionSpec>(connection: Connection<T>)
+
+    /// パースの前
     func beforeParse(chain: EventChain)
     func afterParse()
 

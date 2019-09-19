@@ -9,31 +9,27 @@
 import Foundation
 
 /// HTTP通信の実行処理
-protocol HTTPConnector {
-    var isCancelled: Bool { get }
-    func execute(request: Request, complete: @escaping (Data?, URLResponse?, Error?) -> Void)
+public protocol HTTPConnector {
+    func execute(request: Request, complete: @escaping (Response?, Error?) -> Void)
     func cancel()
 }
 
 public class DefaultHTTPConnector: HTTPConnector {
 
-    var isCancelled: Bool = false
-
     var urlSessionTask: URLSessionTask?
 
-    func execute(request: Request, complete: @escaping (Data?, URLResponse?, Error?) -> Void) {
-        isCancelled = false
-
+    public func execute(request: Request, complete: @escaping (Response?, Error?) -> Void) {
         let config = URLSessionConfiguration.default
         config.urlCache = nil // この指定がないとHTTPSでも平文でレスポンスが端末にキャッシュされてしまう
         config.timeoutIntervalForRequest = request.timeoutIntervalShort
         config.timeoutIntervalForResource = request.timeoutInterval
 
-        let urlRequest = toURLRequest(request: request)
+        let urlRequest = makeURLRequest(request: request)
 
         let session = URLSession(configuration: config)
-        urlSessionTask = session.dataTask(with: urlRequest, completionHandler: { [weak self] (data, resp, err) in
-            complete(data, resp, err)
+        urlSessionTask = session.dataTask(with: urlRequest, completionHandler: { [weak self] (data, urlResponse, error) in
+            let response = self?.makeResponse(urlResponse: urlResponse, data: data)
+            complete(response, error)
             self?.urlSessionTask = nil
             // 一部のアプリでは以下の処理を入れないとメモリリークが発生する。
             // 発生しないアプリもあり再現条件は不明だが明示的に破棄しておく
@@ -42,13 +38,30 @@ public class DefaultHTTPConnector: HTTPConnector {
         urlSessionTask?.resume()
     }
 
-    func cancel() {
+    public func cancel() {
         urlSessionTask?.cancel()
         urlSessionTask = nil
-        isCancelled = true
     }
 
-    private func toURLRequest(request: Request) -> URLRequest {
+    private func makeResponse(urlResponse: URLResponse?, data: Data?) -> Response? {
+        guard let urlResponse = urlResponse as? HTTPURLResponse else {
+            return nil
+        }
+
+        var hedears: [String: String] = [:]
+        for keyValue in urlResponse.allHeaderFields {
+            if let key = keyValue.key as? String, let value = keyValue.value as? String {
+                hedears[key] = value
+            }
+        }
+
+        return Response(data: data,
+                        statusCode: urlResponse.statusCode,
+                        headers: hedears,
+                        nativeResponse: urlResponse)
+    }
+
+    private func makeURLRequest(request: Request) -> URLRequest {
         let urlRequest = NSMutableURLRequest(url: request.url)
         urlRequest.cachePolicy = .reloadIgnoringCacheData
         urlRequest.httpMethod = request.method.stringValue

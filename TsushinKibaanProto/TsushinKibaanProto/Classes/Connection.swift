@@ -8,7 +8,8 @@
 
 import Foundation
 
-class Connection<Spec: ConnectionSpec>: Cancellable {
+/// 通信処理？
+public class Connection<Spec: ConnectionSpec>: Cancellable {
     
     let spec: Spec
     var listeners: [ConnectionListener] = []
@@ -28,29 +29,24 @@ class Connection<Spec: ConnectionSpec>: Cancellable {
         listeners.append(listener)
     }
     
-    func connect(success: ((Spec.Response) -> Void)? = nil,
-                 error: ((ConnectionError) -> Void)? = nil,
-                 end: (() -> Void)? = nil) {
+    func connect(onSuccess: ((Spec.Response) -> Void)? = nil,
+                 onError: ((Spec.Response?, ErrorResponse) -> Void)? = nil,
+                 onEnd: (() -> Void)? = nil) {
         var urlStr = spec.url
         
+        // クエリを作成
         if let urlQuery = spec.urlQuery {
             urlStr += "?" + urlQuery.stringValue(encoder: urlEncoder)
         }
 
-        // クエリを作成
-        var httpBody: Data?
-        if spec.httpMethod == .post || spec.httpMethod == .put {
-            httpBody = spec.makePostData()
-        }
-        
         guard let url = URL(string: urlStr) else {
-            handleError(.invalidURL)
+            handleError(.invalidURL, onError: onError)
             return
         }
         
         // リクエスト作成
         let request = Request(url: url, method: spec.httpMethod)
-        request.body = httpBody
+        request.body = spec.makePostData()
         request.headers = spec.headers
 
         listeners.forEach { $0.onStart() }
@@ -59,77 +55,117 @@ class Connection<Spec: ConnectionSpec>: Cancellable {
         holder?.add(connection: self)
 
         // 通信する
-        connector.execute(request: request, complete: { [weak self] (data, resp, err) in
-            // TODO メインスレッドでやらなくていい？
-            self?.complete(success: success, data: data, response: resp, error: err)
+        connector.execute(request: request, complete: { [weak self] (response, error) in
+            // TODO メインスレッドでやらなくていいのか？
+            self?.complete(onSuccess: onSuccess,
+                           onError: onError,
+                           response: response,
+                           error: error)
             DispatchQueue.main.async(execute: {
                 self?.listeners.forEach { $0.onEnd() }
             })
             self?.holder?.remove(connection: self)
+            onEnd?()
         })
     }
 
     /// 通信完了時の処理
-    private func complete(success: ((Spec.Response) -> Void)?,
-                          data: Data?,
-                          response: URLResponse?,
+    private func complete(onSuccess: ((Spec.Response) -> Void)?,
+                          onError: ((Spec.Response?, ErrorResponse) -> Void)?,
+                          response: Response?,
                           error: Error?) {
         if isCancelled {
             return
         }
 
-        guard let response = response as? HTTPURLResponse else {
-            handleError(.network, error: error)
+        guard let response = response else {
+            handleError(.network, error: error, onError: onError)
             return
         }
 
-        // 通信エラーをチェック
         if error != nil {
-            handleError(.network, error: error, response: response)
+            handleError(.network, error: error, response: response, onError: onError)
             return
         }
 
-        guard let data = data else {
-            handleError(.network, error: error, response: response)
+        guard let data = response.data else {
+            handleError(.network, error: error, response: response, onError: onError)
             return
         }
 
         // ステータスコードをチェック
         if !spec.isValidStatusCode(response.statusCode) {
-// TODO            statusCodeError(response: response, data: data)
+            handleError(.statusCode, error: error, response: response, onError: onError)
             return
         }
 
-        handleResponseData(success: success, data: data, response: response)
+        handleResponseData(onSuccess: onSuccess,
+                           onError: onError,
+                           data: data,
+                           response: response)
     }
 
-    open func handleResponseData(success: ((Spec.Response) -> Void)?, data: Data, response: HTTPURLResponse) {
+    open func handleResponseData(onSuccess: ((Spec.Response) -> Void)?,
+                                 onError: ((Spec.Response?, ErrorResponse) -> Void)?,
+                                 data: Data,
+                                 response: Response) {
+
+        let eventChain = EventChain()
+        events.forEach {
+            $0.beforeParse(chain: eventChain)
+        }
 
         do {
-            let response = try spec.parseResponse(data: data, statusCode: response.statusCode)
+            let responseModel = try spec.parseResponse(data: data, statusCode: response.statusCode)
 
-            if spec.isValidResponse(response) {
-//            handleValidResponse(result: result)
-                success?(response)
+            events.forEach {
+                $0.afterParse()
+            }
+
+            if spec.isValidResponse(responseModel) {
+                events.forEach {
+                    $0.beforSuccessCallback(chain: eventChain)
+                }
+                onSuccess?(responseModel)
+                events.forEach {
+                    $0.afterSuccessCallback()
+                }
             } else {
-//            handleError(.invalidResponse, result: result, response: response, data: data)
+                handleError(.invalidResponse, response: response, responseModel: responseModel, onError: onError)
             }
         } catch {
-//            handleError(.parse, result: nil, response: response, data: data)
-//            return
+            handleError(.parse, response: response, onError: onError)
         }
     }
 
     /// エラーを処理する
-    open func handleError(_ type: ConnectionError, error: Error? = nil, response: HTTPURLResponse? = nil, data: Data? = nil) {
+    open func handleError(_ type: ConnectionError,
+                          error: Error? = nil,
+                          response: Response? = nil,
+                          responseModel: Spec.Response? = nil,
+                          onError: ((Spec.Response?, ErrorResponse) -> Void)?) {
         // Override
         let message = error?.localizedDescription ?? ""
         print("[ConnectionError] Type= \(type.description), NativeMessage=\(message)")
+
+        let eventChain = EventChain()
+        events.forEach {
+            $0.beforErrorCallback(chain: eventChain)
+        }
+        
+        let errorResponse = ErrorResponse(type: type,
+                                          response: response,
+                                          nativeError: error)
+        onError?(responseModel, errorResponse)
+
+        events.forEach {
+            $0.afterErrorCallback()
+        }
     }
     
     open func cancel() {
         isCancelled = true
-        // TODO キャンセルする
+        connector.cancel()
     }
 }
 

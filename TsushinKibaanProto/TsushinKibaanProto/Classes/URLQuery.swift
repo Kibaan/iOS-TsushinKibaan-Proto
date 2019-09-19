@@ -9,9 +9,9 @@
 import Foundation
 
 /// key=valueの&つなぎ形式のクエリ
-open class URLQuery: ExpressibleByDictionaryLiteral {
+public class URLQuery: ExpressibleByDictionaryLiteral {
 
-    open var keyValues: [KeyValue] = []
+    public var keyValues: [KeyValue] = []
 
     public init() {}
 
@@ -37,7 +37,7 @@ open class URLQuery: ExpressibleByDictionaryLiteral {
         self.keyValues = keyValues
     }
 
-    open subscript (key: String) -> String? {
+    public subscript (key: String) -> String? {
         get {
             return keyValues.first { $0.key == key }?.value
         }
@@ -53,13 +53,9 @@ open class URLQuery: ExpressibleByDictionaryLiteral {
         }
     }
 
-    open func stringValue(encoder: URLEncoder) -> String {
-        return keyValues.map {
-            var item = encoder.encode($0.key)
-            if let value = $0.value {
-                item += "=\(encoder.encode(value))"
-            }
-            return item
-            }.joined(separator: "&")
+    public func stringValue(encoder: URLEncoder) -> String {
+        return keyValues
+            .map { $0.encodedValue(encoder: encoder) }
+            .joined(separator: "&")
     }
 }

@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol ConnectionListener {
+public protocol ConnectionListener {
     func onStart()
     func onEnd()
 }

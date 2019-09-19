@@ -29,6 +29,8 @@
 		403188BA2314BA0C000AAABA /* HogeSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403188B92314BA0C000AAABA /* HogeSpec.swift */; };
 		405294CF232228AB00739998 /* SimpleSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405294CE232228AB00739998 /* SimpleSpec.swift */; };
 		405294F5232A599300739998 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405294F4232A599300739998 /* Request.swift */; };
+		40AB633223320BB2009BD7CB /* ErrorResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40AB633123320BB2009BD7CB /* ErrorResponse.swift */; };
+		40AB633423321142009BD7CB /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40AB633323321142009BD7CB /* Response.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,6 +58,8 @@
 		403188B92314BA0C000AAABA /* HogeSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HogeSpec.swift; sourceTree = "<group>"; };
 		405294CE232228AB00739998 /* SimpleSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleSpec.swift; sourceTree = "<group>"; };
 		405294F4232A599300739998 /* Request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
+		40AB633123320BB2009BD7CB /* ErrorResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorResponse.swift; sourceTree = "<group>"; };
+		40AB633323321142009BD7CB /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +121,8 @@
 				403188B22313A643000AAABA /* EventChain.swift */,
 				239B121523294228009F4B0B /* ConnectionHolder.swift */,
 				405294F4232A599300739998 /* Request.swift */,
+				40AB633323321142009BD7CB /* Response.swift */,
+				40AB633123320BB2009BD7CB /* ErrorResponse.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -223,8 +229,10 @@
 				2356F68522FDB980002A2047 /* AppDelegate.swift in Sources */,
 				2356F69A22FDB9CF002A2047 /* Connection.swift in Sources */,
 				405294F5232A599300739998 /* Request.swift in Sources */,
+				40AB633423321142009BD7CB /* Response.swift in Sources */,
 				403188AB230D0A71000AAABA /* URLQuery.swift in Sources */,
 				23A8D9B22312248800873CAB /* ConnectionEvent.swift in Sources */,
+				40AB633223320BB2009BD7CB /* ErrorResponse.swift in Sources */,
 				403188A9230D082C000AAABA /* URLEncoder.swift in Sources */,
 				403188AD230D0E93000AAABA /* ConnectionError.swift in Sources */,
 				403188A7230D0587000AAABA /* KeyValue.swift in Sources */,

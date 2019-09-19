@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ConnectionHolder {
+public class ConnectionHolder {
     static var shared = ConnectionHolder()
     var connections: [Cancellable] = []
     

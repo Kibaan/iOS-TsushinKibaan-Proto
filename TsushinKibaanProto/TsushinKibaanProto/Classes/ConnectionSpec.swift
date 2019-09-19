@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol ConnectionSpec {
+public protocol ConnectionSpec {
     associatedtype Response
 
     var url: String { get }

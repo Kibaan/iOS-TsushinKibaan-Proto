@@ -24,4 +24,12 @@ public struct KeyValue {
         self.key = key
         self.value = value
     }
+
+    public func encodedValue(encoder: URLEncoder) -> String {
+        var item = encoder.encode(key)
+        if let value = value {
+            item += "=\(encoder.encode(value))"
+        }
+        return item
+    }
 }

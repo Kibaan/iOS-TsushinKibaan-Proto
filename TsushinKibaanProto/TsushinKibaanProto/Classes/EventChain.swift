@@ -8,8 +8,9 @@
 
 import Foundation
 
-class EventChain {
-    func stop() {
-        
+public class EventChain {
+    public var isStopped = false
+    public func stop() {
+        isStopped = true
     }
 }
