@@ -1,5 +1,5 @@
 //
-//  HTTPConnection.swift
+//  ConnectionLifecycle.swift
 //  TsushinKibaanProto
 //
 //  Created by 山本敬太 on 2019/08/09.
@@ -9,7 +9,7 @@
 import Foundation
 
 /// 通信処理？
-public class Connection<Spec: ConnectionSpec>: Cancellable {
+public class ConnectionLifecycle<Spec: ConnectionSpec>: ConnectionTask {
     
     let spec: Spec
     var listeners: [ConnectionListener] = []
@@ -111,20 +111,21 @@ public class Connection<Spec: ConnectionSpec>: Cancellable {
                                  response: Response) {
 
         let eventChain = EventChain()
-        events.forEach {
-            $0.beforeParse(chain: eventChain)
-        }
+        // TODO event呼び出し
+//        events.forEach {
+//            $0.beforeParse(connection: self, data: data, statusCode: <#T##Int#>, chain: eventChain)
+//        }
 
         do {
             let responseModel = try spec.parseResponse(data: data, statusCode: response.statusCode)
 
             events.forEach {
-                $0.afterParse()
+                $0.afterParse(connection: self, response: responseModel)
             }
 
             if spec.isValidResponse(responseModel) {
                 events.forEach {
-                    $0.beforSuccessCallback(chain: eventChain)
+                    $0.beforSuccessCallback(connection: self, response: responseModel, chain: eventChain)
                 }
                 onSuccess?(responseModel)
                 events.forEach {
@@ -162,13 +163,17 @@ public class Connection<Spec: ConnectionSpec>: Cancellable {
             $0.afterErrorCallback()
         }
     }
-    
+
+    open func restart() {
+    }
+
     open func cancel() {
         isCancelled = true
         connector.cancel()
     }
 }
 
-public protocol Cancellable: class {
+public protocol ConnectionTask: class {
     func cancel()
+    func restart()
 }

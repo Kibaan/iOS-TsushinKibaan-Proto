@@ -11,17 +11,14 @@ import Foundation
 public protocol ConnectionEvent {
     var useMainThread: Bool { get }
 
-    // spec: Spec
+    func onReceived<T: ConnectionSpec>(connection: ConnectionLifecycle<T>)
 
-    func onReceived<T: ConnectionSpec>(connection: Connection<T>)
+    func beforeParse<T: ConnectionSpec>(connection: ConnectionLifecycle<T>, data: Data, statusCode: Int, chain: EventChain)
+    func afterParse<T: ConnectionSpec>(connection: ConnectionLifecycle<T>, response: T.Response)
 
-    /// パースの前
-    func beforeParse(chain: EventChain)
-    func afterParse()
+    func beforSuccessCallback<T: ConnectionSpec>(connection: ConnectionLifecycle<T>, response: T.Response, chain: EventChain)
+    func afterSuccessCallback<T: ConnectionSpec>(connection: ConnectionLifecycle<T>)
 
-    func beforSuccessCallback(chain: EventChain)
-    func afterSuccessCallback()
-
-    func beforErrorCallback(chain: EventChain)
-    func afterErrorCallback()
+    func beforErrorCallback<T: ConnectionSpec>(connection: ConnectionLifecycle<T>, chain: EventChain)
+    func afterErrorCallback<T: ConnectionSpec>(connection: ConnectionLifecycle<T>)
 }

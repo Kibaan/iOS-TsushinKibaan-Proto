@@ -8,6 +8,9 @@
 
 import Foundation
 
+// ConnectionInterface
+// ConnectionIF
+// API
 public protocol ConnectionSpec {
     associatedtype Response
 
