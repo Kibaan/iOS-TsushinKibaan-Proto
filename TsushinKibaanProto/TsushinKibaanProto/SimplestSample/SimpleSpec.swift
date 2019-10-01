@@ -26,6 +26,6 @@ class SimpleSpec: ConnectionSpec {
         if let string = String(bytes: data, encoding: .utf8) {
             return string
         }
-        throw ConnectionError.parse
+        throw ConnectionErrorType.parse
     }
 }

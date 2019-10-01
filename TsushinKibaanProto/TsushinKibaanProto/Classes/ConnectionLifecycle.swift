@@ -30,7 +30,7 @@ public class ConnectionLifecycle<Spec: ConnectionSpec>: ConnectionTask {
     }
     
     func connect(onSuccess: ((Spec.Response) -> Void)? = nil,
-                 onError: ((Spec.Response?, ErrorResponse) -> Void)? = nil,
+                 onError: ((Spec.Response?, ConnectionError) -> Void)? = nil,
                  onEnd: (() -> Void)? = nil) {
         var urlStr = spec.url
         
@@ -71,7 +71,7 @@ public class ConnectionLifecycle<Spec: ConnectionSpec>: ConnectionTask {
 
     /// 通信完了時の処理
     private func complete(onSuccess: ((Spec.Response) -> Void)?,
-                          onError: ((Spec.Response?, ErrorResponse) -> Void)?,
+                          onError: ((Spec.Response?, ConnectionError) -> Void)?,
                           response: Response?,
                           error: Error?) {
         if isCancelled {
@@ -106,7 +106,7 @@ public class ConnectionLifecycle<Spec: ConnectionSpec>: ConnectionTask {
     }
 
     open func handleResponseData(onSuccess: ((Spec.Response) -> Void)?,
-                                 onError: ((Spec.Response?, ErrorResponse) -> Void)?,
+                                 onError: ((Spec.Response?, ConnectionError) -> Void)?,
                                  data: Data,
                                  response: Response) {
 
@@ -140,11 +140,11 @@ public class ConnectionLifecycle<Spec: ConnectionSpec>: ConnectionTask {
     }
 
     /// エラーを処理する
-    open func handleError(_ type: ConnectionError,
+    open func handleError(_ type: ConnectionErrorType,
                           error: Error? = nil,
                           response: Response? = nil,
                           responseModel: Spec.Response? = nil,
-                          onError: ((Spec.Response?, ErrorResponse) -> Void)?) {
+                          onError: ((Spec.Response?, ConnectionError) -> Void)?) {
         // Override
         let message = error?.localizedDescription ?? ""
         print("[ConnectionError] Type= \(type.description), NativeMessage=\(message)")
@@ -154,7 +154,7 @@ public class ConnectionLifecycle<Spec: ConnectionSpec>: ConnectionTask {
             $0.beforErrorCallback(chain: eventChain)
         }
         
-        let errorResponse = ErrorResponse(type: type,
+        let errorResponse = ConnectionError(type: type,
                                           response: response,
                                           nativeError: error)
         onError?(responseModel, errorResponse)
