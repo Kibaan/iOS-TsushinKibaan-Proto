@@ -8,7 +8,7 @@
 
 import Foundation
 
-/// 通信処理？
+/// 通信ライフサイクル
 public class ConnectionLifecycle<Spec: ConnectionSpec>: ConnectionTask {
     
     let spec: Spec

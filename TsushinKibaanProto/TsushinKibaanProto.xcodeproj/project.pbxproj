@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		234C34C12343A79000AE45FF /* ConnectionIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234C34C02343A79000AE45FF /* ConnectionIndicator.swift */; };
+		234C34C62348EB7400AE45FF /* DefaultHTTPConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234C34C52348EB7400AE45FF /* DefaultHTTPConnector.swift */; };
+		234C34C82348EB9E00AE45FF /* DefaultURLEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234C34C72348EB9E00AE45FF /* DefaultURLEncoder.swift */; };
+		234C34CA2348EBCE00AE45FF /* DefaultConnectionIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234C34C92348EBCE00AE45FF /* DefaultConnectionIndicator.swift */; };
 		2356F68522FDB980002A2047 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2356F68422FDB980002A2047 /* AppDelegate.swift */; };
 		2356F68722FDB980002A2047 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2356F68622FDB980002A2047 /* ViewController.swift */; };
 		2356F68A22FDB980002A2047 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2356F68822FDB980002A2047 /* Main.storyboard */; };
@@ -37,6 +40,9 @@
 
 /* Begin PBXFileReference section */
 		234C34C02343A79000AE45FF /* ConnectionIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionIndicator.swift; sourceTree = "<group>"; };
+		234C34C52348EB7400AE45FF /* DefaultHTTPConnector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultHTTPConnector.swift; sourceTree = "<group>"; };
+		234C34C72348EB9E00AE45FF /* DefaultURLEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultURLEncoder.swift; sourceTree = "<group>"; };
+		234C34C92348EBCE00AE45FF /* DefaultConnectionIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultConnectionIndicator.swift; sourceTree = "<group>"; };
 		2356F68122FDB980002A2047 /* TsushinKibaanProto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TsushinKibaanProto.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2356F68422FDB980002A2047 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2356F68622FDB980002A2047 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -77,6 +83,38 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		234C34C22348EAE400AE45FF /* Entity */ = {
+			isa = PBXGroup;
+			children = (
+				403188B22313A643000AAABA /* EventChain.swift */,
+				403188A6230D0587000AAABA /* KeyValue.swift */,
+				405294F4232A599300739998 /* Request.swift */,
+				40AB633323321142009BD7CB /* Response.swift */,
+				403188AA230D0A71000AAABA /* URLQuery.swift */,
+				40AB633123320BB2009BD7CB /* ConnectionError.swift */,
+			);
+			path = Entity;
+			sourceTree = "<group>";
+		};
+		234C34C32348EB4E00AE45FF /* EnumType */ = {
+			isa = PBXGroup;
+			children = (
+				403188B0230FF3AD000AAABA /* HTTPMethod.swift */,
+				403188AC230D0E93000AAABA /* ConnectionErrorType.swift */,
+			);
+			path = EnumType;
+			sourceTree = "<group>";
+		};
+		234C34C42348EB6700AE45FF /* DefaultImpl */ = {
+			isa = PBXGroup;
+			children = (
+				234C34C52348EB7400AE45FF /* DefaultHTTPConnector.swift */,
+				234C34C72348EB9E00AE45FF /* DefaultURLEncoder.swift */,
+				234C34C92348EBCE00AE45FF /* DefaultConnectionIndicator.swift */,
+			);
+			path = DefaultImpl;
+			sourceTree = "<group>";
+		};
 		2356F67822FDB980002A2047 = {
 			isa = PBXGroup;
 			children = (
@@ -112,21 +150,16 @@
 		2356F69622FDB995002A2047 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				403188B0230FF3AD000AAABA /* HTTPMethod.swift */,
-				2356F69722FDB9AC002A2047 /* HTTPConnector.swift */,
+				234C34C42348EB6700AE45FF /* DefaultImpl */,
+				234C34C32348EB4E00AE45FF /* EnumType */,
+				234C34C22348EAE400AE45FF /* Entity */,
 				2356F69922FDB9CF002A2047 /* ConnectionLifecycle.swift */,
+				2356F69722FDB9AC002A2047 /* HTTPConnector.swift */,
 				2356F69B22FDB9E2002A2047 /* ConnectionSpec.swift */,
 				2356F69D22FDBAA3002A2047 /* ConnectionListener.swift */,
 				23A8D9B12312248800873CAB /* ConnectionEvent.swift */,
-				403188A6230D0587000AAABA /* KeyValue.swift */,
 				403188A8230D082C000AAABA /* URLEncoder.swift */,
-				403188AA230D0A71000AAABA /* URLQuery.swift */,
-				403188AC230D0E93000AAABA /* ConnectionErrorType.swift */,
-				403188B22313A643000AAABA /* EventChain.swift */,
 				239B121523294228009F4B0B /* ConnectionHolder.swift */,
-				405294F4232A599300739998 /* Request.swift */,
-				40AB633323321142009BD7CB /* Response.swift */,
-				40AB633123320BB2009BD7CB /* ConnectionError.swift */,
 				234C34C02343A79000AE45FF /* ConnectionIndicator.swift */,
 			);
 			path = Classes;
@@ -224,9 +257,11 @@
 			files = (
 				2356F69C22FDB9E2002A2047 /* ConnectionSpec.swift in Sources */,
 				40AB642A233B57D3009BD7CB /* CommonEvent.swift in Sources */,
+				234C34CA2348EBCE00AE45FF /* DefaultConnectionIndicator.swift in Sources */,
 				403188B62314B84E000AAABA /* MTSSpec.swift in Sources */,
 				405294CF232228AB00739998 /* SimpleSpec.swift in Sources */,
 				2356F69822FDB9AC002A2047 /* HTTPConnector.swift in Sources */,
+				234C34C62348EB7400AE45FF /* DefaultHTTPConnector.swift in Sources */,
 				403188B32313A643000AAABA /* EventChain.swift in Sources */,
 				2356F68722FDB980002A2047 /* ViewController.swift in Sources */,
 				403188B82314B942000AAABA /* MTSResponse.swift in Sources */,
@@ -245,6 +280,7 @@
 				403188AD230D0E93000AAABA /* ConnectionErrorType.swift in Sources */,
 				403188A7230D0587000AAABA /* KeyValue.swift in Sources */,
 				239B121623294228009F4B0B /* ConnectionHolder.swift in Sources */,
+				234C34C82348EB9E00AE45FF /* DefaultURLEncoder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
