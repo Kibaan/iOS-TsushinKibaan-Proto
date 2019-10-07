@@ -14,6 +14,7 @@ public class ConnectionLifecycle<Spec: ConnectionSpec>: ConnectionTask {
     let spec: Spec
     var listeners: [ConnectionListener] = []
     var events: [ConnectionEvent] = []
+    
     var connector: HTTPConnector
     var urlEncoder: URLEncoder
     weak var holder = ConnectionHolder.shared
@@ -29,6 +30,11 @@ public class ConnectionLifecycle<Spec: ConnectionSpec>: ConnectionTask {
         listeners.append(listener)
     }
     
+    func startConnection() {
+        
+    }
+    
+    /// 通信処理を開始する
     func connect(onSuccess: ((Spec.Response) -> Void)? = nil,
                  onError: ((Spec.Response?, ConnectionError) -> Void)? = nil,
                  onEnd: (() -> Void)? = nil) {
@@ -111,10 +117,9 @@ public class ConnectionLifecycle<Spec: ConnectionSpec>: ConnectionTask {
                                  response: Response) {
 
         let eventChain = EventChain()
-        // TODO event呼び出し
-//        events.forEach {
-//            $0.beforeParse(connection: self, data: data, statusCode: <#T##Int#>, chain: eventChain)
-//        }
+        events.forEach {
+            $0.beforeParse(connection: self, data: data, statusCode: response.statusCode, chain: eventChain)
+        }
 
         do {
             let responseModel = try spec.parseResponse(data: data, statusCode: response.statusCode)
@@ -129,7 +134,7 @@ public class ConnectionLifecycle<Spec: ConnectionSpec>: ConnectionTask {
                 }
                 onSuccess?(responseModel)
                 events.forEach {
-                    $0.afterSuccessCallback()
+                    $0.afterSuccessCallback(connection: self)
                 }
             } else {
                 handleError(.invalidResponse, response: response, responseModel: responseModel, onError: onError)
@@ -151,7 +156,7 @@ public class ConnectionLifecycle<Spec: ConnectionSpec>: ConnectionTask {
 
         let eventChain = EventChain()
         events.forEach {
-            $0.beforErrorCallback(chain: eventChain)
+            $0.beforErrorCallback(connection: self, chain: eventChain)
         }
         
         let errorResponse = ConnectionError(type: type,
@@ -160,11 +165,12 @@ public class ConnectionLifecycle<Spec: ConnectionSpec>: ConnectionTask {
         onError?(responseModel, errorResponse)
 
         events.forEach {
-            $0.afterErrorCallback()
+            $0.afterErrorCallback(connection: self)
         }
     }
 
     open func restart() {
+        startConnection()
     }
 
     open func cancel() {

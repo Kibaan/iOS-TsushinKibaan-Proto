@@ -6,7 +6,7 @@
 //  Copyright © 2019 山本敬太. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 class DefaultConnectionIndicator: ConnectionIndicator {
     var referenceCount = 0

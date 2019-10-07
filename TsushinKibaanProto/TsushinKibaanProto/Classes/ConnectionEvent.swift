@@ -22,3 +22,9 @@ public protocol ConnectionEvent {
     func beforErrorCallback<T: ConnectionSpec>(connection: ConnectionLifecycle<T>, chain: EventChain)
     func afterErrorCallback<T: ConnectionSpec>(connection: ConnectionLifecycle<T>)
 }
+
+public protocol ConnectionEvent2 {
+    associatedtype Response
+    
+    func onSuccess(response: Response)
+}
