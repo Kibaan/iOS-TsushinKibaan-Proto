@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		23168DB0234DF3150030D263 /* ConnectionRequestSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23168DAF234DF3150030D263 /* ConnectionRequestSpec.swift */; };
+		23168DB2234DF36F0030D263 /* ConnectionResponseSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23168DB1234DF36F0030D263 /* ConnectionResponseSpec.swift */; };
 		234C34C12343A79000AE45FF /* ConnectionIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234C34C02343A79000AE45FF /* ConnectionIndicator.swift */; };
 		234C34C62348EB7400AE45FF /* DefaultHTTPConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234C34C52348EB7400AE45FF /* DefaultHTTPConnector.swift */; };
 		234C34C82348EB9E00AE45FF /* DefaultURLEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234C34C72348EB9E00AE45FF /* DefaultURLEncoder.swift */; };
@@ -39,6 +41,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		23168DAF234DF3150030D263 /* ConnectionRequestSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionRequestSpec.swift; sourceTree = "<group>"; };
+		23168DB1234DF36F0030D263 /* ConnectionResponseSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionResponseSpec.swift; sourceTree = "<group>"; };
 		234C34C02343A79000AE45FF /* ConnectionIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionIndicator.swift; sourceTree = "<group>"; };
 		234C34C52348EB7400AE45FF /* DefaultHTTPConnector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultHTTPConnector.swift; sourceTree = "<group>"; };
 		234C34C72348EB9E00AE45FF /* DefaultURLEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultURLEncoder.swift; sourceTree = "<group>"; };
@@ -155,6 +159,8 @@
 				234C34C22348EAE400AE45FF /* Entity */,
 				2356F69922FDB9CF002A2047 /* ConnectionLifecycle.swift */,
 				2356F69722FDB9AC002A2047 /* HTTPConnector.swift */,
+				23168DAF234DF3150030D263 /* ConnectionRequestSpec.swift */,
+				23168DB1234DF36F0030D263 /* ConnectionResponseSpec.swift */,
 				2356F69B22FDB9E2002A2047 /* ConnectionSpec.swift */,
 				2356F69D22FDBAA3002A2047 /* ConnectionListener.swift */,
 				23A8D9B12312248800873CAB /* ConnectionEvent.swift */,
@@ -268,6 +274,7 @@
 				403188B1230FF3AD000AAABA /* HTTPMethod.swift in Sources */,
 				403188BA2314BA0C000AAABA /* HogeSpec.swift in Sources */,
 				2356F69E22FDBAA3002A2047 /* ConnectionListener.swift in Sources */,
+				23168DB2234DF36F0030D263 /* ConnectionResponseSpec.swift in Sources */,
 				2356F68522FDB980002A2047 /* AppDelegate.swift in Sources */,
 				2356F69A22FDB9CF002A2047 /* ConnectionLifecycle.swift in Sources */,
 				405294F5232A599300739998 /* Request.swift in Sources */,
@@ -281,6 +288,7 @@
 				403188A7230D0587000AAABA /* KeyValue.swift in Sources */,
 				239B121623294228009F4B0B /* ConnectionHolder.swift in Sources */,
 				234C34C82348EB9E00AE45FF /* DefaultURLEncoder.swift in Sources */,
+				23168DB0234DF3150030D263 /* ConnectionRequestSpec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

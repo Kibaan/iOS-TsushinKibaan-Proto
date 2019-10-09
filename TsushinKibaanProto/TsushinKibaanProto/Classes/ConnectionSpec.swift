@@ -11,17 +11,5 @@ import Foundation
 // ConnectionInterface
 // ConnectionIF
 // API
-public protocol ConnectionSpec {
-    associatedtype Response
-
-    var url: String { get }
-    var httpMethod: HTTPMethod { get }
-    var headers: [String: String] { get }
-    var urlQuery: URLQuery? { get }
-    
-    func makePostData() -> Data?
-    func parseResponse(data: Data, statusCode: Int) throws -> Response
-    
-    func isValidStatusCode(_ code: Int) -> Bool
-    func isValidResponse(_ data: Response) -> Bool
+public protocol ConnectionSpec: ConnectionRequestSpec, ConnectionResponseSpec {
 }

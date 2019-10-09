@@ -24,7 +24,15 @@ public protocol ConnectionEvent {
 }
 
 public protocol ConnectionEvent2 {
-    associatedtype Response
     
-    func onSuccess(response: Response)
+    func onReceived(connection: ConnectionTask)
+    
+    func beforeParse(connection: ConnectionTask, data: Data, statusCode: Int, chain: EventChain)
+    func afterParse(connection: ConnectionTask, response: Any)
+    
+    func beforSuccessCallback(connection: ConnectionTask, response: Any, chain: EventChain)
+    func afterSuccessCallback(connection: ConnectionTask)
+    
+    func beforErrorCallback(connection: ConnectionTask, chain: EventChain)
+    func afterErrorCallback(connection: ConnectionTask)
 }
