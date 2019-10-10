@@ -42,6 +42,7 @@ public class ConnectionLifecycle<Spec: ConnectionSpec>: ConnectionTask {
         
         // クエリを作成
         if let urlQuery = spec.urlQuery {
+            // TODO 元のURLに既にクエリがついている場合 ? が重複してしまう
             urlStr += "?" + urlQuery.stringValue(encoder: urlEncoder)
         }
 
@@ -60,6 +61,7 @@ public class ConnectionLifecycle<Spec: ConnectionSpec>: ConnectionTask {
         // このインスタンスが通信完了まで開放されないよう保持する必要がある
         holder?.add(connection: self)
 
+        print("[\(spec.httpMethod.stringValue)] \(url)")
         // 通信する
         connector.execute(request: request, complete: { [weak self] (response, error) in
             // TODO メインスレッドでやらなくていいのか？

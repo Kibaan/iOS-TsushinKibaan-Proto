@@ -13,5 +13,8 @@ public protocol ConnectionResponseSpec {
     
     func isValidStatusCode(_ code: Int) -> Bool
     func parseResponse(data: Data, statusCode: Int) throws -> Response
+
+    // TODO この関数必要か？
+    // パースはできたがエラーコードなど含む場合
     func isValidResponse(_ data: Response) -> Bool
 }

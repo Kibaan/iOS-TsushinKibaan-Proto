@@ -8,6 +8,8 @@
 
 import Foundation
 
+// TODO いくつかのプロトコルに分割すべきか？
+
 public protocol ConnectionEvent {
     var useMainThread: Bool { get }
 
