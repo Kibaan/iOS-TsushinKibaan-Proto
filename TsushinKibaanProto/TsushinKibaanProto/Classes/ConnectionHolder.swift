@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// 実行中の通信オブジェクトを保持するためのコンテナ
 public class ConnectionHolder {
     static var shared = ConnectionHolder()
     var connections: [ConnectionTask] = []
@@ -18,5 +19,9 @@ public class ConnectionHolder {
 
     func remove(connection: ConnectionTask?) {
         connections.removeAll{ $0 === connection }
+    }
+
+    func removeAll() {
+        connections.removeAll()
     }
 }

@@ -8,8 +8,13 @@
 
 import Foundation
 
-// ConnectionInterface
-// ConnectionIF
-// API
+/// HTTP通信のリクエスト、レスポンスの仕様
 public protocol ConnectionSpec: ConnectionRequestSpec, ConnectionResponseSpec {
 }
+
+/*
+TODO 他にいい名前がないか検討する
+- ConnectionInterface
+- ConnectionIF
+- API
+ */

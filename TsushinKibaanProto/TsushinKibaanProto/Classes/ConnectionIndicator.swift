@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// 通信インジケーター
 protocol ConnectionIndicator {
     func addReferenceCount()
     func removeReferenceCount()

@@ -10,6 +10,7 @@ import Foundation
 
 // TODO いくつかのプロトコルに分割すべきか？
 
+/// 通信の？？？
 public protocol ConnectionEvent {
     var useMainThread: Bool { get }
 

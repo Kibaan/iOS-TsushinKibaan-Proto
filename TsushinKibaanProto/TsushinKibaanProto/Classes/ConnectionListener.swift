@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// 通信の開始と終了時の処理
 public protocol ConnectionListener {
     func onStart()
     func onEnd()

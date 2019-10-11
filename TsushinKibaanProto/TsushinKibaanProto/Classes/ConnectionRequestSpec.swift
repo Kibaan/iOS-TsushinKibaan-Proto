@@ -10,10 +10,15 @@ import Foundation
 
 /// 通信リクエストの仕様
 public protocol ConnectionRequestSpec {
+    /// リクエスト先URL
     var url: String { get }
+    /// HTTPメソッド
     var httpMethod: HTTPMethod { get }
+    /// リクエストヘッダー
     var headers: [String: String] { get }
+    /// URLに付与するクエリパラメーター
     var urlQuery: URLQuery? { get }
-    
+
+    /// POSTデータを作成する
     func makePostData() -> Data?
 }

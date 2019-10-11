@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// 文字列をURLエンコードする
 public protocol URLEncoder {
     func encode(_ text: String) -> String
 }
