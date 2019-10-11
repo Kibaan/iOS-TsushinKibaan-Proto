@@ -31,7 +31,7 @@ public class ConnectionLifecycle<Spec: ConnectionSpec>: ConnectionTask {
     }
     
     func startConnection() {
-        
+        // TODO 実装する
     }
     
     /// 通信処理を開始する

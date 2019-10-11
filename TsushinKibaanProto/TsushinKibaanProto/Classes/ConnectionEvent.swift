@@ -12,6 +12,7 @@ import Foundation
 
 /// 通信の？？？
 public protocol ConnectionEvent {
+    // TODO これいるか？
     var useMainThread: Bool { get }
 
     func onReceived<T: ConnectionSpec>(connection: ConnectionLifecycle<T>)
