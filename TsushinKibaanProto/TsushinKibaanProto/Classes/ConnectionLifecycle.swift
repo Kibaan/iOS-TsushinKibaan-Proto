@@ -35,8 +35,8 @@ public class ConnectionLifecycle<Spec: ConnectionSpec>: ConnectionTask {
     }
     
     /// 通信処理を開始する
-    func connect(onSuccess: ((Spec.Response) -> Void)? = nil,
-                 onError: ((Spec.Response?, ConnectionError) -> Void)? = nil,
+    func connect(onSuccess: ((Spec.ResponseModel) -> Void)? = nil,
+                 onError: ((Spec.ResponseModel?, ConnectionError) -> Void)? = nil,
                  onEnd: (() -> Void)? = nil) {
         var urlStr = spec.url
         
@@ -78,8 +78,8 @@ public class ConnectionLifecycle<Spec: ConnectionSpec>: ConnectionTask {
     }
 
     /// 通信完了時の処理
-    private func complete(onSuccess: ((Spec.Response) -> Void)?,
-                          onError: ((Spec.Response?, ConnectionError) -> Void)?,
+    private func complete(onSuccess: ((Spec.ResponseModel) -> Void)?,
+                          onError: ((Spec.ResponseModel?, ConnectionError) -> Void)?,
                           response: Response?,
                           error: Error?) {
         if isCancelled {
@@ -113,8 +113,8 @@ public class ConnectionLifecycle<Spec: ConnectionSpec>: ConnectionTask {
                            response: response)
     }
 
-    open func handleResponseData(onSuccess: ((Spec.Response) -> Void)?,
-                                 onError: ((Spec.Response?, ConnectionError) -> Void)?,
+    open func handleResponseData(onSuccess: ((Spec.ResponseModel) -> Void)?,
+                                 onError: ((Spec.ResponseModel?, ConnectionError) -> Void)?,
                                  data: Data,
                                  response: Response) {
 
@@ -150,8 +150,8 @@ public class ConnectionLifecycle<Spec: ConnectionSpec>: ConnectionTask {
     open func handleError(_ type: ConnectionErrorType,
                           error: Error? = nil,
                           response: Response? = nil,
-                          responseModel: Spec.Response? = nil,
-                          onError: ((Spec.Response?, ConnectionError) -> Void)?) {
+                          responseModel: Spec.ResponseModel? = nil,
+                          onError: ((Spec.ResponseModel?, ConnectionError) -> Void)?) {
         // Override
         let message = error?.localizedDescription ?? ""
         print("[ConnectionError] Type= \(type.description), NativeMessage=\(message)")

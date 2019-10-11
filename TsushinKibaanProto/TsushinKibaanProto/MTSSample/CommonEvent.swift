@@ -18,11 +18,11 @@ class CommonEvent: ConnectionEvent {
         
     }
     
-    func afterParse<T>(connection: ConnectionLifecycle<T>, response: T.Response) where T : ConnectionSpec {
+    func afterParse<T>(connection: ConnectionLifecycle<T>, response: T.ResponseModel) where T : ConnectionSpec {
         
     }
     
-    func beforSuccessCallback<T>(connection: ConnectionLifecycle<T>, response: T.Response, chain: EventChain) where T : ConnectionSpec {
+    func beforSuccessCallback<T>(connection: ConnectionLifecycle<T>, response: T.ResponseModel, chain: EventChain) where T : ConnectionSpec {
         
     }
     

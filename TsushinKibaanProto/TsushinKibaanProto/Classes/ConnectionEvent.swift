@@ -16,9 +16,9 @@ public protocol ConnectionEvent {
     func onReceived<T: ConnectionSpec>(connection: ConnectionLifecycle<T>)
 
     func beforeParse<T: ConnectionSpec>(connection: ConnectionLifecycle<T>, data: Data, statusCode: Int, chain: EventChain)
-    func afterParse<T: ConnectionSpec>(connection: ConnectionLifecycle<T>, response: T.Response)
+    func afterParse<T: ConnectionSpec>(connection: ConnectionLifecycle<T>, response: T.ResponseModel)
 
-    func beforSuccessCallback<T: ConnectionSpec>(connection: ConnectionLifecycle<T>, response: T.Response, chain: EventChain)
+    func beforSuccessCallback<T: ConnectionSpec>(connection: ConnectionLifecycle<T>, response: T.ResponseModel, chain: EventChain)
     func afterSuccessCallback<T: ConnectionSpec>(connection: ConnectionLifecycle<T>)
 
     func beforErrorCallback<T: ConnectionSpec>(connection: ConnectionLifecycle<T>, chain: EventChain)

@@ -8,13 +8,14 @@
 
 import Foundation
 
+/// 通信レスポンスの仕様
 public protocol ConnectionResponseSpec {
-    associatedtype Response
+    associatedtype ResponseModel
     
     func isValidStatusCode(_ code: Int) -> Bool
-    func parseResponse(data: Data, statusCode: Int) throws -> Response
+    func parseResponse(data: Data, statusCode: Int) throws -> ResponseModel
 
     // TODO この関数必要か？
     // パースはできたがエラーコードなど含む場合
-    func isValidResponse(_ data: Response) -> Bool
+    func isValidResponse(_ model: ResponseModel) -> Bool
 }

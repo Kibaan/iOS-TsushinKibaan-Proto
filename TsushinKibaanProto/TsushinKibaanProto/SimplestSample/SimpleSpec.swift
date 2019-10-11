@@ -11,7 +11,7 @@ import Foundation
 /// 最小構成のConnectionSpec実装
 /// GoogleトップページをGETでリクエストして、取得データをStringで返す
 class SimpleSpec: ConnectionSpec {
-    typealias Response = String
+    typealias ResponseModel = String
 
     var url: String { return "https://www.google.com/" }
     var httpMethod: HTTPMethod { return .get }
@@ -20,9 +20,9 @@ class SimpleSpec: ConnectionSpec {
 
     func makePostData() -> Data? { return nil }
     func isValidStatusCode(_ code: Int) -> Bool { return true }
-    func isValidResponse(_ data: Response) -> Bool { return true }
+    func isValidResponse(_ model: ResponseModel) -> Bool { return true }
 
-    func parseResponse(data: Data, statusCode: Int) throws -> Response {
+    func parseResponse(data: Data, statusCode: Int) throws -> ResponseModel {
         if let string = String(bytes: data, encoding: .utf8) {
             return string
         }

@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// 通信リクエストの仕様
 public protocol ConnectionRequestSpec {
     var url: String { get }
     var httpMethod: HTTPMethod { get }
