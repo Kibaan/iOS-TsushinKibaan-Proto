@@ -8,9 +8,13 @@
 
 import Foundation
 
-public class DefaultHTTPConnector: HTTPConnector {
+public class DefaultHTTPConnector: NSObject, HTTPConnector {
     
     var urlSessionTask: URLSessionTask?
+
+    var isRedirectEnabled = true
+    // TODO クッキーの制御をする
+    var isCookieEnabled = true
     
     public func execute(request: Request, complete: @escaping (Response?, Error?) -> Void) {
         let config = URLSessionConfiguration.default
@@ -20,7 +24,7 @@ public class DefaultHTTPConnector: HTTPConnector {
         
         let urlRequest = makeURLRequest(request: request)
         
-        let session = URLSession(configuration: config)
+        let session = URLSession(configuration: config, delegate: self, delegateQueue: nil)
         urlSessionTask = session.dataTask(with: urlRequest, completionHandler: { [weak self] (data, urlResponse, error) in
             let response = self?.makeResponse(urlResponse: urlResponse, data: data)
             complete(response, error)
@@ -66,5 +70,16 @@ public class DefaultHTTPConnector: HTTPConnector {
         }
         
         return urlRequest as URLRequest
+    }
+}
+
+extension DefaultHTTPConnector: URLSessionTaskDelegate {
+    public func urlSession(_ session: URLSession,
+                           task: URLSessionTask,
+                           willPerformHTTPRedirection response: HTTPURLResponse,
+                           newRequest request: URLRequest,
+                           completionHandler: @escaping (URLRequest?) -> Void) {
+        let newRequest = isRedirectEnabled ? request : nil
+        completionHandler(newRequest)
     }
 }

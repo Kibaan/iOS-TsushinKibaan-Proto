@@ -13,7 +13,7 @@ public protocol ConnectionResponseSpec {
     associatedtype ResponseModel
     
     func isValidStatusCode(_ code: Int) -> Bool
-    func parseResponse(data: Data, statusCode: Int) throws -> ResponseModel
+    func parseResponse(response: Response) throws -> ResponseModel
 
     // TODO この関数必要か？
     // パースはできたがエラーコードなど含む場合

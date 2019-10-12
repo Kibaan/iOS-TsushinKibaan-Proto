@@ -22,8 +22,8 @@ class SimpleSpec: ConnectionSpec {
     func isValidStatusCode(_ code: Int) -> Bool { return true }
     func isValidResponse(_ model: ResponseModel) -> Bool { return true }
 
-    func parseResponse(data: Data, statusCode: Int) throws -> ResponseModel {
-        if let string = String(bytes: data, encoding: .utf8) {
+    func parseResponse(response: Response) throws -> ResponseModel {
+        if let string = String(bytes: response.data, encoding: .utf8) {
             return string
         }
         throw ConnectionErrorType.parse

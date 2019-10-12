@@ -8,6 +8,8 @@
 
 import Foundation
 
+/// キーと値のペア。
+/// クエリパラメーターを構築するのに用いる。
 public struct KeyValue {
     public let key: String
     public let value: String?

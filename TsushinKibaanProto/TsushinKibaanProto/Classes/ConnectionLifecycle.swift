@@ -9,7 +9,7 @@
 import Foundation
 
 /// 通信ライフサイクル
-public class ConnectionLifecycle<Spec: ConnectionSpec>: ConnectionTask {
+open class ConnectionLifecycle<Spec: ConnectionSpec>: ConnectionTask {
     
     let spec: Spec
     var listeners: [ConnectionListener] = []
@@ -17,8 +17,9 @@ public class ConnectionLifecycle<Spec: ConnectionSpec>: ConnectionTask {
     
     var connector: HTTPConnector
     var urlEncoder: URLEncoder
-    weak var holder = ConnectionHolder.shared
     var isCancelled = false
+
+    weak var holder = ConnectionHolder.shared
 
     init(spec: Spec, urlEncoder: URLEncoder = DefaultURLEncoder(), connector: HTTPConnector) {
         self.spec = spec
@@ -38,15 +39,8 @@ public class ConnectionLifecycle<Spec: ConnectionSpec>: ConnectionTask {
     func connect(onSuccess: ((Spec.ResponseModel) -> Void)? = nil,
                  onError: ((Spec.ResponseModel?, ConnectionError) -> Void)? = nil,
                  onEnd: (() -> Void)? = nil) {
-        var urlStr = spec.url
         
-        // クエリを作成
-        if let urlQuery = spec.urlQuery {
-            // TODO 元のURLに既にクエリがついている場合 ? が重複してしまう
-            urlStr += "?" + urlQuery.stringValue(encoder: urlEncoder)
-        }
-
-        guard let url = URL(string: urlStr) else {
+        guard let url = makeURL(baseURL: spec.url, query: spec.urlQuery, encoder: urlEncoder) else {
             handleError(.invalidURL, onError: onError)
             return
         }
@@ -75,6 +69,17 @@ public class ConnectionLifecycle<Spec: ConnectionSpec>: ConnectionTask {
             self?.holder?.remove(connection: self)
             onEnd?()
         })
+    }
+    
+    open func makeURL(baseURL: String, query: URLQuery?, encoder: URLEncoder) -> URL? {
+        var urlStr = baseURL
+        
+        if let query = query {
+            let separator = urlStr.contains("?") ? "&" : "?"
+            urlStr += separator + query.stringValue(encoder: urlEncoder)
+        }
+        
+        return URL(string: urlStr)
     }
 
     /// 通信完了時の処理
@@ -124,7 +129,7 @@ public class ConnectionLifecycle<Spec: ConnectionSpec>: ConnectionTask {
         }
 
         do {
-            let responseModel = try spec.parseResponse(data: data, statusCode: response.statusCode)
+            let responseModel = try spec.parseResponse(response: response)
 
             events.forEach {
                 $0.afterParse(connection: self, response: responseModel)
@@ -171,10 +176,12 @@ public class ConnectionLifecycle<Spec: ConnectionSpec>: ConnectionTask {
         }
     }
 
+    /// 通信を再実行する
     open func restart() {
         startConnection()
     }
 
+    /// 通信をキャンセルする
     open func cancel() {
         isCancelled = true
         connector.cancel()

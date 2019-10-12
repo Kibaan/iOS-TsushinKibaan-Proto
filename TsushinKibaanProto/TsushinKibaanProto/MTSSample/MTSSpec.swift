@@ -9,7 +9,7 @@
 import Foundation
 
 class MTSSpec<T: MTSResponse>: ConnectionSpec {
-    typealias Response = T
+    typealias ResponseModel = T
 
     var url: String {
         return "https://hogehoge"
@@ -33,7 +33,7 @@ class MTSSpec<T: MTSResponse>: ConnectionSpec {
         return nil
     }
 
-    func parseResponse(data: Data, statusCode: Int) throws -> T {
+    func parseResponse(response: Response) throws -> T {
         fatalError("override this")
     }
 
