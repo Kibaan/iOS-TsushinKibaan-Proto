@@ -160,7 +160,6 @@
 				234C34C32348EB4E00AE45FF /* EnumType */,
 				234C34C22348EAE400AE45FF /* Entity */,
 				2356F69922FDB9CF002A2047 /* ConnectionLifecycle.swift */,
-				2356F69722FDB9AC002A2047 /* HTTPConnector.swift */,
 				23168DAF234DF3150030D263 /* ConnectionRequestSpec.swift */,
 				23168DB1234DF36F0030D263 /* ConnectionResponseSpec.swift */,
 				2356F69B22FDB9E2002A2047 /* ConnectionSpec.swift */,
@@ -168,6 +167,7 @@
 				40AF223C2356FF4C00C01E3D /* ConnectionResponseListener.swift */,
 				23168DB32350DCDB0030D263 /* ConnectionErrorListener.swift */,
 				403188A8230D082C000AAABA /* URLEncoder.swift */,
+				2356F69722FDB9AC002A2047 /* HTTPConnector.swift */,
 				239B121523294228009F4B0B /* ConnectionHolder.swift */,
 				234C34C02343A79000AE45FF /* ConnectionIndicator.swift */,
 			);

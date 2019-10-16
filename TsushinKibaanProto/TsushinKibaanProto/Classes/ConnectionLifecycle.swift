@@ -22,6 +22,8 @@ open class ConnectionLifecycle<ResponseSpec: ConnectionResponseSpec>: Connection
     var urlEncoder: URLEncoder
     var isCancelled = false
 
+    var indicator: ConnectionIndicator?
+
     weak var holder = ConnectionHolder.shared
 
     init(requestSpec: ConnectionRequestSpec,
@@ -66,6 +68,7 @@ open class ConnectionLifecycle<ResponseSpec: ConnectionResponseSpec>: Connection
         request.headers = requestSpec.headers
 
         listeners.forEach { $0.onStart() }
+        indicator?.addReferenceCount()
 
         // このインスタンスが通信完了まで開放されないよう保持する必要がある
         holder?.add(connection: self)
@@ -81,20 +84,10 @@ open class ConnectionLifecycle<ResponseSpec: ConnectionResponseSpec>: Connection
             DispatchQueue.main.async(execute: {
                 self?.listeners.forEach { $0.onEnd() }
             })
+            self?.indicator?.removeReferenceCount()
             self?.holder?.remove(connection: self)
             onEnd?()
         })
-    }
-    
-    open func makeURL(baseURL: String, query: URLQuery?, encoder: URLEncoder) -> URL? {
-        var urlStr = baseURL
-        
-        if let query = query {
-            let separator = urlStr.contains("?") ? "&" : "?"
-            urlStr += separator + query.stringValue(encoder: urlEncoder)
-        }
-        
-        return URL(string: urlStr)
     }
 
     /// 通信完了時の処理
@@ -216,6 +209,17 @@ open class ConnectionLifecycle<ResponseSpec: ConnectionResponseSpec>: Connection
 
     ///
     open func after(callback: () -> Void) {
+    }
+
+    open func makeURL(baseURL: String, query: URLQuery?, encoder: URLEncoder) -> URL? {
+        var urlStr = baseURL
+
+        if let query = query {
+            let separator = urlStr.contains("?") ? "&" : "?"
+            urlStr += separator + query.stringValue(encoder: urlEncoder)
+        }
+
+        return URL(string: urlStr)
     }
 }
 
