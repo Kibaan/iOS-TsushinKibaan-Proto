@@ -11,8 +11,10 @@ import Foundation
 /// 通信エラーのリスナー
 protocol ConnectionErrorListener {
     
-    func onNetworkError(error: Error, response: Response?)
-    func onStatusError(statusCode: Int)
-    func onParseError()
-    func onValidationError(dataModel: Any)
+    func onNetworkError(error: Error?)
+    func onStatusCodeError(response: Response)
+    func onParseError(response: Response)
+    func onValidationError(response: Response, dataModel: Any)
 }
+
+// TODO メインのエラーの後にやるか

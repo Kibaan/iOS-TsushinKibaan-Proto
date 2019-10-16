@@ -53,7 +53,7 @@ public class DefaultHTTPConnector: NSObject, HTTPConnector {
             }
         }
         
-        return Response(data: data,
+        return Response(data: data ?? Data(),
                         statusCode: urlResponse.statusCode,
                         headers: hedears,
                         nativeResponse: urlResponse)

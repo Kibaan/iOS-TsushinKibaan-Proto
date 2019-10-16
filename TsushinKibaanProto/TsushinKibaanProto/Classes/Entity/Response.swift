@@ -9,7 +9,7 @@
 import Foundation
 
 public struct Response {
-    let data: Data?
+    let data: Data
     let statusCode: Int
     let headers: [String: String]
     let nativeResponse: Any?

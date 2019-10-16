@@ -24,7 +24,6 @@
 		2356F69C22FDB9E2002A2047 /* ConnectionSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2356F69B22FDB9E2002A2047 /* ConnectionSpec.swift */; };
 		2356F69E22FDBAA3002A2047 /* ConnectionListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2356F69D22FDBAA3002A2047 /* ConnectionListener.swift */; };
 		239B121623294228009F4B0B /* ConnectionHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239B121523294228009F4B0B /* ConnectionHolder.swift */; };
-		23A8D9B22312248800873CAB /* ConnectionEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A8D9B12312248800873CAB /* ConnectionEvent.swift */; };
 		403188A7230D0587000AAABA /* KeyValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403188A6230D0587000AAABA /* KeyValue.swift */; };
 		403188A9230D082C000AAABA /* URLEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403188A8230D082C000AAABA /* URLEncoder.swift */; };
 		403188AB230D0A71000AAABA /* URLQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403188AA230D0A71000AAABA /* URLQuery.swift */; };
@@ -39,6 +38,7 @@
 		40AB633223320BB2009BD7CB /* ConnectionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40AB633123320BB2009BD7CB /* ConnectionError.swift */; };
 		40AB633423321142009BD7CB /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40AB633323321142009BD7CB /* Response.swift */; };
 		40AB642A233B57D3009BD7CB /* CommonEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40AB6429233B57D3009BD7CB /* CommonEvent.swift */; };
+		40AF223D2356FF4C00C01E3D /* ConnectionResponseListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40AF223C2356FF4C00C01E3D /* ConnectionResponseListener.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -61,7 +61,6 @@
 		2356F69B22FDB9E2002A2047 /* ConnectionSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionSpec.swift; sourceTree = "<group>"; };
 		2356F69D22FDBAA3002A2047 /* ConnectionListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionListener.swift; sourceTree = "<group>"; };
 		239B121523294228009F4B0B /* ConnectionHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionHolder.swift; sourceTree = "<group>"; };
-		23A8D9B12312248800873CAB /* ConnectionEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionEvent.swift; sourceTree = "<group>"; };
 		403188A6230D0587000AAABA /* KeyValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyValue.swift; sourceTree = "<group>"; };
 		403188A8230D082C000AAABA /* URLEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLEncoder.swift; sourceTree = "<group>"; };
 		403188AA230D0A71000AAABA /* URLQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLQuery.swift; sourceTree = "<group>"; };
@@ -76,6 +75,7 @@
 		40AB633123320BB2009BD7CB /* ConnectionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionError.swift; sourceTree = "<group>"; };
 		40AB633323321142009BD7CB /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
 		40AB6429233B57D3009BD7CB /* CommonEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonEvent.swift; sourceTree = "<group>"; };
+		40AF223C2356FF4C00C01E3D /* ConnectionResponseListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionResponseListener.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,8 +165,8 @@
 				23168DB1234DF36F0030D263 /* ConnectionResponseSpec.swift */,
 				2356F69B22FDB9E2002A2047 /* ConnectionSpec.swift */,
 				2356F69D22FDBAA3002A2047 /* ConnectionListener.swift */,
+				40AF223C2356FF4C00C01E3D /* ConnectionResponseListener.swift */,
 				23168DB32350DCDB0030D263 /* ConnectionErrorListener.swift */,
-				23A8D9B12312248800873CAB /* ConnectionEvent.swift */,
 				403188A8230D082C000AAABA /* URLEncoder.swift */,
 				239B121523294228009F4B0B /* ConnectionHolder.swift */,
 				234C34C02343A79000AE45FF /* ConnectionIndicator.swift */,
@@ -285,9 +285,9 @@
 				234C34C12343A79000AE45FF /* ConnectionIndicator.swift in Sources */,
 				40AB633423321142009BD7CB /* Response.swift in Sources */,
 				403188AB230D0A71000AAABA /* URLQuery.swift in Sources */,
-				23A8D9B22312248800873CAB /* ConnectionEvent.swift in Sources */,
 				40AB633223320BB2009BD7CB /* ConnectionError.swift in Sources */,
 				403188A9230D082C000AAABA /* URLEncoder.swift in Sources */,
+				40AF223D2356FF4C00C01E3D /* ConnectionResponseListener.swift in Sources */,
 				403188AD230D0E93000AAABA /* ConnectionErrorType.swift in Sources */,
 				403188A7230D0587000AAABA /* KeyValue.swift in Sources */,
 				239B121623294228009F4B0B /* ConnectionHolder.swift in Sources */,
