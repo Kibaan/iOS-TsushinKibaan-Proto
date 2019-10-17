@@ -11,11 +11,16 @@ import Foundation
 /// 通信レスポンスの仕様
 public protocol ConnectionResponseSpec {
     associatedtype ResponseModel
-    
-    func isValidStatusCode(_ code: Int) -> Bool
+
     func parseResponse(response: Response) throws -> ResponseModel
 
+    // TODO ヘッダーやデータ値によってエラー判断されるケースもあるのにステータスコードだけチェックするのは不公平では？
+    // バリデーションとパースをまとめてparseResponseに押し付けることもできるし、
+    // Validatorを分離する案もある
+    func isValidStatusCode(_ code: Int) -> Bool
+
     // TODO この関数必要か？
-    // パースはできたがエラーコードなど含む場合
+    // パースはできたがエラーコードなど含む場合に必要か
+    // ResponseListenerでstopして、そこからエラーに流れればよいのでは？
     func isValidResponse(_ model: ResponseModel) -> Bool
 }

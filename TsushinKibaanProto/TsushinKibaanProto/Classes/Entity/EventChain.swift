@@ -10,7 +10,11 @@ import Foundation
 
 public class EventChain {
     public var isStopped = false
-    public func stop() {
-        isStopped = true
+
+    public func stopImmediately() {
     }
+
+    public func stopNextPhase() {
+    }
+
 }

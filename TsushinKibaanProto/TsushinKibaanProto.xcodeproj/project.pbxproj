@@ -32,12 +32,10 @@
 		403188B32313A643000AAABA /* EventChain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403188B22313A643000AAABA /* EventChain.swift */; };
 		403188B62314B84E000AAABA /* MTSSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403188B52314B84E000AAABA /* MTSSpec.swift */; };
 		403188B82314B942000AAABA /* MTSResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403188B72314B942000AAABA /* MTSResponse.swift */; };
-		403188BA2314BA0C000AAABA /* HogeSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403188B92314BA0C000AAABA /* HogeSpec.swift */; };
 		405294CF232228AB00739998 /* SimpleSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405294CE232228AB00739998 /* SimpleSpec.swift */; };
 		405294F5232A599300739998 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405294F4232A599300739998 /* Request.swift */; };
 		40AB633223320BB2009BD7CB /* ConnectionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40AB633123320BB2009BD7CB /* ConnectionError.swift */; };
 		40AB633423321142009BD7CB /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40AB633323321142009BD7CB /* Response.swift */; };
-		40AB642A233B57D3009BD7CB /* CommonEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40AB6429233B57D3009BD7CB /* CommonEvent.swift */; };
 		40AF223D2356FF4C00C01E3D /* ConnectionResponseListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40AF223C2356FF4C00C01E3D /* ConnectionResponseListener.swift */; };
 /* End PBXBuildFile section */
 
@@ -69,12 +67,10 @@
 		403188B22313A643000AAABA /* EventChain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventChain.swift; sourceTree = "<group>"; };
 		403188B52314B84E000AAABA /* MTSSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTSSpec.swift; sourceTree = "<group>"; };
 		403188B72314B942000AAABA /* MTSResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTSResponse.swift; sourceTree = "<group>"; };
-		403188B92314BA0C000AAABA /* HogeSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HogeSpec.swift; sourceTree = "<group>"; };
 		405294CE232228AB00739998 /* SimpleSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleSpec.swift; sourceTree = "<group>"; };
 		405294F4232A599300739998 /* Request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
 		40AB633123320BB2009BD7CB /* ConnectionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionError.swift; sourceTree = "<group>"; };
 		40AB633323321142009BD7CB /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
-		40AB6429233B57D3009BD7CB /* CommonEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonEvent.swift; sourceTree = "<group>"; };
 		40AF223C2356FF4C00C01E3D /* ConnectionResponseListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionResponseListener.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -179,8 +175,6 @@
 			children = (
 				403188B52314B84E000AAABA /* MTSSpec.swift */,
 				403188B72314B942000AAABA /* MTSResponse.swift */,
-				403188B92314BA0C000AAABA /* HogeSpec.swift */,
-				40AB6429233B57D3009BD7CB /* CommonEvent.swift */,
 			);
 			path = MTSSample;
 			sourceTree = "<group>";
@@ -265,7 +259,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2356F69C22FDB9E2002A2047 /* ConnectionSpec.swift in Sources */,
-				40AB642A233B57D3009BD7CB /* CommonEvent.swift in Sources */,
 				234C34CA2348EBCE00AE45FF /* DefaultConnectionIndicator.swift in Sources */,
 				403188B62314B84E000AAABA /* MTSSpec.swift in Sources */,
 				405294CF232228AB00739998 /* SimpleSpec.swift in Sources */,
@@ -276,7 +269,6 @@
 				2356F68722FDB980002A2047 /* ViewController.swift in Sources */,
 				403188B82314B942000AAABA /* MTSResponse.swift in Sources */,
 				403188B1230FF3AD000AAABA /* HTTPMethod.swift in Sources */,
-				403188BA2314BA0C000AAABA /* HogeSpec.swift in Sources */,
 				2356F69E22FDBAA3002A2047 /* ConnectionListener.swift in Sources */,
 				23168DB2234DF36F0030D263 /* ConnectionResponseSpec.swift in Sources */,
 				2356F68522FDB980002A2047 /* AppDelegate.swift in Sources */,

@@ -76,15 +76,14 @@ open class ConnectionLifecycle<ResponseSpec: ConnectionResponseSpec>: Connection
         print("[\(requestSpec.httpMethod.stringValue)] \(url)")
         // 通信する
         connector.execute(request: request, complete: { [weak self] (response, error) in
-            // TODO Should we do this in main thread?
             self?.complete(onSuccess: onSuccess,
                            onError: onError,
                            response: response,
                            error: error)
-            DispatchQueue.main.async(execute: {
+            DispatchQueue.main.async {
                 self?.listeners.forEach { $0.onEnd() }
-            })
-            self?.indicator?.removeReferenceCount()
+                self?.indicator?.removeReferenceCount()
+            }
             self?.holder?.remove(connection: self)
             onEnd?()
         })
@@ -137,7 +136,11 @@ open class ConnectionLifecycle<ResponseSpec: ConnectionResponseSpec>: Connection
 
             if responseSpec.isValidResponse(responseModel) {
                 // TODO Aspect to be hooked
-                onSuccess?(responseModel)
+
+                DispatchQueue.main.async {
+                    onSuccess?(responseModel)
+                }
+
                 // TODO Aspect to be hooked
             } else {
                 handleError(.invalidResponse, response: response, responseModel: responseModel, onError: onError)
@@ -145,6 +148,10 @@ open class ConnectionLifecycle<ResponseSpec: ConnectionResponseSpec>: Connection
         } catch {
             handleError(.parse, response: response, onError: onError)
         }
+    }
+
+    func handleNetworkError(error: Error?) {
+
     }
 
     /// エラーを処理する
@@ -173,26 +180,26 @@ open class ConnectionLifecycle<ResponseSpec: ConnectionResponseSpec>: Connection
                                     response: Response? = nil,
                                     responseModel: ResponseSpec.ResponseModel? = nil) {
 
-        switch type {
-        case .invalidURL, .network:
-            errorListeners.forEach {
-                $0.onNetworkError(error: error)
-            }
-        case .statusCode:
-            errorListeners.forEach {
-                $0.onStatusCodeError(response: response)
-            }
-        case .parse:
-            errorListeners.forEach {
-                $0.onParseError(response: response)
-            }
-        case .invalidResponse:
-            errorListeners.forEach {
-                $0.onValidationError(response: response, dataModel: responseModel)
-            }
-
-        default:
-        }
+//        switch type {
+//        case .invalidURL, .network:
+//            errorListeners.forEach {
+//                $0.onNetworkError(error: error)
+//            }
+//        case .statusCode:
+//            errorListeners.forEach {
+//                $0.onStatusCodeError(response: response)
+//            }
+//        case .parse:
+//            errorListeners.forEach {
+//                $0.onParseError(response: response)
+//            }
+//        case .invalidResponse:
+//            errorListeners.forEach {
+//                $0.onValidationError(response: response, dataModel: responseModel)
+//            }
+//
+//        default:
+//        }
 
     }
 
