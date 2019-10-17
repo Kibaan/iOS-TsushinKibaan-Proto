@@ -2,14 +2,14 @@
 //  ConnectionErrorListener.swift
 //  TsushinKibaanProto
 //
-//  Created by 山本敬太 on 2019/10/12.
-//  Copyright © 2019 山本敬太. All rights reserved.
+//  Created by Yamamoto Keita on 2019/10/12.
+//  Copyright © 2019 Yamamoto Keita. All rights reserved.
 //
 
 import Foundation
 
 /// 通信エラーのリスナー
-protocol ConnectionErrorListener {
+public protocol ConnectionErrorListener {
     
     func onNetworkError(error: Error?)
     func onStatusCodeError(response: Response)

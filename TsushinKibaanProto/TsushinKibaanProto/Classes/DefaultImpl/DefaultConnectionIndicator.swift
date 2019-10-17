@@ -2,8 +2,8 @@
 //  DefaultConnectionIndicator.swift
 //  TsushinKibaanProto
 //
-//  Created by 山本敬太 on 2019/10/06.
-//  Copyright © 2019 山本敬太. All rights reserved.
+//  Created by Yamamoto Keita on 2019/10/06.
+//  Copyright © 2019 Yamamoto Keita. All rights reserved.
 //
 
 import UIKit

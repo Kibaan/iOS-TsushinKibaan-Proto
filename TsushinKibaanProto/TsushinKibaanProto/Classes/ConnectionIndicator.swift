@@ -2,14 +2,14 @@
 //  ConnectionIndicator.swift
 //  TsushinKibaanProto
 //
-//  Created by 山本敬太 on 2019/10/02.
-//  Copyright © 2019 山本敬太. All rights reserved.
+//  Created by Yamamoto Keita on 2019/10/02.
+//  Copyright © 2019 Yamamoto Keita. All rights reserved.
 //
 
 import Foundation
 
 /// 通信インジケーター
-protocol ConnectionIndicator {
+public protocol ConnectionIndicator {
     func addReferenceCount()
     func removeReferenceCount()
 }

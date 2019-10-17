@@ -2,13 +2,16 @@
 //  ConnectionSpec.swift
 //  TsushinKibaanProto
 //
-//  Created by 山本敬太 on 2019/08/09.
-//  Copyright © 2019 山本敬太. All rights reserved.
+//  Created by Yamamoto Keita on 2019/08/09.
+//  Copyright © 2019 Yamamoto Keita. All rights reserved.
 //
 
 import Foundation
 
-/// HTTP通信のリクエスト、レスポンスの仕様
+/// HTTP通信のリクエストおよびレスポンスの仕様
+///
+/// Specification of a HTTP request and response.
+///
 public protocol ConnectionSpec: ConnectionRequestSpec, ConnectionResponseSpec {
 }
 

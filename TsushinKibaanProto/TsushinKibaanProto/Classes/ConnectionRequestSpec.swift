@@ -2,13 +2,18 @@
 //  ConnectionRequestSpec.swift
 //  TsushinKibaanProto
 //
-//  Created by 山本敬太 on 2019/10/09.
-//  Copyright © 2019 山本敬太. All rights reserved.
+//  Created by Yamamoto Keita on 2019/10/09.
+//  Copyright © 2019 Yamamoto Keita. All rights reserved.
 //
 
 import Foundation
 
-/// 通信リクエストの仕様
+/// HTTPリクエストの仕様
+/// URL、HTTPメソッド、ヘッダー、パラメーターなどのリクエストの内容を決める
+///
+/// Specification of a HTTP request.
+/// This specify contents of a request including url, HTTP method, headers and parameters.
+///
 public protocol ConnectionRequestSpec {
     /// リクエスト先URL
     var url: String { get }

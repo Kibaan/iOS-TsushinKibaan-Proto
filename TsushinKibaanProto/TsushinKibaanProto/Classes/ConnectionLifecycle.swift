@@ -2,29 +2,34 @@
 //  ConnectionLifecycle.swift
 //  TsushinKibaanProto
 //
-//  Created by 山本敬太 on 2019/08/09.
-//  Copyright © 2019 山本敬太. All rights reserved.
+//  Created by Yamamoto Keita on 2019/08/09.
+//  Copyright © 2019 Yamamoto Keita. All rights reserved.
 //
 
 import Foundation
 
-/// 通信ライフサイクル
+/// HTTP通信のライフサイクル
+/// 通信に必要な各種モジュールを取りまとめ、通信処理の実行と各種コールバックやリスナーの呼び出しを行う
+///
+/// The lifecycle of a HTTP connection.
+///
+///
 open class ConnectionLifecycle<ResponseSpec: ConnectionResponseSpec>: ConnectionTask {
     
-    let requestSpec: ConnectionRequestSpec
-    let responseSpec: ResponseSpec
+    public let requestSpec: ConnectionRequestSpec
+    public let responseSpec: ResponseSpec
 
-    var listeners: [ConnectionListener] = []
-    var responseListeners: [ConnectionResponseListener] = []
-    var errorListeners: [ConnectionErrorListener] = []
+    public var listeners: [ConnectionListener] = []
+    public var responseListeners: [ConnectionResponseListener] = []
+    public var errorListeners: [ConnectionErrorListener] = []
 
-    var connector: HTTPConnector
-    var urlEncoder: URLEncoder
-    var isCancelled = false
+    public var connector: HTTPConnector
+    public var urlEncoder: URLEncoder
+    public var isCancelled = false
 
-    var indicator: ConnectionIndicator?
+    public var indicator: ConnectionIndicator?
 
-    weak var holder = ConnectionHolder.shared
+    public weak var holder = ConnectionHolder.shared
 
     init(requestSpec: ConnectionRequestSpec,
          responseSpec: ResponseSpec,
@@ -74,6 +79,7 @@ open class ConnectionLifecycle<ResponseSpec: ConnectionResponseSpec>: Connection
         holder?.add(connection: self)
 
         print("[\(requestSpec.httpMethod.stringValue)] \(url)")
+        
         // 通信する
         connector.execute(request: request, complete: { [weak self] (response, error) in
             self?.complete(onSuccess: onSuccess,
@@ -134,17 +140,14 @@ open class ConnectionLifecycle<ResponseSpec: ConnectionResponseSpec>: Connection
                 $0.onReceivedModel(responseModel: responseModel)
             }
 
-            if responseSpec.isValidResponse(responseModel) {
-                // TODO Aspect to be hooked
+            // TODO Aspect to be hooked
 
-                DispatchQueue.main.async {
-                    onSuccess?(responseModel)
-                }
-
-                // TODO Aspect to be hooked
-            } else {
-                handleError(.invalidResponse, response: response, responseModel: responseModel, onError: onError)
+            DispatchQueue.main.async {
+                onSuccess?(responseModel)
             }
+
+            // TODO Aspect to be hooked
+
         } catch {
             handleError(.parse, response: response, onError: onError)
         }
@@ -231,6 +234,9 @@ open class ConnectionLifecycle<ResponseSpec: ConnectionResponseSpec>: Connection
 }
 
 public protocol ConnectionTask: class {
+    
+    var requestSpec: ConnectionRequestSpec { get }
+    
     func cancel()
     func restart()
 }
