@@ -14,9 +14,9 @@ import Foundation
 /// The lifecycle of a HTTP connection.
 ///
 ///
-open class ConnectionLifecycle<ResponseSpec: ConnectionResponseSpec>: ConnectionTask {
+open class ConnectionLifecycle<ResponseSpec: ResponseSpec>: ConnectionTask {
     
-    public let requestSpec: ConnectionRequestSpec
+    public let requestSpec: RequestSpec
     public let responseSpec: ResponseSpec
 
     public var listeners: [ConnectionListener] = []
@@ -31,7 +31,7 @@ open class ConnectionLifecycle<ResponseSpec: ConnectionResponseSpec>: Connection
 
     public weak var holder = ConnectionHolder.shared
 
-    init(requestSpec: ConnectionRequestSpec,
+    init(requestSpec: RequestSpec,
          responseSpec: ResponseSpec,
          urlEncoder: URLEncoder,
          connector: HTTPConnector) {
@@ -235,7 +235,7 @@ open class ConnectionLifecycle<ResponseSpec: ConnectionResponseSpec>: Connection
 
 public protocol ConnectionTask: class {
     
-    var requestSpec: ConnectionRequestSpec { get }
+    var requestSpec: RequestSpec { get }
     
     func cancel()
     func restart()

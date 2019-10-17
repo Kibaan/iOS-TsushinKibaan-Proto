@@ -12,7 +12,7 @@ import Foundation
 ///
 /// Specification of a HTTP request and response.
 ///
-public protocol ConnectionSpec: ConnectionRequestSpec, ConnectionResponseSpec {
+public protocol ConnectionSpec: RequestSpec, ResponseSpec {
 }
 
 /*

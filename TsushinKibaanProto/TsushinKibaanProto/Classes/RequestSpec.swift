@@ -1,5 +1,5 @@
 //
-//  ConnectionRequestSpec.swift
+//  RequestSpec.swift
 //  TsushinKibaanProto
 //
 //  Created by Yamamoto Keita on 2019/10/09.
@@ -14,7 +14,7 @@ import Foundation
 /// Specification of a HTTP request.
 /// This specify contents of a request including url, HTTP method, headers and parameters.
 ///
-public protocol ConnectionRequestSpec {
+public protocol RequestSpec {
     /// リクエスト先URL
     var url: String { get }
     /// HTTPメソッド

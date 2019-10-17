@@ -1,5 +1,5 @@
 //
-//  ConnectionResponseSpec.swift
+//  ResponseSpec.swift
 //  TsushinKibaanProto
 //
 //  Created by Yamamoto Keita on 2019/10/09.
@@ -14,7 +14,7 @@ import Foundation
 ///
 ///
 ///
-public protocol ConnectionResponseSpec {
+public protocol ResponseSpec {
     associatedtype ResponseModel
 
     /// HTTPレスポンスをassociated typeに指定された型に変換する
