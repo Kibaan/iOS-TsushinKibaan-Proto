@@ -8,7 +8,8 @@
 
 import Foundation
 
-/// 通信エラーのリスナー
+/// 通信エラーを受け取るリスナー
+/// 
 public protocol ConnectionErrorListener {
     
     func onNetworkError(error: Error?)
