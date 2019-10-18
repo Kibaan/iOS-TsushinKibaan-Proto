@@ -70,9 +70,10 @@ open class ConnectionLifecycle<T: ResponseSpec>: ConnectionTask {
         }
         
         // リクエスト作成
-        let request = Request(url: url, method: requestSpec.httpMethod)
-        request.body = requestSpec.makePostData()
-        request.headers = requestSpec.headers
+        let request = Request(url: url,
+                              method: requestSpec.httpMethod,
+                              body: requestSpec.makePostData(),
+                              headers: requestSpec.headers)
 
         listeners.forEach {
             $0.onStart(request: request)
@@ -150,14 +151,13 @@ open class ConnectionLifecycle<T: ResponseSpec>: ConnectionTask {
                 $0.onReceivedModel(responseModel: responseModel)
             }
 
-            // TODO Aspect to be hooked
-
             DispatchQueue.main.async {
                 onSuccess?(responseModel)
             }
 
-            // TODO Aspect to be hooked
-
+            responseListeners.forEach {
+                $0.afterSuccess(responseModel: responseModel)
+            }
         } catch {
             handleError(.parse, response: response, onError: onError)
         }
@@ -176,6 +176,8 @@ open class ConnectionLifecycle<T: ResponseSpec>: ConnectionTask {
         // Override
         let message = error?.localizedDescription ?? ""
         print("[ConnectionError] Type= \(type.description), NativeMessage=\(message)")
+
+        // TODO call error listeners
 
         let errorResponse = ConnectionError(type: type,
                                           response: response,

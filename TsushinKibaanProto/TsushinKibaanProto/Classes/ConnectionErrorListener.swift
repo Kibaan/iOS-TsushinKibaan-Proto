@@ -18,4 +18,4 @@ public protocol ConnectionErrorListener {
     func onValidationError(response: Response, dataModel: Any)
 }
 
-// TODO メインのエラーの後にやるか
+// TODO エラーコールバックの先にやるか後にやるか？
