@@ -10,15 +10,15 @@ import Foundation
 
 /// HTTP通信のエラー種別
 public enum ConnectionErrorType: Error {
-    /// URL不正
+    /// 不正なURL
     case invalidURL
-    /// オフライン、タイムアウトなどの通信エラー
+    /// オフライン、タイムアウトなどのネットワークエラー
     case network
-    /// HTTPステータスコードが既定ではないエラー
+    /// HTTPステータスコードが既定ではない
     case statusCode
     /// レスポンスのパースに失敗
     case parse
-    /// レスポンスデータの内容が不正
+    /// バリデーションエラー
     case validation
 
     public var description: String {

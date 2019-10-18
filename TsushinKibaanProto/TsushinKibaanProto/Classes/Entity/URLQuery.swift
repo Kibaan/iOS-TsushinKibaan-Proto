@@ -9,6 +9,7 @@
 import Foundation
 
 /// key=valueの&つなぎ形式のクエリ
+/// URLのクエリパラメーターを構築するのに用いる
 public class URLQuery: ExpressibleByDictionaryLiteral {
 
     public var keyValues: [KeyValue] = []

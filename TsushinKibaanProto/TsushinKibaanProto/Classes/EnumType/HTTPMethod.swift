@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// HTTPメソッド
 public enum HTTPMethod: String {
     case get
     case post

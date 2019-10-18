@@ -8,6 +8,8 @@
 
 import Foundation
 
+// TODO これいらない？
+
 public class EventChain {
     public var isStopped = false
 

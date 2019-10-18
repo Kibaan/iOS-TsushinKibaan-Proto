@@ -1,8 +1,16 @@
 # AbstractHTTP
 
 
+AbstractHTTP はHTTP通信とそれに付随する一連の処理を抽象化したライブラリです。
 
-This project is a prototype of abstract HTTP processing library.
+このライブラリ大部分がプロトコルでできており、**通信の実装というより設計や処理の流れを提供するもの**になっています。
 
-I am considering about designs.
+※ 利便性のためプロトコルのデフォルト実装はいくつか含まれています
+
+```
+AbstractHTTP is abstract HTTP processing library.  
+```
+
+# プログラミングガイド
+
 

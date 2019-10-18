@@ -9,13 +9,13 @@
 import Foundation
 
 /// HTTPリクエストの仕様
-/// URL、HTTPメソッド、ヘッダー、パラメーターなどのリクエストの内容を決める
+/// URL、HTTPメソッド、ヘッダー、パラメーターなどリクエストの内容を決める
 ///
 /// Specification of a HTTP request.
 /// This specify contents of a request including url, HTTP method, headers and parameters.
 ///
 public protocol RequestSpec {
-    /// リクエスト先URL
+    /// リクエスト先のURL
     var url: String { get }
     /// HTTPメソッド
     var httpMethod: HTTPMethod { get }

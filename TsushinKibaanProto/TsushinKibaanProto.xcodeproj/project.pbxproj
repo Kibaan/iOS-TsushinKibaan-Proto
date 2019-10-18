@@ -37,6 +37,7 @@
 		40AB633223320BB2009BD7CB /* ConnectionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40AB633123320BB2009BD7CB /* ConnectionError.swift */; };
 		40AB633423321142009BD7CB /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40AB633323321142009BD7CB /* Response.swift */; };
 		40AF223D2356FF4C00C01E3D /* ConnectionResponseListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40AF223C2356FF4C00C01E3D /* ConnectionResponseListener.swift */; };
+		40D5EE302359F124000E2E51 /* ViewIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40D5EE2F2359F124000E2E51 /* ViewIndicator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -72,6 +73,7 @@
 		40AB633123320BB2009BD7CB /* ConnectionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionError.swift; sourceTree = "<group>"; };
 		40AB633323321142009BD7CB /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
 		40AF223C2356FF4C00C01E3D /* ConnectionResponseListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionResponseListener.swift; sourceTree = "<group>"; };
+		40D5EE2F2359F124000E2E51 /* ViewIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewIndicator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +115,7 @@
 				234C34C52348EB7400AE45FF /* DefaultHTTPConnector.swift */,
 				234C34C72348EB9E00AE45FF /* DefaultURLEncoder.swift */,
 				234C34C92348EBCE00AE45FF /* DefaultConnectionIndicator.swift */,
+				40D5EE2F2359F124000E2E51 /* ViewIndicator.swift */,
 			);
 			path = DefaultImpl;
 			sourceTree = "<group>";
@@ -280,6 +283,7 @@
 				40AB633223320BB2009BD7CB /* ConnectionError.swift in Sources */,
 				403188A9230D082C000AAABA /* URLEncoder.swift in Sources */,
 				40AF223D2356FF4C00C01E3D /* ConnectionResponseListener.swift in Sources */,
+				40D5EE302359F124000E2E51 /* ViewIndicator.swift in Sources */,
 				403188AD230D0E93000AAABA /* ConnectionErrorType.swift in Sources */,
 				403188A7230D0587000AAABA /* KeyValue.swift in Sources */,
 				239B121623294228009F4B0B /* ConnectionHolder.swift in Sources */,

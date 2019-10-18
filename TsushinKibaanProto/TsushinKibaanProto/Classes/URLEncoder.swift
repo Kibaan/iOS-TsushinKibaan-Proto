@@ -9,6 +9,9 @@
 import Foundation
 
 /// 文字列をURLエンコードする
+/// URLのクエリパラメーターのエンコードに使われる
+/// クエリパラメーターのエンコードは一般的にUTF-8だが、
+/// 古いシステムでは他の文字コードが使われている場合があるためプロトコルにしている
 public protocol URLEncoder {
     func encode(_ text: String) -> String
 }

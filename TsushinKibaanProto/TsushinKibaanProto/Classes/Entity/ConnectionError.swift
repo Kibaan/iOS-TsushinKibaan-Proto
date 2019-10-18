@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// 通信エラーの情報
 public struct ConnectionError {
     let type: ConnectionErrorType
     let response: Response?

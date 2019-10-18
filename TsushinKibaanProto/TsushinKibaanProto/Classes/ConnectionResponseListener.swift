@@ -11,7 +11,7 @@ import Foundation
 /// 通信のレスポンスを受け取るリスナー
 /// 主に複数の通信で共通の後処理を行うために使う
 /// （個別の通信完了処理は ConnectionLifecycle.connect の引数のコールバックで処理する）
-/// レスポンスのバリデーターの役割も兼ねており、`onReceived` などの返り値はエラー判定に用いられる
+/// レスポンスのバリデーターの役割も兼ねており、`onReceived` 、`onReceivedModel` の返り値はエラー判定に用いられる
 ///
 public protocol ConnectionResponseListener {
 
