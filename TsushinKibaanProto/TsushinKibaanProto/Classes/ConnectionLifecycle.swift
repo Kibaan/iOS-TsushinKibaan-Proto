@@ -29,8 +29,6 @@ open class ConnectionLifecycle<T: ResponseSpec>: ConnectionTask {
 
     var latestRequest: Request?
 
-    public var indicator: ConnectionIndicator?
-
     public weak var holder = ConnectionHolder.shared
 
     init(requestSpec: RequestSpec,
@@ -78,7 +76,6 @@ open class ConnectionLifecycle<T: ResponseSpec>: ConnectionTask {
         listeners.forEach {
             $0.onStart(request: request)
         }
-        indicator?.addReferenceCount()
 
         // このインスタンスが通信完了まで開放されないよう保持する必要がある
         holder?.add(connection: self)
@@ -93,7 +90,6 @@ open class ConnectionLifecycle<T: ResponseSpec>: ConnectionTask {
                            error: error)
             DispatchQueue.main.async {
                 self?.listeners.forEach { $0.onEnd() }
-                self?.indicator?.removeReferenceCount()
             }
             self?.holder?.remove(connection: self)
             onEnd?()

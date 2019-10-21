@@ -10,10 +10,9 @@
 		23168DB0234DF3150030D263 /* RequestSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23168DAF234DF3150030D263 /* RequestSpec.swift */; };
 		23168DB2234DF36F0030D263 /* ResponseSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23168DB1234DF36F0030D263 /* ResponseSpec.swift */; };
 		23168DB42350DCDB0030D263 /* ConnectionErrorListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23168DB32350DCDB0030D263 /* ConnectionErrorListener.swift */; };
-		234C34C12343A79000AE45FF /* ConnectionIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234C34C02343A79000AE45FF /* ConnectionIndicator.swift */; };
+		233C10DE235E784100893F39 /* ConnectionIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233C10DD235E784100893F39 /* ConnectionIndicator.swift */; };
 		234C34C62348EB7400AE45FF /* DefaultHTTPConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234C34C52348EB7400AE45FF /* DefaultHTTPConnector.swift */; };
 		234C34C82348EB9E00AE45FF /* DefaultURLEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234C34C72348EB9E00AE45FF /* DefaultURLEncoder.swift */; };
-		234C34CA2348EBCE00AE45FF /* DefaultConnectionIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234C34C92348EBCE00AE45FF /* DefaultConnectionIndicator.swift */; };
 		2356F68522FDB980002A2047 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2356F68422FDB980002A2047 /* AppDelegate.swift */; };
 		2356F68722FDB980002A2047 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2356F68622FDB980002A2047 /* ViewController.swift */; };
 		2356F68A22FDB980002A2047 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2356F68822FDB980002A2047 /* Main.storyboard */; };
@@ -37,17 +36,15 @@
 		40AB633223320BB2009BD7CB /* ConnectionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40AB633123320BB2009BD7CB /* ConnectionError.swift */; };
 		40AB633423321142009BD7CB /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40AB633323321142009BD7CB /* Response.swift */; };
 		40AF223D2356FF4C00C01E3D /* ConnectionResponseListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40AF223C2356FF4C00C01E3D /* ConnectionResponseListener.swift */; };
-		40D5EE302359F124000E2E51 /* ViewIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40D5EE2F2359F124000E2E51 /* ViewIndicator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		23168DAF234DF3150030D263 /* RequestSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestSpec.swift; sourceTree = "<group>"; };
 		23168DB1234DF36F0030D263 /* ResponseSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseSpec.swift; sourceTree = "<group>"; };
 		23168DB32350DCDB0030D263 /* ConnectionErrorListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionErrorListener.swift; sourceTree = "<group>"; };
-		234C34C02343A79000AE45FF /* ConnectionIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionIndicator.swift; sourceTree = "<group>"; };
+		233C10DD235E784100893F39 /* ConnectionIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionIndicator.swift; sourceTree = "<group>"; };
 		234C34C52348EB7400AE45FF /* DefaultHTTPConnector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultHTTPConnector.swift; sourceTree = "<group>"; };
 		234C34C72348EB9E00AE45FF /* DefaultURLEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultURLEncoder.swift; sourceTree = "<group>"; };
-		234C34C92348EBCE00AE45FF /* DefaultConnectionIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultConnectionIndicator.swift; sourceTree = "<group>"; };
 		2356F68122FDB980002A2047 /* TsushinKibaanProto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TsushinKibaanProto.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2356F68422FDB980002A2047 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2356F68622FDB980002A2047 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -73,7 +70,6 @@
 		40AB633123320BB2009BD7CB /* ConnectionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionError.swift; sourceTree = "<group>"; };
 		40AB633323321142009BD7CB /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
 		40AF223C2356FF4C00C01E3D /* ConnectionResponseListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionResponseListener.swift; sourceTree = "<group>"; };
-		40D5EE2F2359F124000E2E51 /* ViewIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewIndicator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,8 +110,7 @@
 			children = (
 				234C34C52348EB7400AE45FF /* DefaultHTTPConnector.swift */,
 				234C34C72348EB9E00AE45FF /* DefaultURLEncoder.swift */,
-				234C34C92348EBCE00AE45FF /* DefaultConnectionIndicator.swift */,
-				40D5EE2F2359F124000E2E51 /* ViewIndicator.swift */,
+				233C10DD235E784100893F39 /* ConnectionIndicator.swift */,
 			);
 			path = DefaultImpl;
 			sourceTree = "<group>";
@@ -168,7 +163,6 @@
 				403188A8230D082C000AAABA /* URLEncoder.swift */,
 				2356F69722FDB9AC002A2047 /* HTTPConnector.swift */,
 				239B121523294228009F4B0B /* ConnectionHolder.swift */,
-				234C34C02343A79000AE45FF /* ConnectionIndicator.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -262,12 +256,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				2356F69C22FDB9E2002A2047 /* ConnectionSpec.swift in Sources */,
-				234C34CA2348EBCE00AE45FF /* DefaultConnectionIndicator.swift in Sources */,
 				403188B62314B84E000AAABA /* MTSSpec.swift in Sources */,
 				405294CF232228AB00739998 /* SimpleSpec.swift in Sources */,
 				2356F69822FDB9AC002A2047 /* HTTPConnector.swift in Sources */,
 				23168DB42350DCDB0030D263 /* ConnectionErrorListener.swift in Sources */,
 				234C34C62348EB7400AE45FF /* DefaultHTTPConnector.swift in Sources */,
+				233C10DE235E784100893F39 /* ConnectionIndicator.swift in Sources */,
 				403188B32313A643000AAABA /* EventChain.swift in Sources */,
 				2356F68722FDB980002A2047 /* ViewController.swift in Sources */,
 				403188B82314B942000AAABA /* MTSResponse.swift in Sources */,
@@ -277,13 +271,11 @@
 				2356F68522FDB980002A2047 /* AppDelegate.swift in Sources */,
 				2356F69A22FDB9CF002A2047 /* ConnectionLifecycle.swift in Sources */,
 				405294F5232A599300739998 /* Request.swift in Sources */,
-				234C34C12343A79000AE45FF /* ConnectionIndicator.swift in Sources */,
 				40AB633423321142009BD7CB /* Response.swift in Sources */,
 				403188AB230D0A71000AAABA /* URLQuery.swift in Sources */,
 				40AB633223320BB2009BD7CB /* ConnectionError.swift in Sources */,
 				403188A9230D082C000AAABA /* URLEncoder.swift in Sources */,
 				40AF223D2356FF4C00C01E3D /* ConnectionResponseListener.swift in Sources */,
-				40D5EE302359F124000E2E51 /* ViewIndicator.swift in Sources */,
 				403188AD230D0E93000AAABA /* ConnectionErrorType.swift in Sources */,
 				403188A7230D0587000AAABA /* KeyValue.swift in Sources */,
 				239B121623294228009F4B0B /* ConnectionHolder.swift in Sources */,
