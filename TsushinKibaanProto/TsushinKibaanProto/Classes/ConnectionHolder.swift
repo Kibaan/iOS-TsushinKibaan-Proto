@@ -13,13 +13,13 @@ import Foundation
 public class ConnectionHolder {
     static var shared = ConnectionHolder()
     var connections: [ConnectionTask] = []
-    
+
     func add(connection: ConnectionTask) {
         connections.append(connection)
     }
 
     func remove(connection: ConnectionTask?) {
-        connections.removeAll{ $0 === connection }
+        connections.removeAll { $0 === connection }
     }
 
     func removeAll() {

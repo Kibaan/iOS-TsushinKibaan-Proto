@@ -21,7 +21,7 @@ public protocol ConnectionResponseListener {
     ///   - response: 通信レスポンスデータ
     /// - Returns: レスポンスデータが正常の場合 `true`、エラーの場合 `false`
     func onReceived(response: Response) -> Bool
-    
+
     /// レスポンスデータモデルの受信イベント
     /// `ConnectionResponseSpec`で作られたデータモデルを処理する
     ///
@@ -29,7 +29,7 @@ public protocol ConnectionResponseListener {
     ///   - responseModel: 通信レスポンスデータモデル。
     /// - Returns: レスポンスデータモデルが正常の場合 `true`、エラーの場合 `false`
     func onReceivedModel(responseModel: Any) -> Bool
-    
+
     /// 成功コールバック実行後のイベント
     func afterSuccess(responseModel: Any)
 }

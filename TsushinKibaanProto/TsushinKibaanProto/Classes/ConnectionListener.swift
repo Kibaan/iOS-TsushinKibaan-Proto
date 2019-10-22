@@ -12,7 +12,7 @@ import Foundation
 public protocol ConnectionListener {
     /// 通信の開始イベント
     func onStart(request: Request)
-    
+
     /// 通信の終了イベント
     /// 通信の成否に関わらず終了時に必ず呼び出される
     func onEnd()

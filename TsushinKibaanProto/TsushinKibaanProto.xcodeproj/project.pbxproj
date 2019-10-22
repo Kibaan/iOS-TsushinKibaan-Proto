@@ -28,7 +28,6 @@
 		403188AB230D0A71000AAABA /* URLQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403188AA230D0A71000AAABA /* URLQuery.swift */; };
 		403188AD230D0E93000AAABA /* ConnectionErrorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403188AC230D0E93000AAABA /* ConnectionErrorType.swift */; };
 		403188B1230FF3AD000AAABA /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403188B0230FF3AD000AAABA /* HTTPMethod.swift */; };
-		403188B32313A643000AAABA /* EventChain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403188B22313A643000AAABA /* EventChain.swift */; };
 		403188B62314B84E000AAABA /* MTSSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403188B52314B84E000AAABA /* MTSSpec.swift */; };
 		403188B82314B942000AAABA /* MTSResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403188B72314B942000AAABA /* MTSResponse.swift */; };
 		405294CF232228AB00739998 /* SimpleSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405294CE232228AB00739998 /* SimpleSpec.swift */; };
@@ -62,7 +61,6 @@
 		403188AA230D0A71000AAABA /* URLQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLQuery.swift; sourceTree = "<group>"; };
 		403188AC230D0E93000AAABA /* ConnectionErrorType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionErrorType.swift; sourceTree = "<group>"; };
 		403188B0230FF3AD000AAABA /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
-		403188B22313A643000AAABA /* EventChain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventChain.swift; sourceTree = "<group>"; };
 		403188B52314B84E000AAABA /* MTSSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTSSpec.swift; sourceTree = "<group>"; };
 		403188B72314B942000AAABA /* MTSResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTSResponse.swift; sourceTree = "<group>"; };
 		405294CE232228AB00739998 /* SimpleSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleSpec.swift; sourceTree = "<group>"; };
@@ -86,7 +84,6 @@
 		234C34C22348EAE400AE45FF /* Entity */ = {
 			isa = PBXGroup;
 			children = (
-				403188B22313A643000AAABA /* EventChain.swift */,
 				403188A6230D0587000AAABA /* KeyValue.swift */,
 				405294F4232A599300739998 /* Request.swift */,
 				40AB633323321142009BD7CB /* Response.swift */,
@@ -194,6 +191,7 @@
 				2356F67D22FDB980002A2047 /* Sources */,
 				2356F67E22FDB980002A2047 /* Frameworks */,
 				2356F67F22FDB980002A2047 /* Resources */,
+				23001111235EB272002AA506 /* Run Script(SwiftLint) */,
 			);
 			buildRules = (
 			);
@@ -250,6 +248,27 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		23001111235EB272002AA506 /* Run Script(SwiftLint) */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script(SwiftLint)";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"SwiftLint does not exist, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		2356F67D22FDB980002A2047 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -262,7 +281,6 @@
 				23168DB42350DCDB0030D263 /* ConnectionErrorListener.swift in Sources */,
 				234C34C62348EB7400AE45FF /* DefaultHTTPConnector.swift in Sources */,
 				233C10DE235E784100893F39 /* ConnectionIndicator.swift in Sources */,
-				403188B32313A643000AAABA /* EventChain.swift in Sources */,
 				2356F68722FDB980002A2047 /* ViewController.swift in Sources */,
 				403188B82314B942000AAABA /* MTSResponse.swift in Sources */,
 				403188B1230FF3AD000AAABA /* HTTPMethod.swift in Sources */,

@@ -9,21 +9,21 @@
 import Foundation
 
 public class DefaultHTTPConnector: NSObject, HTTPConnector {
-    
+
     var urlSessionTask: URLSessionTask?
 
     var isRedirectEnabled = true
     // TODO クッキーの制御をする
     var isCookieEnabled = true
-    
+
     public func execute(request: Request, complete: @escaping (Response?, Error?) -> Void) {
         let config = URLSessionConfiguration.default
         config.urlCache = nil // この指定がないとHTTPSでも平文でレスポンスが端末にキャッシュされてしまう
         config.timeoutIntervalForRequest = request.timeoutIntervalShort
         config.timeoutIntervalForResource = request.timeoutInterval
-        
+
         let urlRequest = makeURLRequest(request: request)
-        
+
         let session = URLSession(configuration: config, delegate: self, delegateQueue: nil)
         urlSessionTask = session.dataTask(with: urlRequest, completionHandler: { [weak self] (data, urlResponse, error) in
             let response = self?.makeResponse(urlResponse: urlResponse, data: data)
@@ -35,40 +35,40 @@ public class DefaultHTTPConnector: NSObject, HTTPConnector {
         })
         urlSessionTask?.resume()
     }
-    
+
     public func cancel() {
         urlSessionTask?.cancel()
         urlSessionTask = nil
     }
-    
+
     private func makeResponse(urlResponse: URLResponse?, data: Data?) -> Response? {
         guard let urlResponse = urlResponse as? HTTPURLResponse else {
             return nil
         }
-        
+
         var hedears: [String: String] = [:]
         for keyValue in urlResponse.allHeaderFields {
             if let key = keyValue.key as? String, let value = keyValue.value as? String {
                 hedears[key] = value
             }
         }
-        
+
         return Response(data: data ?? Data(),
                         statusCode: urlResponse.statusCode,
                         headers: hedears,
                         nativeResponse: urlResponse)
     }
-    
+
     private func makeURLRequest(request: Request) -> URLRequest {
         let urlRequest = NSMutableURLRequest(url: request.url)
         urlRequest.cachePolicy = .reloadIgnoringCacheData
         urlRequest.httpMethod = request.method.stringValue
         urlRequest.httpBody = request.body
-        
+
         for (key, value) in request.headers {
             urlRequest.setValue(value, forHTTPHeaderField: key)
         }
-        
+
         return urlRequest as URLRequest
     }
 }

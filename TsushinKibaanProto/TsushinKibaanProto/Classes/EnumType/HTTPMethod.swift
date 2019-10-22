@@ -18,7 +18,7 @@ public enum HTTPMethod: String {
     case options
     case trace
     case connect
-    
+
     var stringValue: String {
         return rawValue.uppercased()
     }

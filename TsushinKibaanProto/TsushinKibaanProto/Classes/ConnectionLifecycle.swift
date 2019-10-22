@@ -15,7 +15,7 @@ import Foundation
 ///
 ///
 open class ConnectionLifecycle<T: ResponseSpec>: ConnectionTask {
-    
+
     public let requestSpec: RequestSpec
     public let responseSpec: T
 
@@ -56,17 +56,17 @@ open class ConnectionLifecycle<T: ResponseSpec>: ConnectionTask {
     func startConnection() {
         // TODO 実装する
     }
-    
+
     /// 通信処理を開始する
     func connect(onSuccess: ((T.ResponseModel) -> Void)? = nil,
                  onError: ((T.ResponseModel?, ConnectionError) -> Void)? = nil,
                  onEnd: (() -> Void)? = nil) {
-        
+
         guard let url = makeURL(baseURL: requestSpec.url, query: requestSpec.urlQuery, encoder: urlEncoder) else {
             handleError(.invalidURL, onError: onError)
             return
         }
-        
+
         // リクエスト作成
         let request = Request(url: url,
                               method: requestSpec.httpMethod,
@@ -81,7 +81,7 @@ open class ConnectionLifecycle<T: ResponseSpec>: ConnectionTask {
         holder?.add(connection: self)
 
         print("[\(requestSpec.httpMethod.stringValue)] \(url)")
-        
+
         // 通信する
         connector.execute(request: request, complete: { [weak self] (response, error) in
             self?.complete(onSuccess: onSuccess,
@@ -176,8 +176,8 @@ open class ConnectionLifecycle<T: ResponseSpec>: ConnectionTask {
         // TODO call error listeners
 
         let errorResponse = ConnectionError(type: type,
-                                          response: response,
-                                          nativeError: error)
+                                            response: response,
+                                            nativeError: error)
         onError?(responseModel, errorResponse)
 
         // TODO Aspect to be hooked
@@ -188,26 +188,26 @@ open class ConnectionLifecycle<T: ResponseSpec>: ConnectionTask {
                                     response: Response? = nil,
                                     responseModel: T.ResponseModel? = nil) {
 
-//        switch type {
-//        case .invalidURL, .network:
-//            errorListeners.forEach {
-//                $0.onNetworkError(error: error)
-//            }
-//        case .statusCode:
-//            errorListeners.forEach {
-//                $0.onStatusCodeError(response: response)
-//            }
-//        case .parse:
-//            errorListeners.forEach {
-//                $0.onParseError(response: response)
-//            }
-//        case .invalidResponse:
-//            errorListeners.forEach {
-//                $0.onValidationError(response: response, dataModel: responseModel)
-//            }
-//
-//        default:
-//        }
+        //        switch type {
+        //        case .invalidURL, .network:
+        //            errorListeners.forEach {
+        //                $0.onNetworkError(error: error)
+        //            }
+        //        case .statusCode:
+        //            errorListeners.forEach {
+        //                $0.onStatusCodeError(response: response)
+        //            }
+        //        case .parse:
+        //            errorListeners.forEach {
+        //                $0.onParseError(response: response)
+        //            }
+        //        case .invalidResponse:
+        //            errorListeners.forEach {
+        //                $0.onValidationError(response: response, dataModel: responseModel)
+        //            }
+        //
+        //        default:
+        //        }
 
     }
 
@@ -239,9 +239,8 @@ open class ConnectionLifecycle<T: ResponseSpec>: ConnectionTask {
 }
 
 public protocol ConnectionTask: class {
-    
     var requestSpec: RequestSpec { get }
-    
+
     func cancel()
     func restart()
 }

@@ -12,9 +12,9 @@ import UIKit
 /// インジケーターは複数の通信から表示されることを想定して、
 /// 単純な表示/非表示の切り替えではなく、参照カウントを増減してカウントが0になったら非表示にする
 public class ConnectionIndicator: ConnectionListener {
-    
+
     var referenceCount = 0
-    
+
     let view: UIView
     let indicatorView: UIActivityIndicatorView?
 
@@ -22,12 +22,12 @@ public class ConnectionIndicator: ConnectionListener {
         self.view = view
         self.indicatorView = indicatorView
     }
-    
+
     public func onStart(request: Request) {
         referenceCount += 1
         updateView()
     }
-    
+
     public func onEnd() {
         referenceCount -= 1
         updateView()
