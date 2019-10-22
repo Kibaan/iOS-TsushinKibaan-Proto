@@ -14,10 +14,3 @@ import Foundation
 ///
 public protocol ConnectionSpec: RequestSpec, ResponseSpec {
 }
-
-/*
-TODO 他にいい名前がないか検討する
-- ConnectionInterface
-- ConnectionIF
-- API
- */
