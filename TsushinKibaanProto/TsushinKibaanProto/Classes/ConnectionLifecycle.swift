@@ -14,10 +14,10 @@ import Foundation
 /// The lifecycle of a HTTP connection.
 ///
 ///
-open class ConnectionLifecycle<T: ResponseSpec>: ConnectionTask {
+open class ConnectionLifecycle<ResponseModel: Any>: ConnectionTask { // TODO GenericTypeをResponseSpecにすると ConnectionSpec が使えなくなってしまう
 
     public let requestSpec: RequestSpec
-    public let responseSpec: T
+    public let responseSpec: ResponseSpec<ResponseModel>
 
     public var listeners: [ConnectionListener] = []
     public var responseListeners: [ConnectionResponseListener] = []
@@ -26,6 +26,10 @@ open class ConnectionLifecycle<T: ResponseSpec>: ConnectionTask {
     public var connector: HTTPConnector
     public var urlEncoder: URLEncoder
     public var isCancelled = false
+
+    var onSuccess: ((ResponseModel) -> Void)?
+    var onError: ((ResponseModel?, ConnectionError) -> Void)?
+    var onEnd: (() -> Void)?
 
     var latestRequest: Request?
 
@@ -37,6 +41,15 @@ open class ConnectionLifecycle<T: ResponseSpec>: ConnectionTask {
          connector: HTTPConnector) {
         self.requestSpec = requestSpec
         self.responseSpec = responseSpec
+        self.urlEncoder = urlEncoder
+        self.connector = connector
+    }
+
+    init<Spec: ConnectionSpec>(connectionSpec: Spec,
+         urlEncoder: URLEncoder,
+         connector: HTTPConnector) {
+        self.requestSpec = connectionSpec
+        self.responseSpec = connectionSpec
         self.urlEncoder = urlEncoder
         self.connector = connector
     }
@@ -53,15 +66,19 @@ open class ConnectionLifecycle<T: ResponseSpec>: ConnectionTask {
         errorListeners.append(listener)
     }
 
-    func startConnection() {
-        // TODO 実装する
+    /// 処理を開始する
+    func start(onSuccess: ((T.ResponseModel) -> Void)? = nil,
+               onError: ((T.ResponseModel?, ConnectionError) -> Void)? = nil,
+               onEnd: (() -> Void)? = nil) {
+        self.onSuccess = onSuccess
+        self.onError = onError
+        self.onEnd = onEnd
+
+        connect()
     }
 
     /// 通信処理を開始する
-    func connect(onSuccess: ((T.ResponseModel) -> Void)? = nil,
-                 onError: ((T.ResponseModel?, ConnectionError) -> Void)? = nil,
-                 onEnd: (() -> Void)? = nil) {
-
+    func connect() {
         guard let url = makeURL(baseURL: requestSpec.url, query: requestSpec.urlQuery, encoder: urlEncoder) else {
             handleError(.invalidURL, onError: onError)
             return
@@ -84,23 +101,17 @@ open class ConnectionLifecycle<T: ResponseSpec>: ConnectionTask {
 
         // 通信する
         connector.execute(request: request, complete: { [weak self] (response, error) in
-            self?.complete(onSuccess: onSuccess,
-                           onError: onError,
-                           response: response,
-                           error: error)
+            self?.complete(response: response, error: error)
             DispatchQueue.main.async {
                 self?.listeners.forEach { $0.onEnd() }
             }
             self?.holder?.remove(connection: self)
-            onEnd?()
+            self?.onEnd?()
         })
     }
 
     /// 通信完了時の処理
-    private func complete(onSuccess: ((T.ResponseModel) -> Void)?,
-                          onError: ((T.ResponseModel?, ConnectionError) -> Void)?,
-                          response: Response?,
-                          error: Error?) {
+    private func complete(response: Response?, error: Error?) {
         if isCancelled {
             return
         }
@@ -131,31 +142,34 @@ open class ConnectionLifecycle<T: ResponseSpec>: ConnectionTask {
             return
         }
 
-        handleResponse(onSuccess: onSuccess,
-                       onError: onError,
-                       response: response)
+        handleResponse(response: response)
     }
 
-    open func handleResponse(onSuccess: ((T.ResponseModel) -> Void)?,
-                             onError: ((T.ResponseModel?, ConnectionError) -> Void)?,
-                             response: Response) {
+    open func handleResponse(response: Response) {
+
+        let responseModel: ResponseModel
 
         do {
-            let responseModel = try responseSpec.parseResponse(response: response)
-
-            responseListeners.forEach {
-                $0.onReceivedModel(responseModel: responseModel)
-            }
-
-            DispatchQueue.main.async {
-                onSuccess?(responseModel)
-            }
-
-            responseListeners.forEach {
-                $0.afterSuccess(responseModel: responseModel)
-            }
+            responseModel = try responseSpec.parseResponse(response: response)
         } catch {
             handleError(.parse, response: response, onError: onError)
+            return
+        }
+
+        var isValidResponse = true
+        responseListeners.forEach {
+            isValidResponse = isValidResponse && $0.onReceivedModel(responseModel: responseModel)
+        }
+        if !isValidResponse {
+            handleError(.validation, response: response, responseModel: responseModel, onError: onError)
+        }
+
+        DispatchQueue.main.async {
+            self.onSuccess?(responseModel)
+        }
+
+        responseListeners.forEach {
+            $0.afterSuccess(responseModel: responseModel)
         }
     }
 
@@ -167,8 +181,7 @@ open class ConnectionLifecycle<T: ResponseSpec>: ConnectionTask {
     open func handleError(_ type: ConnectionErrorType,
                           error: Error? = nil,
                           response: Response? = nil,
-                          responseModel: T.ResponseModel? = nil,
-                          onError: ((T.ResponseModel?, ConnectionError) -> Void)?) {
+                          responseModel: ResponseModel? = nil) {
         // Override
         let message = error?.localizedDescription ?? ""
         print("[ConnectionError] Type= \(type.description), NativeMessage=\(message)")
@@ -183,47 +196,15 @@ open class ConnectionLifecycle<T: ResponseSpec>: ConnectionTask {
         // TODO Aspect to be hooked
     }
 
-    private func callErrorListeners(_ type: ConnectionErrorType,
-                                    error: Error? = nil,
-                                    response: Response? = nil,
-                                    responseModel: T.ResponseModel? = nil) {
-
-        //        switch type {
-        //        case .invalidURL, .network:
-        //            errorListeners.forEach {
-        //                $0.onNetworkError(error: error)
-        //            }
-        //        case .statusCode:
-        //            errorListeners.forEach {
-        //                $0.onStatusCodeError(response: response)
-        //            }
-        //        case .parse:
-        //            errorListeners.forEach {
-        //                $0.onParseError(response: response)
-        //            }
-        //        case .invalidResponse:
-        //            errorListeners.forEach {
-        //                $0.onValidationError(response: response, dataModel: responseModel)
-        //            }
-        //
-        //        default:
-        //        }
-
-    }
-
     /// 通信を再実行する
     open func restart() {
-        startConnection()
+        connect()
     }
 
     /// 通信をキャンセルする
     open func cancel() {
         isCancelled = true
         connector.cancel()
-    }
-
-    ///
-    open func after(callback: () -> Void) {
     }
 
     open func makeURL(baseURL: String, query: URLQuery?, encoder: URLEncoder) -> URL? {

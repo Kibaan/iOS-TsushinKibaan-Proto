@@ -16,8 +16,6 @@ public class DefaultHTTPConnector: NSObject, HTTPConnector {
     var urlSessionTask: URLSessionTask?
 
     var isRedirectEnabled = true
-    // TODO クッキーの制御をする
-    var isCookieEnabled = true
 
     public func execute(request: Request, complete: @escaping (Response?, Error?) -> Void) {
         let config = URLSessionConfiguration.default

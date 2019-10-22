@@ -9,8 +9,8 @@
 import UIKit
 
 /// 通信インジケーター
-/// インジケーターは複数の通信から表示されることを想定して、
-/// 単純な表示/非表示の切り替えではなく、参照カウントを増減してカウントが0になったら非表示にする
+/// インジケーターは複数の通信で使われることを想定して、
+/// 単純な表示/非表示の切り替えではなく、参照カウントを増減してカウントが0になったら非表示にする方式にする
 public class ConnectionIndicator: ConnectionListener {
 
     var referenceCount = 0
@@ -37,7 +37,8 @@ public class ConnectionIndicator: ConnectionListener {
         view.isHidden = (referenceCount <= 0)
         if view.isHidden {
             indicatorView?.stopAnimating()
+        } else if indicatorView?.isAnimating == false {
+            indicatorView?.startAnimating()
         }
-        // TODO viewの表示切り替え制御
     }
 }
