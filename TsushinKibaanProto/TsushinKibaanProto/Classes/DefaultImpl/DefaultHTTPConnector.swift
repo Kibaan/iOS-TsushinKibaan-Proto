@@ -10,6 +10,9 @@ import Foundation
 
 public class DefaultHTTPConnector: NSObject, HTTPConnector {
 
+    public var timeoutIntervalShort: TimeInterval? = 30
+    public var timeoutInterval: TimeInterval? = 60
+
     var urlSessionTask: URLSessionTask?
 
     var isRedirectEnabled = true
@@ -19,8 +22,13 @@ public class DefaultHTTPConnector: NSObject, HTTPConnector {
     public func execute(request: Request, complete: @escaping (Response?, Error?) -> Void) {
         let config = URLSessionConfiguration.default
         config.urlCache = nil // この指定がないとHTTPSでも平文でレスポンスが端末にキャッシュされてしまう
-        config.timeoutIntervalForRequest = request.timeoutIntervalShort
-        config.timeoutIntervalForResource = request.timeoutInterval
+
+        if let timeoutIntervalShort = timeoutIntervalShort {
+            config.timeoutIntervalForRequest = timeoutIntervalShort
+        }
+        if let timeoutInterval = timeoutInterval {
+            config.timeoutIntervalForResource = timeoutInterval
+        }
 
         let urlRequest = makeURLRequest(request: request)
 

@@ -10,10 +10,6 @@ import Foundation
 
 /// HTTPのリクエスト
 public class Request {
-    // TODO 今タイムアウトのプロパティ使われてない。DefaultHTTPConnectorの方にあればいいんじゃね？
-    public var timeoutIntervalShort: TimeInterval = 30.0
-    public var timeoutInterval: TimeInterval = 60.0
-
     public let url: URL
     public let method: HTTPMethod
     public let body: Data?

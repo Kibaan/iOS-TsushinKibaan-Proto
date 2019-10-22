@@ -27,7 +27,7 @@ public class URLQuery: ExpressibleByDictionaryLiteral {
                 let key = pairs[0].removingPercentEncoding ?? ""
                 let value = 1 < pairs.count ? pairs[1].removingPercentEncoding : nil
                 return KeyValue(key: key, value: value)
-        }
+            }
     }
 
     public required init(dictionaryLiteral elements: (String, String?)...) {
