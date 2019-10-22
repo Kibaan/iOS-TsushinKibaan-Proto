@@ -24,7 +24,7 @@ open class ConnectionLifecycle<ResponseModel: Any>: ConnectionTask { // TODO Gen
     public var errorListeners: [ConnectionErrorListener] = []
 
     public var connector: HTTPConnector
-    public var urlEncoder: URLEncoder
+    public var urlEncoder: URLEncoder = DefaultURLEncoder()
     public var isCancelled = false
 
     var onSuccess: ((ResponseModel) -> Void)?
@@ -36,21 +36,16 @@ open class ConnectionLifecycle<ResponseModel: Any>: ConnectionTask { // TODO Gen
     public weak var holder = ConnectionHolder.shared
 
     init(requestSpec: RequestSpec,
-         responseSpec: T,
-         urlEncoder: URLEncoder,
+         responseSpec: ResponseSpec<ResponseModel>,
          connector: HTTPConnector) {
         self.requestSpec = requestSpec
         self.responseSpec = responseSpec
-        self.urlEncoder = urlEncoder
         self.connector = connector
     }
 
-    init<Spec: ConnectionSpec>(connectionSpec: Spec,
-         urlEncoder: URLEncoder,
-         connector: HTTPConnector) {
+    init(connectionSpec: ConnectionSpec<ResponseModel>, connector: HTTPConnector) {
         self.requestSpec = connectionSpec
         self.responseSpec = connectionSpec
-        self.urlEncoder = urlEncoder
         self.connector = connector
     }
 
@@ -67,8 +62,8 @@ open class ConnectionLifecycle<ResponseModel: Any>: ConnectionTask { // TODO Gen
     }
 
     /// 処理を開始する
-    func start(onSuccess: ((T.ResponseModel) -> Void)? = nil,
-               onError: ((T.ResponseModel?, ConnectionError) -> Void)? = nil,
+    func start(onSuccess: ((ResponseModel) -> Void)? = nil,
+               onError: ((ResponseModel?, ConnectionError) -> Void)? = nil,
                onEnd: (() -> Void)? = nil) {
         self.onSuccess = onSuccess
         self.onError = onError
@@ -80,7 +75,7 @@ open class ConnectionLifecycle<ResponseModel: Any>: ConnectionTask { // TODO Gen
     /// 通信処理を開始する
     func connect() {
         guard let url = makeURL(baseURL: requestSpec.url, query: requestSpec.urlQuery, encoder: urlEncoder) else {
-            handleError(.invalidURL, onError: onError)
+            handleError(.invalidURL)
             return
         }
 
@@ -117,12 +112,12 @@ open class ConnectionLifecycle<ResponseModel: Any>: ConnectionTask { // TODO Gen
         }
 
         guard let response = response else {
-            handleError(.network, error: error, onError: onError)
+            handleError(.network, error: error)
             return
         }
 
         if error != nil {
-            handleError(.network, error: error, response: response, onError: onError)
+            handleError(.network, error: error, response: response)
             return
         }
 
@@ -132,13 +127,13 @@ open class ConnectionLifecycle<ResponseModel: Any>: ConnectionTask { // TODO Gen
         }
 
         if !isValidResponse {
-            handleError(.validation, onError: onError)
+            handleError(.validation)
             return
         }
 
         // ステータスコードをチェック
         if !responseSpec.isValidStatusCode(response.statusCode) {
-            handleError(.statusCode, error: error, response: response, onError: onError)
+            handleError(.statusCode, error: error, response: response)
             return
         }
 
@@ -152,7 +147,7 @@ open class ConnectionLifecycle<ResponseModel: Any>: ConnectionTask { // TODO Gen
         do {
             responseModel = try responseSpec.parseResponse(response: response)
         } catch {
-            handleError(.parse, response: response, onError: onError)
+            handleError(.parse, response: response)
             return
         }
 
@@ -161,7 +156,7 @@ open class ConnectionLifecycle<ResponseModel: Any>: ConnectionTask { // TODO Gen
             isValidResponse = isValidResponse && $0.onReceivedModel(responseModel: responseModel)
         }
         if !isValidResponse {
-            handleError(.validation, response: response, responseModel: responseModel, onError: onError)
+            handleError(.validation, response: response, responseModel: responseModel)
         }
 
         DispatchQueue.main.async {
