@@ -104,6 +104,8 @@ open class ConnectionLifecycle<ResponseModel>: ConnectionTask {
             self?.holder?.remove(connection: self)
             self?.onEnd?()
         })
+
+        latestRequest = request
     }
 
     /// 通信完了時の処理
@@ -195,6 +197,10 @@ open class ConnectionLifecycle<ResponseModel>: ConnectionTask {
     /// 通信を再実行する
     open func restart() {
         connect()
+    }
+
+    open func cloneRequest() {
+        // TODO 実装する
     }
 
     /// 通信をキャンセルする
