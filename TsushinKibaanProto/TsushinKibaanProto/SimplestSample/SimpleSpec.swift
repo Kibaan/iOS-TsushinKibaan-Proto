@@ -19,8 +19,7 @@ class SimpleSpec: ConnectionSpec {
     var urlQuery: URLQuery? { return nil }
 
     func makePostData() -> Data? { return nil }
-    func isValidStatusCode(_ code: Int) -> Bool { return true }
-    func isValidResponse(_ model: ResponseModel) -> Bool { return true }
+    func isValidStatusCode(code: Int) -> Bool { return true }
 
     func parseResponse(response: Response) throws -> ResponseModel {
         if let string = String(bytes: response.data, encoding: .utf8) {

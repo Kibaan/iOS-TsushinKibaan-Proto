@@ -37,11 +37,7 @@ class MTSSpec<T: MTSResponse>: ConnectionSpec {
         fatalError("override this")
     }
 
-    func isValidStatusCode(_ code: Int) -> Bool {
+    func isValidStatusCode(code: Int) -> Bool {
         return code == 200
-    }
-
-    func isValidResponse(_ data: T) -> Bool {
-        return true
     }
 }

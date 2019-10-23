@@ -15,7 +15,7 @@ public protocol ConnectionListener {
 
     /// 通信の終了イベント
     /// 通信の成否に関わらず終了時に必ず呼び出される
-    func onEnd()
+    func onEnd(response: Response?, error: Error?)
     // TODO ポーリングはonEndでやるのが良いかも。
     // そうするとポーリングするか判断するため、引数に errorType やレスポンスの情報がいる
 }

@@ -14,16 +14,18 @@ import Foundation
 /// The lifecycle of a HTTP connection.
 ///
 ///
-open class ConnectionLifecycle<ResponseModel: Any>: ConnectionTask { // TODO GenericTypeをResponseSpecにすると ConnectionSpec が使えなくなってしまう
+open class ConnectionLifecycle<ResponseModel>: ConnectionTask {
 
     public let requestSpec: RequestSpec
-    public let responseSpec: ResponseSpec<ResponseModel>
+    public let parseResponse: (Response) throws -> ResponseModel
+    public let isValidStatusCode: (Int) -> Bool
 
+    // TODO 各種リスナーをメインスレッドで呼ぶかコントロールできるようにしたい
     public var listeners: [ConnectionListener] = []
     public var responseListeners: [ConnectionResponseListener] = []
     public var errorListeners: [ConnectionErrorListener] = []
 
-    public var connector: HTTPConnector
+    public var connector: HTTPConnector = DefaultHTTPConnector()
     public var urlEncoder: URLEncoder = DefaultURLEncoder()
     public var isCancelled = false
 
@@ -35,18 +37,16 @@ open class ConnectionLifecycle<ResponseModel: Any>: ConnectionTask { // TODO Gen
 
     public weak var holder = ConnectionHolder.shared
 
-    init(requestSpec: RequestSpec,
-         responseSpec: ResponseSpec<ResponseModel>,
-         connector: HTTPConnector) {
+    init<T>(requestSpec: RequestSpec, responseSpec: T) where T: ResponseSpec, T.ResponseModel == ResponseModel {
         self.requestSpec = requestSpec
-        self.responseSpec = responseSpec
-        self.connector = connector
+        self.parseResponse = responseSpec.parseResponse
+        self.isValidStatusCode = responseSpec.isValidStatusCode
     }
 
-    init(connectionSpec: ConnectionSpec<ResponseModel>, connector: HTTPConnector) {
+    init<T>(connectionSpec: T) where T: ConnectionSpec, T.ResponseModel == ResponseModel {
         self.requestSpec = connectionSpec
-        self.responseSpec = connectionSpec
-        self.connector = connector
+        self.parseResponse = connectionSpec.parseResponse
+        self.isValidStatusCode = connectionSpec.isValidStatusCode
     }
 
     func addListener(_ listener: ConnectionListener) {
@@ -64,7 +64,8 @@ open class ConnectionLifecycle<ResponseModel: Any>: ConnectionTask { // TODO Gen
     /// 処理を開始する
     func start(onSuccess: ((ResponseModel) -> Void)? = nil,
                onError: ((ResponseModel?, ConnectionError) -> Void)? = nil,
-               onEnd: (() -> Void)? = nil) {
+               onEnd: (() -> Void)? = nil,
+               mainThread: Bool = true) { // TODO コールバックをメインスレッドで呼ぶか切り替える
         self.onSuccess = onSuccess
         self.onError = onError
         self.onEnd = onEnd
@@ -98,7 +99,7 @@ open class ConnectionLifecycle<ResponseModel: Any>: ConnectionTask { // TODO Gen
         connector.execute(request: request, complete: { [weak self] (response, error) in
             self?.complete(response: response, error: error)
             DispatchQueue.main.async {
-                self?.listeners.forEach { $0.onEnd() }
+                self?.listeners.forEach { $0.onEnd(response: response, error: error) }
             }
             self?.holder?.remove(connection: self)
             self?.onEnd?()
@@ -132,7 +133,7 @@ open class ConnectionLifecycle<ResponseModel: Any>: ConnectionTask { // TODO Gen
         }
 
         // ステータスコードをチェック
-        if !responseSpec.isValidStatusCode(response.statusCode) {
+        if !isValidStatusCode(response.statusCode) {
             handleError(.statusCode, error: error, response: response)
             return
         }
@@ -145,7 +146,7 @@ open class ConnectionLifecycle<ResponseModel: Any>: ConnectionTask { // TODO Gen
         let responseModel: ResponseModel
 
         do {
-            responseModel = try responseSpec.parseResponse(response: response)
+            responseModel = try parseResponse(response)
         } catch {
             handleError(.parse, response: response)
             return

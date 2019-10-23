@@ -28,7 +28,7 @@ public class ConnectionIndicator: ConnectionListener {
         updateView()
     }
 
-    public func onEnd() {
+    public func onEnd(response: Response?, error: Error?) {
         referenceCount -= 1
         updateView()
     }
