@@ -62,10 +62,16 @@ open class ConnectionLifecycle<ResponseModel>: ConnectionTask {
     }
 
     /// 処理を開始する
+    ///
+    /// - Parameters:
+    ///   - onSuccess: パラメータの説明
+    ///   - onError: パラメータの説明
+    ///   - onEnd: パラメータの説明
+    ///   - callbackInMainThread: パラメータの説明
     func start(onSuccess: ((ResponseModel) -> Void)? = nil,
                onError: ((ResponseModel?, ConnectionError) -> Void)? = nil,
                onEnd: (() -> Void)? = nil,
-               mainThread: Bool = true) { // TODO コールバックをメインスレッドで呼ぶか切り替える
+               callbackInMainThread: Bool = true) { // TODO コールバックをメインスレッドで呼ぶか切り替える
         self.onSuccess = onSuccess
         self.onError = onError
         self.onEnd = onEnd
@@ -73,6 +79,8 @@ open class ConnectionLifecycle<ResponseModel>: ConnectionTask {
         connect()
     }
 
+    // TODO Listnerにキャンセルやリトライするための制御オブジェクトを渡す必要がある
+    
     /// 通信処理を開始する
     func connect() {
         guard let url = makeURL(baseURL: requestSpec.url, query: requestSpec.urlQuery, encoder: urlEncoder) else {

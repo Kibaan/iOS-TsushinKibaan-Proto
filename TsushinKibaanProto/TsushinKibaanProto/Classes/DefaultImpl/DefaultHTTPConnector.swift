@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// HTTP通信の標準実装
 public class DefaultHTTPConnector: NSObject, HTTPConnector {
 
     public var timeoutIntervalShort: TimeInterval? = 30
