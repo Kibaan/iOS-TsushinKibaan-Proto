@@ -30,7 +30,7 @@ open class ConnectionLifecycle<ResponseModel>: ConnectionTask {
     public var isCancelled = false
 
     var onSuccess: ((ResponseModel) -> Void)?
-    var onError: ((ResponseModel?, ConnectionError) -> Void)?
+    var onError: ((ConnectionError, Response?, ResponseModel?) -> Void)?
     var onEnd: (() -> Void)?
 
     var latestRequest: Request?
@@ -69,7 +69,7 @@ open class ConnectionLifecycle<ResponseModel>: ConnectionTask {
     ///   - onEnd: パラメータの説明
     ///   - callbackInMainThread: パラメータの説明
     func start(onSuccess: ((ResponseModel) -> Void)? = nil,
-               onError: ((ResponseModel?, ConnectionError) -> Void)? = nil,
+               onError: ((ConnectionError, Response?, ResponseModel?) -> Void)? = nil,
                onEnd: (() -> Void)? = nil,
                callbackInMainThread: Bool = true) { // TODO コールバックをメインスレッドで呼ぶか切り替える
         self.onSuccess = onSuccess
@@ -194,10 +194,8 @@ open class ConnectionLifecycle<ResponseModel>: ConnectionTask {
 
         // TODO call error listeners
 
-        let errorResponse = ConnectionError(type: type,
-                                            response: response,
-                                            nativeError: error)
-        onError?(responseModel, errorResponse)
+        let connectionError = ConnectionError(type: type, nativeError: error)
+        onError?(connectionError, response, responseModel)
 
         // TODO Aspect to be hooked
     }

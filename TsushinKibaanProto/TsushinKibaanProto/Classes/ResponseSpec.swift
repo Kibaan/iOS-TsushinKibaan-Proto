@@ -17,7 +17,7 @@ import Foundation
 public protocol ResponseSpec {
     associatedtype ResponseModel
 
-    /// HTTPレスポンスをassociated typeに指定された型に変換する
+    /// HTTPレスポンスをassociated typeに指定した型に変換する
     /// 変換に失敗した場合、何らかのErrorをthrowするとパースエラーとして扱われる
     func parseResponse(response: Response) throws -> ResponseModel
 
