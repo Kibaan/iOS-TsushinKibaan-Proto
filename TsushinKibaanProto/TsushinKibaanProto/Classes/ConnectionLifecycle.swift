@@ -21,6 +21,8 @@ open class ConnectionLifecycle<ResponseModel>: ConnectionTask {
     public let isValidStatusCode: (Int) -> Bool
 
     // TODO 各種リスナーをメインスレッドで呼ぶかコントロールできるようにしたい
+    // -> バックスレッドから呼んでもリスナー側でメインスレッドを呼べるし、
+    // パースまではバックグラウンドスレッドでやりたいことを考えると、リスナーはメインスレッドじゃなくて良いのでは
     public var listeners: [ConnectionListener] = []
     public var responseListeners: [ConnectionResponseListener] = []
     public var errorListeners: [ConnectionErrorListener] = []
@@ -106,9 +108,7 @@ open class ConnectionLifecycle<ResponseModel>: ConnectionTask {
         // 通信する
         connector.execute(request: request, complete: { [weak self] (response, error) in
             self?.complete(response: response, error: error)
-            DispatchQueue.main.async {
-                self?.listeners.forEach { $0.onEnd(response: response, error: error) }
-            }
+            self?.listeners.forEach { $0.onEnd(response: response, error: error) }
             self?.holder?.remove(connection: self)
             self?.onEnd?()
         })

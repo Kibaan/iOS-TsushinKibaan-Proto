@@ -23,6 +23,8 @@ public protocol ResponseSpec {
 
     // TODO ヘッダーやデータ値によってエラー判断されるケースもあるのにステータスコードだけチェックするのは不公平では？
     // バリデーションとパースをまとめてparseResponseに押し付けることもできるし、Validatorを分離する案もある
+    // isValidData(Response), isValidModel(Any)
+    // isValidStatusCode(Int), isValidData(Data), isValidHeaders([String: String])
     func isValidStatusCode(code: Int) -> Bool
 
 }

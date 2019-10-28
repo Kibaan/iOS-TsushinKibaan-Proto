@@ -25,12 +25,18 @@ public class ConnectionIndicator: ConnectionListener {
 
     public func onStart(request: Request) {
         referenceCount += 1
-        updateView()
+        updateViewInMainThread()
     }
 
     public func onEnd(response: Response?, error: Error?) {
         referenceCount -= 1
-        updateView()
+        updateViewInMainThread()
+    }
+
+    func updateViewInMainThread() {
+        DispatchQueue.main.async {
+            self.updateView()
+        }
     }
 
     func updateView() {
