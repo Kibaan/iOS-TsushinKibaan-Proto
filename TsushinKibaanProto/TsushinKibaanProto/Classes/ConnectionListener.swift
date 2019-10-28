@@ -9,6 +9,8 @@
 import Foundation
 
 /// 通信の開始と終了のイベントを受け取るリスナー
+/// 各ファンクションはバックグラウンドスレッドで実行されるため、
+/// Viewの更新を行う場合はメインスレッドに切り替える必要がある
 public protocol ConnectionListener {
     /// 通信の開始イベント
     func onStart(request: Request)

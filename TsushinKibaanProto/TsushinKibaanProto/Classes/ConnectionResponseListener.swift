@@ -13,6 +13,8 @@ import Foundation
 /// （個別の通信完了処理は ConnectionLifecycle.connect の引数のコールバックで処理する）
 /// レスポンスのバリデーターの役割も兼ねており、`onReceived` 、`onReceivedModel` の返り値はエラー判定に用いられる
 ///
+/// 各ファンクションはバックグラウンドスレッドで実行されるため、
+/// Viewの更新を行う場合はメインスレッドに切り替える必要がある
 public protocol ConnectionResponseListener {
 
     /// レスポンスデータの受信イベント

@@ -10,6 +10,8 @@ import Foundation
 
 /// 通信エラーを受け取るリスナー
 ///
+/// 各ファンクションはバックグラウンドスレッドで実行されるため、
+/// Viewの更新を行う場合はメインスレッドに切り替える必要がある
 public protocol ConnectionErrorListener {
     func onNetworkError(error: Error?)
     func onStatusCodeError(response: Response)

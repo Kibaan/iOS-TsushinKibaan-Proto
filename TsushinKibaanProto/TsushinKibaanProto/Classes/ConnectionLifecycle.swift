@@ -30,6 +30,7 @@ open class ConnectionLifecycle<ResponseModel>: ConnectionTask {
     public var connector: HTTPConnector = DefaultHTTPConnector()
     public var urlEncoder: URLEncoder = DefaultURLEncoder()
     public var isCancelled = false
+    public var callbackInMainThread = true
 
     var onSuccess: ((ResponseModel) -> Void)?
     var onError: ((ConnectionError, Response?, ResponseModel?) -> Void)?
@@ -72,8 +73,7 @@ open class ConnectionLifecycle<ResponseModel>: ConnectionTask {
     ///   - callbackInMainThread: パラメータの説明
     func start(onSuccess: ((ResponseModel) -> Void)? = nil,
                onError: ((ConnectionError, Response?, ResponseModel?) -> Void)? = nil,
-               onEnd: (() -> Void)? = nil,
-               callbackInMainThread: Bool = true) { // TODO コールバックをメインスレッドで呼ぶか切り替える
+               onEnd: (() -> Void)? = nil) {
         self.onSuccess = onSuccess
         self.onError = onError
         self.onEnd = onEnd
@@ -170,6 +170,7 @@ open class ConnectionLifecycle<ResponseModel>: ConnectionTask {
             handleError(.validation, response: response, responseModel: responseModel)
         }
 
+        // TODO コールバックをメインスレッドで呼ぶか切り替える
         DispatchQueue.main.async {
             self.onSuccess?(responseModel)
         }
@@ -213,6 +214,10 @@ open class ConnectionLifecycle<ResponseModel>: ConnectionTask {
     open func cancel() {
         isCancelled = true
         connector.cancel()
+    }
+
+    func callback(_ function: () -> Void) {
+
     }
 
     open func makeURL(baseURL: String, query: URLQuery?, encoder: URLEncoder) -> URL? {
