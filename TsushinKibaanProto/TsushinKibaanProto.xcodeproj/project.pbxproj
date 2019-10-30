@@ -28,6 +28,7 @@
 		403188AB230D0A71000AAABA /* URLQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403188AA230D0A71000AAABA /* URLQuery.swift */; };
 		403188AD230D0E93000AAABA /* ConnectionErrorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403188AC230D0E93000AAABA /* ConnectionErrorType.swift */; };
 		403188B1230FF3AD000AAABA /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403188B0230FF3AD000AAABA /* HTTPMethod.swift */; };
+		4040036123697D6600C79CDB /* Polling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4040036023697D6600C79CDB /* Polling.swift */; };
 		405294CF232228AB00739998 /* SimplestSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405294CE232228AB00739998 /* SimplestSpec.swift */; };
 		405294F5232A599300739998 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405294F4232A599300739998 /* Request.swift */; };
 		40AB633223320BB2009BD7CB /* ConnectionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40AB633123320BB2009BD7CB /* ConnectionError.swift */; };
@@ -59,6 +60,7 @@
 		403188AA230D0A71000AAABA /* URLQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLQuery.swift; sourceTree = "<group>"; };
 		403188AC230D0E93000AAABA /* ConnectionErrorType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionErrorType.swift; sourceTree = "<group>"; };
 		403188B0230FF3AD000AAABA /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
+		4040036023697D6600C79CDB /* Polling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Polling.swift; sourceTree = "<group>"; };
 		405294CE232228AB00739998 /* SimplestSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimplestSpec.swift; sourceTree = "<group>"; };
 		405294F4232A599300739998 /* Request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
 		40AB633123320BB2009BD7CB /* ConnectionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionError.swift; sourceTree = "<group>"; };
@@ -104,6 +106,7 @@
 				234C34C52348EB7400AE45FF /* DefaultHTTPConnector.swift */,
 				234C34C72348EB9E00AE45FF /* DefaultURLEncoder.swift */,
 				233C10DD235E784100893F39 /* ConnectionIndicator.swift */,
+				4040036023697D6600C79CDB /* Polling.swift */,
 			);
 			path = DefaultImpl;
 			sourceTree = "<group>";
@@ -265,6 +268,7 @@
 				2356F69822FDB9AC002A2047 /* HTTPConnector.swift in Sources */,
 				23168DB42350DCDB0030D263 /* ConnectionErrorListener.swift in Sources */,
 				234C34C62348EB7400AE45FF /* DefaultHTTPConnector.swift in Sources */,
+				4040036123697D6600C79CDB /* Polling.swift in Sources */,
 				233C10DE235E784100893F39 /* ConnectionIndicator.swift in Sources */,
 				2356F68722FDB980002A2047 /* ViewController.swift in Sources */,
 				403188B1230FF3AD000AAABA /* HTTPMethod.swift in Sources */,
