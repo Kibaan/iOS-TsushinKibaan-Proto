@@ -29,7 +29,9 @@ class SimplestSpec: ConnectionSpec {
     func makePostData() -> Data? { return nil }
 
     // ステータスコードの正常判定
-    func isValidStatusCode(code: Int) -> Bool { return true }
+    func isValidResponse(response: Response) -> Bool {
+        return true
+    }
 
     // 通信レスポンスをデータモデルに変換する
     func parseResponse(response: Response) throws -> ResponseModel {

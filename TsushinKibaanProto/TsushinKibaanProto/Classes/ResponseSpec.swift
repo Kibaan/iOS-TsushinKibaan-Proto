@@ -17,14 +17,17 @@ import Foundation
 public protocol ResponseSpec {
     associatedtype ResponseModel
 
+    /// パース前のレスポンスデータのバリデーションを行う
+    /// `false` を返すとエラーのコールバックが呼ばれる
+    /// 200系以外のHTTPステータスコードを弾いたりするのに使う場合が多い
+    ///
+    /// - Parameters:
+    ///   - response: HTTPのレスポンス情報
+    /// - Returns: レスポンスデータが正常の場合 `true`、エラーの場合 `false`
+    func isValidResponse(response: Response) -> Bool
+
     /// HTTPレスポンスをassociated typeに指定した型に変換する
     /// 変換に失敗した場合、何らかのErrorをthrowするとパースエラーとして扱われる
     func parseResponse(response: Response) throws -> ResponseModel
-
-    // TODO ヘッダーやデータ値によってエラー判断されるケースもあるのにステータスコードだけチェックするのは不公平では？
-    // バリデーションとパースをまとめてparseResponseに押し付けることもできるし、Validatorを分離する案もある
-    // isValidData(Response), isValidModel(Any)
-    // isValidStatusCode(Int), isValidData(Data), isValidHeaders([String: String])
-    func isValidStatusCode(code: Int) -> Bool
 
 }

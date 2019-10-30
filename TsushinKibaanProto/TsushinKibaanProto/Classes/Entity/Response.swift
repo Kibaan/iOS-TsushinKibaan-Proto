@@ -8,6 +8,8 @@
 
 import Foundation
 
+/// HTTPレスポンスの情報
+/// レスポンスボディの他、ステータスコード、ヘッダーの情報を持つ
 public struct Response {
     let data: Data
     let statusCode: Int

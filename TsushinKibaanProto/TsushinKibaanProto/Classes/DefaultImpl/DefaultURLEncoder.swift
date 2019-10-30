@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// URLエンコードの標準実装
 public class DefaultURLEncoder: URLEncoder {
     public init() {}
     public func encode(_ text: String) -> String {

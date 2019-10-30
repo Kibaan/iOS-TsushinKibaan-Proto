@@ -14,8 +14,8 @@ public enum ConnectionErrorType: Error {
     case invalidURL
     /// オフライン、タイムアウトなどのネットワークエラー
     case network
-    /// HTTPステータスコードが既定ではない
-    case statusCode
+    /// レスポンスデータが規定ではない
+    case invalidResponse
     /// レスポンスのパースに失敗
     case parse
     /// バリデーションエラー
@@ -27,12 +27,12 @@ public enum ConnectionErrorType: Error {
             return "リクエスト先のURLが不正です。"
         case .network:
             return "通信エラーが発生しました。 通信環境が不安定か、接続先が誤っている可能性があります。"
-        case .statusCode:
-            return "HTTPステータスコードが不正です。"
+        case .invalidResponse:
+            return "レスポンスデータが不正です。"
         case .parse:
             return "レスポンスデータのパースに失敗しました。"
         case .validation:
-            return "レスポンスデータの内容が不正です。"
+            return "バリデーションエラーです。"
         }
     }
 }

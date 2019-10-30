@@ -18,11 +18,8 @@ open class ConnectionLifecycle<ResponseModel>: ConnectionTask {
 
     public let requestSpec: RequestSpec
     public let parseResponse: (Response) throws -> ResponseModel
-    public let isValidStatusCode: (Int) -> Bool
+    public let isValidResponse: (Response) -> Bool
 
-    // TODO 各種リスナーをメインスレッドで呼ぶかコントロールできるようにしたい
-    // -> バックスレッドから呼んでもリスナー側でメインスレッドを呼べるし、
-    // パースまではバックグラウンドスレッドでやりたいことを考えると、リスナーはメインスレッドじゃなくて良いのでは
     public var listeners: [ConnectionListener] = []
     public var responseListeners: [ConnectionResponseListener] = []
     public var errorListeners: [ConnectionErrorListener] = []
@@ -40,16 +37,16 @@ open class ConnectionLifecycle<ResponseModel>: ConnectionTask {
 
     public weak var holder = ConnectionHolder.shared
 
-    init<T>(requestSpec: RequestSpec, responseSpec: T) where T: ResponseSpec, T.ResponseModel == ResponseModel {
+    init<T: ResponseSpec>(requestSpec: RequestSpec, responseSpec: T) where T.ResponseModel == ResponseModel {
         self.requestSpec = requestSpec
         self.parseResponse = responseSpec.parseResponse
-        self.isValidStatusCode = responseSpec.isValidStatusCode
+        self.isValidResponse = responseSpec.isValidResponse
     }
 
-    init<T>(connectionSpec: T) where T: ConnectionSpec, T.ResponseModel == ResponseModel {
+    init<T: ConnectionSpec>(connectionSpec: T) where T.ResponseModel == ResponseModel {
         self.requestSpec = connectionSpec
         self.parseResponse = connectionSpec.parseResponse
-        self.isValidStatusCode = connectionSpec.isValidStatusCode
+        self.isValidResponse = connectionSpec.isValidResponse
     }
 
     func addListener(_ listener: ConnectionListener) {
@@ -84,17 +81,17 @@ open class ConnectionLifecycle<ResponseModel>: ConnectionTask {
     // TODO Listnerにキャンセルやリトライするための制御オブジェクトを渡す必要がある
     
     /// 通信処理を開始する
-    func connect() {
+    func connect(request: Request? = nil) {
         guard let url = makeURL(baseURL: requestSpec.url, query: requestSpec.urlQuery, encoder: urlEncoder) else {
             handleError(.invalidURL)
             return
         }
 
         // リクエスト作成
-        let request = Request(url: url,
-                              method: requestSpec.httpMethod,
-                              body: requestSpec.makePostData(),
-                              headers: requestSpec.headers)
+        let request = request ?? Request(url: url,
+                                         method: requestSpec.httpMethod,
+                                         body: requestSpec.makePostData(),
+                                         headers: requestSpec.headers)
 
         listeners.forEach {
             $0.onStart(request: request)
@@ -142,9 +139,8 @@ open class ConnectionLifecycle<ResponseModel>: ConnectionTask {
             return
         }
 
-        // ステータスコードをチェック
-        if !isValidStatusCode(response.statusCode) {
-            handleError(.statusCode, error: error, response: response)
+        if !self.isValidResponse(response) {
+            handleError(.invalidResponse, error: error, response: response)
             return
         }
 
@@ -170,8 +166,7 @@ open class ConnectionLifecycle<ResponseModel>: ConnectionTask {
             handleError(.validation, response: response, responseModel: responseModel)
         }
 
-        // TODO コールバックをメインスレッドで呼ぶか切り替える
-        DispatchQueue.main.async {
+        callback {
             self.onSuccess?(responseModel)
         }
 
@@ -207,7 +202,7 @@ open class ConnectionLifecycle<ResponseModel>: ConnectionTask {
     }
 
     open func cloneRequest() {
-        // TODO 実装する
+        connect(request: latestRequest)
     }
 
     /// 通信をキャンセルする
@@ -216,8 +211,14 @@ open class ConnectionLifecycle<ResponseModel>: ConnectionTask {
         connector.cancel()
     }
 
-    func callback(_ function: () -> Void) {
-
+    open func callback(_ function: @escaping () -> Void) {
+        if callbackInMainThread {
+            DispatchQueue.main.async {
+                function()
+            }
+        } else {
+            function()
+        }
     }
 
     open func makeURL(baseURL: String, query: URLQuery?, encoder: URLEncoder) -> URL? {
@@ -237,4 +238,5 @@ public protocol ConnectionTask: class {
 
     func cancel()
     func restart()
+    func cloneRequest()
 }
