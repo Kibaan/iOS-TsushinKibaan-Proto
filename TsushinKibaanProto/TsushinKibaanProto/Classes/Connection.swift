@@ -50,6 +50,8 @@ open class Connection<ResponseModel>: ConnectionTask {
         self.isValidResponse = connectionSpec.isValidResponse
     }
 
+    // TODO removeListener、containsなどをつくる？
+    
     func addListener(_ listener: ConnectionListener) {
         listeners.append(listener)
     }
