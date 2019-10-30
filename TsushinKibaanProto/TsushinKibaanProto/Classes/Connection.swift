@@ -1,5 +1,5 @@
 //
-//  ConnectionLifecycle.swift
+//  Connection.swift
 //  TsushinKibaanProto
 //
 //  Created by Yamamoto Keita on 2019/08/09.
@@ -14,7 +14,7 @@ import Foundation
 /// The lifecycle of a HTTP connection.
 ///
 ///
-open class ConnectionLifecycle<ResponseModel>: ConnectionTask {
+open class Connection<ResponseModel>: ConnectionTask {
 
     public let requestSpec: RequestSpec
     public let parseResponse: (Response) throws -> ResponseModel
@@ -27,6 +27,7 @@ open class ConnectionLifecycle<ResponseModel>: ConnectionTask {
     public var connector: HTTPConnector = DefaultHTTPConnector()
     public var urlEncoder: URLEncoder = DefaultURLEncoder()
     public var isCancelled = false
+    /// startの引数に渡したコールバックをメインスレッドで呼び出すか
     public var callbackInMainThread = true
 
     var onSuccess: ((ResponseModel) -> Void)?
@@ -105,9 +106,10 @@ open class ConnectionLifecycle<ResponseModel>: ConnectionTask {
         // 通信する
         connector.execute(request: request, complete: { [weak self] (response, error) in
             self?.complete(response: response, error: error)
-            self?.listeners.forEach { $0.onEnd(response: response, error: error) }
             self?.holder?.remove(connection: self)
-            self?.onEnd?()
+            self?.callback {
+                self?.onEnd?()
+            }
         })
 
         latestRequest = request
@@ -119,13 +121,8 @@ open class ConnectionLifecycle<ResponseModel>: ConnectionTask {
             return
         }
 
-        guard let response = response else {
-            handleError(.network, error: error)
-            return
-        }
-
-        if error != nil {
-            handleError(.network, error: error, response: response)
+        guard let response = response, error == nil else {
+            onNetworkError(error: error)
             return
         }
 
@@ -134,13 +131,8 @@ open class ConnectionLifecycle<ResponseModel>: ConnectionTask {
             isValidResponse = isValidResponse && $0.onReceived(response: response)
         }
 
-        if !isValidResponse {
-            handleError(.validation)
-            return
-        }
-
-        if !self.isValidResponse(response) {
-            handleError(.invalidResponse, error: error, response: response)
+        guard isValidResponse && self.isValidResponse(response) else {
+            onResponseError(response: response)
             return
         }
 
@@ -154,7 +146,7 @@ open class ConnectionLifecycle<ResponseModel>: ConnectionTask {
         do {
             responseModel = try parseResponse(response)
         } catch {
-            handleError(.parse, response: response)
+            onParseError(response: response)
             return
         }
 
@@ -163,20 +155,37 @@ open class ConnectionLifecycle<ResponseModel>: ConnectionTask {
             isValidResponse = isValidResponse && $0.onReceivedModel(responseModel: responseModel)
         }
         if !isValidResponse {
-            handleError(.validation, response: response, responseModel: responseModel)
+            onValidationError(response: response, responseModel: responseModel)
+            return
         }
 
         callback {
             self.onSuccess?(responseModel)
-        }
-
-        responseListeners.forEach {
-            $0.afterSuccess(responseModel: responseModel)
+            self.responseListeners.forEach {
+                $0.afterSuccess(responseModel: responseModel)
+            }
+            self.listeners.forEach { $0.onEnd(response: response, responseModel: responseModel, error: nil) }
         }
     }
 
-    func handleNetworkError(error: Error?) {
+    func onNetworkError(error: Error?) {
+        errorListeners.forEach { $0.onNetworkError(error: error) }
+        handleError(.network, error: error)
+    }
 
+    func onResponseError(response: Response) {
+        errorListeners.forEach { $0.onResponseError(response: response) }
+        handleError(.invalidResponse, response: response)
+    }
+
+    func onParseError(response: Response) {
+        errorListeners.forEach { $0.onParseError(response: response) }
+        handleError(.parse, response: response)
+    }
+
+    func onValidationError(response: Response, responseModel: ResponseModel) {
+        errorListeners.forEach { $0.onValidationError(response: response, responseModel: responseModel) }
+        handleError(.validation, response: response, responseModel: responseModel)
     }
 
     /// エラーを処理する
@@ -184,16 +193,18 @@ open class ConnectionLifecycle<ResponseModel>: ConnectionTask {
                           error: Error? = nil,
                           response: Response? = nil,
                           responseModel: ResponseModel? = nil) {
-        // Override
+
+        // TODO メインスレッド制御が必要では？
+
         let message = error?.localizedDescription ?? ""
         print("[ConnectionError] Type= \(type.description), NativeMessage=\(message)")
-
-        // TODO call error listeners
 
         let connectionError = ConnectionError(type: type, nativeError: error)
         onError?(connectionError, response, responseModel)
 
         // TODO Aspect to be hooked
+
+        listeners.forEach { $0.onEnd(response: response, responseModel: responseModel, error: connectionError) }
     }
 
     /// 通信を再実行する

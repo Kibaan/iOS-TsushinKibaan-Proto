@@ -19,7 +19,7 @@
 		2356F68C22FDB981002A2047 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2356F68B22FDB981002A2047 /* Assets.xcassets */; };
 		2356F68F22FDB981002A2047 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2356F68D22FDB981002A2047 /* LaunchScreen.storyboard */; };
 		2356F69822FDB9AC002A2047 /* HTTPConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2356F69722FDB9AC002A2047 /* HTTPConnector.swift */; };
-		2356F69A22FDB9CF002A2047 /* ConnectionLifecycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2356F69922FDB9CF002A2047 /* ConnectionLifecycle.swift */; };
+		2356F69A22FDB9CF002A2047 /* Connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2356F69922FDB9CF002A2047 /* Connection.swift */; };
 		2356F69C22FDB9E2002A2047 /* ConnectionSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2356F69B22FDB9E2002A2047 /* ConnectionSpec.swift */; };
 		2356F69E22FDBAA3002A2047 /* ConnectionListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2356F69D22FDBAA3002A2047 /* ConnectionListener.swift */; };
 		239B121623294228009F4B0B /* ConnectionHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239B121523294228009F4B0B /* ConnectionHolder.swift */; };
@@ -51,7 +51,7 @@
 		2356F68E22FDB981002A2047 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2356F69022FDB981002A2047 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2356F69722FDB9AC002A2047 /* HTTPConnector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPConnector.swift; sourceTree = "<group>"; };
-		2356F69922FDB9CF002A2047 /* ConnectionLifecycle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionLifecycle.swift; sourceTree = "<group>"; };
+		2356F69922FDB9CF002A2047 /* Connection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Connection.swift; sourceTree = "<group>"; };
 		2356F69B22FDB9E2002A2047 /* ConnectionSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionSpec.swift; sourceTree = "<group>"; };
 		2356F69D22FDBAA3002A2047 /* ConnectionListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionListener.swift; sourceTree = "<group>"; };
 		239B121523294228009F4B0B /* ConnectionHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionHolder.swift; sourceTree = "<group>"; };
@@ -148,7 +148,7 @@
 				234C34C42348EB6700AE45FF /* DefaultImpl */,
 				234C34C32348EB4E00AE45FF /* EnumType */,
 				234C34C22348EAE400AE45FF /* Entity */,
-				2356F69922FDB9CF002A2047 /* ConnectionLifecycle.swift */,
+				2356F69922FDB9CF002A2047 /* Connection.swift */,
 				23168DAF234DF3150030D263 /* RequestSpec.swift */,
 				23168DB1234DF36F0030D263 /* ResponseSpec.swift */,
 				2356F69B22FDB9E2002A2047 /* ConnectionSpec.swift */,
@@ -275,7 +275,7 @@
 				2356F69E22FDBAA3002A2047 /* ConnectionListener.swift in Sources */,
 				23168DB2234DF36F0030D263 /* ResponseSpec.swift in Sources */,
 				2356F68522FDB980002A2047 /* AppDelegate.swift in Sources */,
-				2356F69A22FDB9CF002A2047 /* ConnectionLifecycle.swift in Sources */,
+				2356F69A22FDB9CF002A2047 /* Connection.swift in Sources */,
 				405294F5232A599300739998 /* Request.swift in Sources */,
 				40AB633423321142009BD7CB /* Response.swift in Sources */,
 				403188AB230D0A71000AAABA /* URLQuery.swift in Sources */,

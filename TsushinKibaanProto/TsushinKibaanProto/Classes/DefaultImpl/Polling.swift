@@ -10,13 +10,17 @@ import Foundation
 
 public class Polling: ConnectionListener {
 
-    public init(delay: Double, callback: () -> Void) {
-        // TODO ポーリング実装する
+    let delay: Double
+    let callback: () -> Void
+
+    public init(delay: Double, callback: @escaping () -> Void) {
+        self.delay = delay
+        self.callback = callback
     }
 
     public func onStart(request: Request) {}
 
-    public func onEnd(response: Response?, error: Error?) {
+    public func onEnd(response: Response?, responseModel: Any?, error: ConnectionError?) {
 
     }
 }

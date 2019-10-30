@@ -9,7 +9,7 @@
 import Foundation
 
 /// 通信のレスポンスを受け取るリスナー。主に複数の通信で共通の後処理を行うために使う。
-/// （個別の通信完了処理は ConnectionLifecycle.connect の引数のコールバックで処理する）
+/// （個別の通信完了処理は Connection.connect の引数のコールバックで処理する）
 /// レスポンスのバリデーターの役割も兼ねており、`onReceived` 、`onReceivedModel` の返り値はエラー判定に用いられる
 ///
 /// バックグラウンドスレッドから呼び出されるため、UIの操作を行う場合はメインスレッドに切り替える必要がある
@@ -30,6 +30,6 @@ public protocol ConnectionResponseListener {
     /// - Returns: レスポンスデータモデルが正常の場合 `true`、エラーの場合 `false`
     func onReceivedModel(responseModel: Any) -> Bool
 
-    /// 成功コールバック実行後のイベント
+    /// 成功コールバック実行直後のイベント
     func afterSuccess(responseModel: Any)
 }
