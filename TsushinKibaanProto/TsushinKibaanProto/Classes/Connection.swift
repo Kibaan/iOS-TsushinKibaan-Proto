@@ -34,10 +34,11 @@ open class Connection<ResponseModel>: ConnectionTask {
     var onError: ((ConnectionError, Response?, ResponseModel?) -> Void)?
     var onEnd: (() -> Void)?
 
-    var latestRequest: Request?
+    public var latestRequest: Request?
 
     public weak var holder = ConnectionHolder.shared
 
+    // TODO initにstartを統合するか？ 使いやすい呼び出しIFを考える
     init<T: ResponseSpec>(requestSpec: RequestSpec, responseSpec: T) where T.ResponseModel == ResponseModel {
         self.requestSpec = requestSpec
         self.parseResponse = responseSpec.parseResponse
@@ -51,7 +52,7 @@ open class Connection<ResponseModel>: ConnectionTask {
     }
 
     // TODO removeListener、containsなどをつくる？
-    
+
     func addListener(_ listener: ConnectionListener) {
         listeners.append(listener)
     }
@@ -204,7 +205,11 @@ open class Connection<ResponseModel>: ConnectionTask {
         let connectionError = ConnectionError(type: type, nativeError: error)
         onError?(connectionError, response, responseModel)
 
-        // TODO Aspect to be hooked
+        errorListeners.forEach {
+            $0.afterError(response: response,
+                          responseModel: responseModel,
+                          error: connectionError)
+        }
 
         listeners.forEach { $0.onEnd(response: response, responseModel: responseModel, error: connectionError) }
     }
@@ -222,6 +227,9 @@ open class Connection<ResponseModel>: ConnectionTask {
     open func cancel() {
         isCancelled = true
         connector.cancel()
+        errorListeners.forEach { $0.onCanceled() }
+
+        // TODO おそらくcancel時にlistenersのonEndが呼ばれない
     }
 
     open func callback(_ function: @escaping () -> Void) {
@@ -248,6 +256,18 @@ open class Connection<ResponseModel>: ConnectionTask {
 
 public protocol ConnectionTask: class {
     var requestSpec: RequestSpec { get }
+
+    var listeners: [ConnectionListener] { get }
+    var responseListeners: [ConnectionResponseListener] { get }
+    var errorListeners: [ConnectionErrorListener] { get }
+
+    var connector: HTTPConnector { get }
+    var urlEncoder: URLEncoder { get }
+    var isCancelled: Bool { get }
+    /// startの引数に渡したコールバックをメインスレッドで呼び出すか
+    var callbackInMainThread: Bool { get }
+
+    var latestRequest: Request? { get }
 
     func cancel()
     func restart()
