@@ -45,7 +45,7 @@ open class Connection<ResponseModel>: ConnectionTask {
         self.isValidResponse = responseSpec.isValidResponse
     }
 
-    init<T: ConnectionSpec>(connectionSpec: T) where T.ResponseModel == ResponseModel {
+    init<T: ConnectionSpec>(_ connectionSpec: T) where T.ResponseModel == ResponseModel {
         self.requestSpec = connectionSpec
         self.parseResponse = connectionSpec.parseResponse
         self.isValidResponse = connectionSpec.isValidResponse
@@ -79,7 +79,7 @@ open class Connection<ResponseModel>: ConnectionTask {
     // TODO Listnerにキャンセルやリトライするための制御オブジェクトを渡す必要がある
     
     /// 通信処理を開始する
-    func connect(request: Request? = nil) {
+    private func connect(request: Request? = nil) {
         guard let url = makeURL(baseURL: requestSpec.url, query: requestSpec.urlQuery, encoder: urlEncoder) else {
             handleError(.invalidURL)
             return

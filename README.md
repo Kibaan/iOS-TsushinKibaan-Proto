@@ -14,17 +14,18 @@ AbstractHTTP is abstract HTTP processing library.
 # プログラミングガイド
 
 
-## 最小限の通信サンプル (The simplest example)
+## 最小構成の通信サンプル (The simplest example)
 
 `ConnectionSpec`(※)を継承したクラス（以下Specクラス）を作成して、リクエストとレスポンスの詳細を記載します。
 
-Specクラスは１つのAPIの仕様を表します。REST通信であれば、URLとHTTPメソッドの組み合わせに対して１つSpecクラスを作成します。
+Specクラスは１つのAPIの仕様を表します。REST通信であればURLとHTTPメソッドの組み合わせに対して１つSpecクラスを作成するのが良いでしょう。
 
 ただし、リクエストパラメーターとレスポンスが同じようなAPIが複数あれば、まとめて１つのSpecクラスを作った方が便利かもしれません。
 
 ※ `ConnectionSpec`は`RequestSpec`、`ResponseSpec`２つのプロトコルを継承したプロトコルです。ConnectionSpecを作成する代わりに、RequestSpecを継承したクラスとResponseSpecを継承したクラスを、それぞれ別に作成することもできます。
 
-```Swift
+```swift
+// 最小構成のシンプルなConnectionSpec実装
 class SimplestSpec: ConnectionSpec {
     // 通信で受取るデータの型を定義する
     typealias ResponseModel = String
@@ -44,8 +45,8 @@ class SimplestSpec: ConnectionSpec {
     // ポストするデータ（リクエストボディ）。GET通信など不要な場合はnilにする
     func makePostData() -> Data? { return nil }
     
-    // ステータスコードの正常判定
-    func isValidStatusCode(code: Int) -> Bool { return true }
+    // レスポンスデータのパース前のバリデーション
+    func isValidResponse(response: Response) -> Bool { return true }
 
     // 通信レスポンスをデータモデルに変換する
     func parseResponse(response: Response) throws -> ResponseModel {
@@ -54,6 +55,14 @@ class SimplestSpec: ConnectionSpec {
         }
         throw ConnectionErrorType.parse
     }
+}
+```
+
+
+```swift
+let spec = SimplestSpec()
+Connection(spec) { response in
+    print(response)
 }
 ```
 

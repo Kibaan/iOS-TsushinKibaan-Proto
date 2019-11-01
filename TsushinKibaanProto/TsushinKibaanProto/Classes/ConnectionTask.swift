@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// 一連の通信処理の制御
 public protocol ConnectionTask: class {
     /// HTTPリクエストの仕様
     var requestSpec: RequestSpec { get }
