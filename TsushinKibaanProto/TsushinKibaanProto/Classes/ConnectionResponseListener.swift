@@ -13,7 +13,7 @@ import Foundation
 /// レスポンスのバリデーターの役割も兼ねており、`onReceived` 、`onReceivedModel` の返り値はエラー判定に用いられる
 ///
 /// バックグラウンドスレッドから呼び出されるため、UIの操作を行う場合はメインスレッドに切り替える必要がある
-public protocol ConnectionResponseListener {
+public protocol ConnectionResponseListener: class {
 
     /// レスポンスデータの受信イベント
     ///

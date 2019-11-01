@@ -12,7 +12,7 @@ import Foundation
 /// afterError以外のエラーコールバックは、Connecion.startの引数に渡したエラーコールバックの直前にバックグラウンドスレッドで呼ばれる。
 ///
 /// バックグラウンドスレッドから呼び出されるため、UIの操作を行う場合はメインスレッドに切り替える必要がある
-public protocol ConnectionErrorListener {
+public protocol ConnectionErrorListener: class {
     func onNetworkError(error: Error?)
     func onResponseError(response: Response)
     func onParseError(response: Response)

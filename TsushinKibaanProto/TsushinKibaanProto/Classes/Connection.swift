@@ -51,19 +51,13 @@ open class Connection<ResponseModel>: ConnectionTask {
         self.isValidResponse = connectionSpec.isValidResponse
     }
 
-    // TODO removeListener、containsなどをつくる？
+    func addListener(_ listener: ConnectionListener) { listeners.append(listener) }
+    func addResponseListener(_ listener: ConnectionResponseListener) { responseListeners.append(listener) }
+    func addErrorListener(_ listener: ConnectionErrorListener) { errorListeners.append(listener) }
 
-    func addListener(_ listener: ConnectionListener) {
-        listeners.append(listener)
-    }
-
-    func addResponseListener(_ listener: ConnectionResponseListener) {
-        responseListeners.append(listener)
-    }
-
-    func addErrorListener(_ listener: ConnectionErrorListener) {
-        errorListeners.append(listener)
-    }
+    func removeListener(_ listener: ConnectionListener) { listeners.removeAll { $0 === listener } }
+    func removeResponseListener(_ listener: ConnectionResponseListener) { responseListeners.removeAll { $0 === listener } }
+    func removeErrorListener(_ listener: ConnectionErrorListener) { errorListeners.removeAll { $0 === listener } }
 
     /// 処理を開始する
     ///
