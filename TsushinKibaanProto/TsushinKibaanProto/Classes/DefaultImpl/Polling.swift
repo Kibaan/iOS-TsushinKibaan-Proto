@@ -12,6 +12,7 @@ public class Polling: ConnectionListener {
 
     let delay: Double
     let callback: () -> Void
+    var timer: Timer?
 
     public init(delay: Double, callback: @escaping () -> Void) {
         self.delay = delay
@@ -21,6 +22,13 @@ public class Polling: ConnectionListener {
     public func onStart(request: Request) {}
 
     public func onEnd(response: Response?, responseModel: Any?, error: ConnectionError?) {
-
+        if error == nil || error?.type == ConnectionErrorType.network {
+            timer = Timer.scheduledTimer(withTimeInterval: delay, repeats: false) { timer in
+                timer.invalidate()
+                self.callback()
+            }
+        } else if error?.type == ConnectionErrorType.canceled {
+            timer?.invalidate()
+        }
     }
 }

@@ -17,5 +17,6 @@ public protocol ConnectionListener: class {
     /// 通信の終了イベント。通信の成否に関わらず終了時に必ず呼び出される。
     /// 他のコールバックが全て実行された後に呼び出されるため、
     /// Connection.callbackInMainThreadがtrueの場合メインスレッドでの実行、falseの場合バックグラウンドスレッドでの実行になる。
+    /// またキャンセル時はConnection.cancelの呼び出しスレッドでそのまま呼び出される。 TODO それでいいのか？
     func onEnd(response: Response?, responseModel: Any?, error: ConnectionError?)
 }

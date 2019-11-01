@@ -20,6 +20,8 @@ public enum ConnectionErrorType: Error {
     case parse
     /// バリデーションエラー
     case validation
+    /// キャンセル
+    case canceled
 
     public var description: String {
         switch self {
@@ -33,6 +35,8 @@ public enum ConnectionErrorType: Error {
             return "レスポンスデータのパースに失敗しました。"
         case .validation:
             return "バリデーションエラーです。"
+        case .canceled:
+            return "通信がキャンセルされました。"
         }
     }
 }

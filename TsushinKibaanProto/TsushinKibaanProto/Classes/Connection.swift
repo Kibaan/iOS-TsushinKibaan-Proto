@@ -186,12 +186,20 @@ open class Connection<ResponseModel>: ConnectionTask {
     }
 
     /// エラーを処理する
+    func callHandleError(_ type: ConnectionErrorType,
+                         error: Error? = nil,
+                         response: Response? = nil,
+                         responseModel: ResponseModel? = nil) {
+        callback {
+            self.handleError(type, error: error, response: response, responseModel: responseModel)
+        }
+    }
+
+    /// エラーを処理する
     open func handleError(_ type: ConnectionErrorType,
                           error: Error? = nil,
                           response: Response? = nil,
                           responseModel: ResponseModel? = nil) {
-
-        // TODO メインスレッド制御が必要では？
 
         let message = error?.localizedDescription ?? ""
         print("[ConnectionError] Type= \(type.description), NativeMessage=\(message)")
@@ -223,7 +231,11 @@ open class Connection<ResponseModel>: ConnectionTask {
         connector.cancel()
         errorListeners.forEach { $0.onCanceled() }
 
-        // TODO おそらくcancel時にlistenersのonEndが呼ばれない
+        let error = ConnectionError(type: .canceled, nativeError: nil)
+
+        listeners.forEach { $0.onEnd(response: nil, responseModel: nil, error: error) }
+
+        // TODO 個別登録のENDコールバックも呼び出すべきでは？
     }
 
     open func callback(_ function: @escaping () -> Void) {
@@ -246,24 +258,4 @@ open class Connection<ResponseModel>: ConnectionTask {
 
         return URL(string: urlStr)
     }
-}
-
-public protocol ConnectionTask: class {
-    var requestSpec: RequestSpec { get }
-
-    var listeners: [ConnectionListener] { get }
-    var responseListeners: [ConnectionResponseListener] { get }
-    var errorListeners: [ConnectionErrorListener] { get }
-
-    var connector: HTTPConnector { get }
-    var urlEncoder: URLEncoder { get }
-    var isCancelled: Bool { get }
-    /// startの引数に渡したコールバックをメインスレッドで呼び出すか
-    var callbackInMainThread: Bool { get }
-
-    var latestRequest: Request? { get }
-
-    func cancel()
-    func restart()
-    func cloneRequest()
 }
