@@ -39,7 +39,7 @@ open class Connection<ResponseModel>: ConnectionTask {
     public weak var holder = ConnectionHolder.shared
 
     // TODO initにstartを統合するか？ 使いやすい呼び出しIFを考える
-    // -> initにstartは統合しないが、startの引数はinitに持ってくる
+    // -> initにstartは統合しないが、onSuccessをinitの引数に持ってくる
     init<T: ResponseSpec>(requestSpec: RequestSpec, responseSpec: T) where T.ResponseModel == ResponseModel {
         self.requestSpec = requestSpec
         self.parseResponse = responseSpec.parseResponse
@@ -59,6 +59,16 @@ open class Connection<ResponseModel>: ConnectionTask {
     func removeListener(_ listener: ConnectionListener) { listeners.removeAll { $0 === listener } }
     func removeResponseListener(_ listener: ConnectionResponseListener) { responseListeners.removeAll { $0 === listener } }
     func removeErrorListener(_ listener: ConnectionErrorListener) { errorListeners.removeAll { $0 === listener } }
+
+    func setOnError(onError: @escaping (ConnectionError, Response?, ResponseModel?) -> Void) -> Self {
+        self.onError = onError
+        return self
+    }
+
+    func setOnEnd(onEnd: @escaping () -> Void) -> Self {
+        self.onEnd = onEnd
+        return self
+    }
 
     /// 処理を開始する
     ///
