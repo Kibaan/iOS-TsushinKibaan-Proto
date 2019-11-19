@@ -24,8 +24,8 @@ open class Connection<ResponseModel>: ConnectionTask {
     public var responseListeners: [ConnectionResponseListener] = []
     public var errorListeners: [ConnectionErrorListener] = []
 
-    public var connector: HTTPConnector = DefaultHTTPConnector()
-    public var urlEncoder: URLEncoder = DefaultURLEncoder()
+    public var connector: HTTPConnector = DefaultImplementation.shared.httpConnector()
+    public var urlEncoder: URLEncoder = DefaultImplementation.shared.urlEncoder()
     public var isCancelled = false
     /// startの引数に渡したコールバックをメインスレッドで呼び出すか
     public var callbackInMainThread = true
@@ -39,6 +39,7 @@ open class Connection<ResponseModel>: ConnectionTask {
     public weak var holder = ConnectionHolder.shared
 
     // TODO initにstartを統合するか？ 使いやすい呼び出しIFを考える
+    // -> initにstartは統合しないが、startの引数はinitに持ってくる
     init<T: ResponseSpec>(requestSpec: RequestSpec, responseSpec: T) where T.ResponseModel == ResponseModel {
         self.requestSpec = requestSpec
         self.parseResponse = responseSpec.parseResponse
@@ -257,5 +258,18 @@ open class Connection<ResponseModel>: ConnectionTask {
         }
 
         return URL(string: urlStr)
+    }
+}
+
+public struct DefaultImplementation {
+
+    public static var shared = DefaultImplementation()
+
+    public var urlEncoder: () -> URLEncoder = {
+        return DefaultURLEncoder()
+    }
+
+    public var httpConnector: () -> HTTPConnector = {
+        return DefaultHTTPConnector()
     }
 }
