@@ -35,14 +35,28 @@ public protocol ConnectionTask: class {
     /// 直近のリクエスト内容
     var latestRequest: Request? { get }
 
+    /// 通信を開始する
+    ///
+    /// - Parameters:
+    ///   - callback: 通信開始時のコールバック※を呼び出す場合は true。
+    /// ※ ConnectionListener.onStart
+    func start(callback: Bool)
+
     /// 通信をキャンセルする
-    func cancel()
+    ///
+    /// - Parameters:
+    ///   - callback: キャンセル時のコールバック※を呼び出す場合は true。
+    /// ※ ConnectionListener.onEnd、ConnectionErrorListener.onCancel など
+    // TODO callback 引数は本当にいるか？ 通信エラー時のリトライはキャンセルでなく「まだ終わってない」なのでは？
+    func cancel(callback: Bool)
 
-    /// 再リクエストする
-    /// リクエスト内容はRequestSpecにより再生成されるため、RequestSpecの実装によっては直前のリクエストと異なるリクエストになる
-    /// （例えばリクエストパラメーターに現在時刻を含める場合などは直前のリクエストと異なる）
-    func restart()
+    /// 通信を再実行する
+    ///
+    /// - Parameters:
+    ///   - cloneRequest: 直前のリクエストと全く同じリクエストをする場合は true。
+    ///   falseの場合リクエスト内容はRequestSpecにより再生成されるため、RequestSpecの実装によっては直前のリクエストと異なるリクエストになる。
+    /// （例えばリクエストパラメーターに現在時刻を含める場合、再生成すると直前のリクエスト内容が変化する）
+    ///   - startCallback: 通信開始のコールバックを呼ぶ場合は true。
+    func restart(cloneRequest: Bool, startCallback: Bool)
 
-    /// 直近のリクエストと同じリクエストをする
-    func cloneRequest()
 }

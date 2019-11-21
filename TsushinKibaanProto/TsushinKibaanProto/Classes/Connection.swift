@@ -25,7 +25,9 @@ open class Connection<ResponseModel>: ConnectionTask {
     public var errorListeners: [ConnectionErrorListener] = []
 
     public var connector: HTTPConnector = DefaultImplementation.shared.httpConnector()
-    public var urlEncoder: URLEncoder = DefaultImplementation.shared.urlEncoder()
+    public var urlEncoder: URLEncoder = DefaultImplementation.shared.urlEncoder()必要
+
+    // TODO Cancel後の再通信があり得ると、これがフラグであることが危うい
     public var isCancelled = false
     /// startの引数に渡したコールバックをメインスレッドで呼び出すか
     public var callbackInMainThread = true
@@ -38,18 +40,21 @@ open class Connection<ResponseModel>: ConnectionTask {
 
     public weak var holder = ConnectionHolder.shared
 
-    // TODO initにstartを統合するか？ 使いやすい呼び出しIFを考える
-    // -> initにstartは統合しないが、onSuccessをinitの引数に持ってくる
-    init<T: ResponseSpec>(requestSpec: RequestSpec, responseSpec: T) where T.ResponseModel == ResponseModel {
+    init<T: ResponseSpec>(requestSpec: RequestSpec,
+                          responseSpec: T,
+                          onSuccess: ((ResponseModel) -> Void)? = nil) where T.ResponseModel == ResponseModel {
         self.requestSpec = requestSpec
         self.parseResponse = responseSpec.parseResponse
         self.isValidResponse = responseSpec.isValidResponse
+        self.onSuccess = onSuccess
     }
 
-    init<T: ConnectionSpec>(_ connectionSpec: T) where T.ResponseModel == ResponseModel {
+    init<T: ConnectionSpec>(_ connectionSpec: T,
+                            onSuccess: ((ResponseModel) -> Void)? = nil) where T.ResponseModel == ResponseModel {
         self.requestSpec = connectionSpec
         self.parseResponse = connectionSpec.parseResponse
         self.isValidResponse = connectionSpec.isValidResponse
+        self.onSuccess = onSuccess
     }
 
     func addListener(_ listener: ConnectionListener) { listeners.append(listener) }
@@ -60,30 +65,20 @@ open class Connection<ResponseModel>: ConnectionTask {
     func removeResponseListener(_ listener: ConnectionResponseListener) { responseListeners.removeAll { $0 === listener } }
     func removeErrorListener(_ listener: ConnectionErrorListener) { errorListeners.removeAll { $0 === listener } }
 
+    @discardableResult
     func setOnError(onError: @escaping (ConnectionError, Response?, ResponseModel?) -> Void) -> Self {
         self.onError = onError
         return self
     }
 
+    @discardableResult
     func setOnEnd(onEnd: @escaping () -> Void) -> Self {
         self.onEnd = onEnd
         return self
     }
 
     /// 処理を開始する
-    ///
-    /// - Parameters:
-    ///   - onSuccess: パラメータの説明
-    ///   - onError: パラメータの説明
-    ///   - onEnd: パラメータの説明
-    ///   - callbackInMainThread: パラメータの説明
-    func start(onSuccess: ((ResponseModel) -> Void)? = nil,
-               onError: ((ConnectionError, Response?, ResponseModel?) -> Void)? = nil,
-               onEnd: (() -> Void)? = nil) {
-        self.onSuccess = onSuccess
-        self.onError = onError
-        self.onEnd = onEnd
-
+    func start() {
         connect()
     }
 
@@ -178,6 +173,8 @@ open class Connection<ResponseModel>: ConnectionTask {
 
     func onNetworkError(error: Error?) {
         errorListeners.forEach { $0.onNetworkError(error: error) }
+        // TODO onNetworkError で自動リトライする場合、外側にエラーを通知したくない
+        // そうすると後続のコールバックを呼ばないようにする機能が必要
         handleError(.network, error: error)
     }
 
@@ -228,25 +225,25 @@ open class Connection<ResponseModel>: ConnectionTask {
     }
 
     /// 通信を再実行する
-    open func restart() {
-        connect()
-    }
+    open func restart(cloneRequest: Bool) {
+        let request = cloneRequest ? latestRequest : nil
+        connect(request: request)
 
-    open func cloneRequest() {
-        connect(request: latestRequest)
+        // TODO 後続処理を止める？ どうやって？
+        // complete > onNetworkError > restart で onNetworkErrorの後続処理はしないみたいな制御が必要
     }
 
     /// 通信をキャンセルする
-    open func cancel() {
+    open func cancel(callback: Bool = true) {
         isCancelled = true
         connector.cancel()
-        errorListeners.forEach { $0.onCanceled() }
 
-        let error = ConnectionError(type: .canceled, nativeError: nil)
-
-        listeners.forEach { $0.onEnd(response: nil, responseModel: nil, error: error) }
-
-        // TODO 個別登録のENDコールバックも呼び出すべきでは？
+        if callback {
+            errorListeners.forEach { $0.onCanceled() }
+            let error = ConnectionError(type: .canceled, nativeError: nil)
+            listeners.forEach { $0.onEnd(response: nil, responseModel: nil, error: error) }
+            // TODO 個別登録のENDコールバックも呼び出すべきでは？
+        }
     }
 
     open func callback(_ function: @escaping () -> Void) {
