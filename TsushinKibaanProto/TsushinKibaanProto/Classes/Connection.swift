@@ -25,9 +25,10 @@ open class Connection<ResponseModel>: ConnectionTask {
     public var errorListeners: [ConnectionErrorListener] = []
 
     public var connector: HTTPConnector = DefaultImplementation.shared.httpConnector()
-    public var urlEncoder: URLEncoder = DefaultImplementation.shared.urlEncoder()必要
+    public var urlEncoder: URLEncoder = DefaultImplementation.shared.urlEncoder()
 
-    // TODO Cancel後の再通信があり得ると、これがフラグであることが危うい
+    /// キャンセルされたかどうか。このフラグが `true` だと通信終了してもコールバックが呼ばれない
+    /// Cancel後の再通信は想定しない
     public var isCancelled = false
     /// startの引数に渡したコールバックをメインスレッドで呼び出すか
     public var callbackInMainThread = true
@@ -78,14 +79,14 @@ open class Connection<ResponseModel>: ConnectionTask {
     }
 
     /// 処理を開始する
-    func start() {
-        connect()
+    public func start(callback: Bool = true) {
+        connect(callback: callback)
     }
 
     // TODO Listnerにキャンセルやリトライするための制御オブジェクトを渡す必要がある
     
     /// 通信処理を開始する
-    private func connect(request: Request? = nil) {
+    private func connect(request: Request? = nil, callback: Bool) {
         guard let url = makeURL(baseURL: requestSpec.url, query: requestSpec.urlQuery, encoder: urlEncoder) else {
             handleError(.invalidURL)
             return
@@ -97,8 +98,10 @@ open class Connection<ResponseModel>: ConnectionTask {
                                          body: requestSpec.makePostData(),
                                          headers: requestSpec.headers)
 
-        listeners.forEach {
-            $0.onStart(request: request)
+        if callback {
+            listeners.forEach {
+                $0.onStart(request: request)
+            }
         }
 
         // このインスタンスが通信完了まで開放されないよう保持する必要がある
@@ -225,10 +228,9 @@ open class Connection<ResponseModel>: ConnectionTask {
     }
 
     /// 通信を再実行する
-    open func restart(cloneRequest: Bool) {
+    open func restart(cloneRequest: Bool, startCallback: Bool) {
         let request = cloneRequest ? latestRequest : nil
-        connect(request: request)
-
+        connect(request: request, callback: startCallback)
         // TODO 後続処理を止める？ どうやって？
         // complete > onNetworkError > restart で onNetworkErrorの後続処理はしないみたいな制御が必要
     }
