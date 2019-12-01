@@ -37,10 +37,7 @@ public protocol ConnectionTask: class {
 
     /// 通信を開始する
     ///
-    /// - Parameters:
-    ///   - shouldNotify: 通信開始のコールバックを呼び出す場合は `true`。
-    ///     通常この引数は `true`を指定するが、リスナーに通知せずこっそり再通信したい場合などに `false` を指定する。
-    func start(shouldNotify: Bool)
+    func start()
 
     /// 通信をキャンセルする
     ///
@@ -53,6 +50,7 @@ public protocol ConnectionTask: class {
     ///     多くの場合リクエスト内容はどちらも変わらないが、例えばリクエストパラメーターに現在時刻を含める場合、`true` では前回りクエストと同時刻になるが、 `false` では新しい時刻になる。
     ///
     ///   - shouldNotify: 通信開始のコールバックを呼ぶ場合は `true`。
+    ///     リスナーに通知せずこっそり再通信したい場合などに `false` を指定する。
     func restart(cloneRequest: Bool, shouldNotify: Bool)
 
 }

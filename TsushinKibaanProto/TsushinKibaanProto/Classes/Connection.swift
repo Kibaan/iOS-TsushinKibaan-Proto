@@ -29,8 +29,9 @@ open class Connection<ResponseModel>: ConnectionTask {
 
     /// キャンセルされたかどうか。このフラグが `true` だと通信終了してもコールバックが呼ばれない
     /// Cancel後の再通信は想定しない
-    public var isCancelled = false
-    /// startの引数に渡したコールバックをメインスレッドで呼び出すか
+    public var isCancelled = false // TODO should be readonly
+
+    /// コールバックをメインスレッドで呼び出すか
     public var callbackInMainThread = true
 
     var onSuccess: ((ResponseModel) -> Void)?
@@ -79,8 +80,8 @@ open class Connection<ResponseModel>: ConnectionTask {
     }
 
     /// 処理を開始する
-    public func start(shouldNotify: Bool = true) {
-        connect(shouldNotify: shouldNotify)
+    public func start() {
+        connect()
     }
 
     // TODO Listnerにキャンセルやリトライするための制御オブジェクトを渡す必要がある
@@ -90,7 +91,7 @@ open class Connection<ResponseModel>: ConnectionTask {
     /// - Parameters:
     ///   - shouldNotify: 通信開始のコールバックを呼び出す場合は `true`。リスナーに通知せず再通信したい場合に `false` を指定する。
     ///
-    private func connect(request: Request? = nil, shouldNotify: Bool) {
+    private func connect(request: Request? = nil, shouldNotify: Bool = true) {
         guard let url = makeURL(baseURL: requestSpec.url, query: requestSpec.urlQuery, encoder: urlEncoder) else {
             handleError(.invalidURL)
             return
