@@ -35,7 +35,7 @@ open class Connection<ResponseModel>: ConnectionTask {
 
     var onSuccess: ((ResponseModel) -> Void)?
     var onError: ((ConnectionError, Response?, ResponseModel?) -> Void)?
-    var onEnd: (() -> Void)?
+    var onEnd: (() -> Void)? // TODO ConnectionListenerのonEndとIFを合わせるべき？
 
     public var latestRequest: Request?
 
