@@ -79,14 +79,18 @@ open class Connection<ResponseModel>: ConnectionTask {
     }
 
     /// 処理を開始する
-    public func start(callback: Bool = true) {
-        connect(callback: callback)
+    public func start(shouldNotify: Bool = true) {
+        connect(shouldNotify: shouldNotify)
     }
 
     // TODO Listnerにキャンセルやリトライするための制御オブジェクトを渡す必要がある
     
     /// 通信処理を開始する
-    private func connect(request: Request? = nil, callback: Bool) {
+    ///
+    /// - Parameters:
+    ///   - shouldNotify: 通信開始のコールバックを呼び出す場合は `true`。リスナーに通知せず再通信したい場合に `false` を指定する。
+    ///
+    private func connect(request: Request? = nil, shouldNotify: Bool) {
         guard let url = makeURL(baseURL: requestSpec.url, query: requestSpec.urlQuery, encoder: urlEncoder) else {
             handleError(.invalidURL)
             return
@@ -98,7 +102,7 @@ open class Connection<ResponseModel>: ConnectionTask {
                                          body: requestSpec.makePostData(),
                                          headers: requestSpec.headers)
 
-        if callback {
+        if shouldNotify {
             listeners.forEach {
                 $0.onStart(request: request)
             }
@@ -228,24 +232,23 @@ open class Connection<ResponseModel>: ConnectionTask {
     }
 
     /// 通信を再実行する
-    open func restart(cloneRequest: Bool, startCallback: Bool) {
+    open func restart(cloneRequest: Bool, shouldNotify: Bool) {
         let request = cloneRequest ? latestRequest : nil
-        connect(request: request, callback: startCallback)
+        connect(request: request, shouldNotify: shouldNotify)
         // TODO 後続処理を止める？ どうやって？
         // complete > onNetworkError > restart で onNetworkErrorの後続処理はしないみたいな制御が必要
     }
 
     /// 通信をキャンセルする
-    open func cancel(callback: Bool = true) {
+    open func cancel() {
         isCancelled = true
         connector.cancel()
 
-        if callback {
-            errorListeners.forEach { $0.onCanceled() }
-            let error = ConnectionError(type: .canceled, nativeError: nil)
-            listeners.forEach { $0.onEnd(response: nil, responseModel: nil, error: error) }
-            // TODO 個別登録のENDコールバックも呼び出すべきでは？
-        }
+        errorListeners.forEach { $0.onCanceled() }
+        let error = ConnectionError(type: .canceled, nativeError: nil)
+        listeners.forEach { $0.onEnd(response: nil, responseModel: nil, error: error) }
+        // TODO 通信コールバック内でキャンセルした場合に、onEndが二重で呼ばれないようにする必要がある
+        // TODO 個別登録のENDコールバックも呼び出すべきでは？
     }
 
     open func callback(_ function: @escaping () -> Void) {

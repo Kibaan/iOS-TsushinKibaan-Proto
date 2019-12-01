@@ -38,25 +38,21 @@ public protocol ConnectionTask: class {
     /// 通信を開始する
     ///
     /// - Parameters:
-    ///   - callback: 通信開始時のコールバック※を呼び出す場合は true。
-    /// ※ ConnectionListener.onStart
-    func start(callback: Bool)
+    ///   - shouldNotify: 通信開始のコールバックを呼び出す場合は `true`。
+    ///     通常この引数は `true`を指定するが、リスナーに通知せずこっそり再通信したい場合などに `false` を指定する。
+    func start(shouldNotify: Bool)
 
     /// 通信をキャンセルする
     ///
-    /// - Parameters:
-    ///   - callback: キャンセル時のコールバック※を呼び出す場合は true。
-    /// ※ ConnectionListener.onEnd、ConnectionErrorListener.onCancel など
-    // TODO callback 引数は本当にいるか？ 通信エラー時のリトライはキャンセルでなく「まだ終わってない」なのでは？
-    func cancel(callback: Bool)
+    func cancel()
 
     /// 通信を再実行する
     ///
     /// - Parameters:
-    ///   - cloneRequest: 直前のリクエストと全く同じリクエストをする場合は true。
-    ///   falseの場合リクエスト内容はRequestSpecにより再生成されるため、RequestSpecの実装によっては直前のリクエストと異なるリクエストになる。
-    /// （例えばリクエストパラメーターに現在時刻を含める場合、再生成すると直前のリクエスト内容が変化する）
-    ///   - startCallback: 通信開始のコールバックを呼ぶ場合は true。
-    func restart(cloneRequest: Bool, startCallback: Bool)
+    ///   - cloneRequest: 直前のリクエストと全く同じリクエストをする場合は `true`。リクエスト内容を再構築する場合 `false` を指定する。
+    ///     多くの場合リクエスト内容はどちらも変わらないが、例えばリクエストパラメーターに現在時刻を含める場合、`true` では前回りクエストと同時刻になるが、 `false` では新しい時刻になる。
+    ///
+    ///   - shouldNotify: 通信開始のコールバックを呼ぶ場合は `true`。
+    func restart(cloneRequest: Bool, shouldNotify: Bool)
 
 }
