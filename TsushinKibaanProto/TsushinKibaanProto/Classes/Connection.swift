@@ -36,7 +36,10 @@ open class Connection<ResponseModel>: ConnectionTask {
 
     var onSuccess: ((ResponseModel) -> Void)?
     var onError: ((ConnectionError, Response?, ResponseModel?) -> Void)?
-    var onEnd: (() -> Void)? // TODO ConnectionListenerのonEndとIFを合わせるべき？
+
+    /// 終了コールバック
+    /// (response: Response?, responseModel: Any?, error: ConnectionError?) -> Void
+    var onEnd: ((Response?, Any?, ConnectionError?) -> Void)?
 
     public var latestRequest: Request?
 
@@ -74,7 +77,7 @@ open class Connection<ResponseModel>: ConnectionTask {
     }
 
     @discardableResult
-    func setOnEnd(onEnd: @escaping () -> Void) -> Self {
+    func setOnEnd(onEnd: @escaping (Response?, Any?, ConnectionError?) -> Void) -> Self {
         self.onEnd = onEnd
         return self
     }
@@ -118,9 +121,6 @@ open class Connection<ResponseModel>: ConnectionTask {
         connector.execute(request: request, complete: { [weak self] (response, error) in
             self?.complete(response: response, error: error)
             self?.holder?.remove(connection: self)
-            self?.callback {
-                self?.onEnd?()
-            }
         })
 
         latestRequest = request
@@ -175,7 +175,7 @@ open class Connection<ResponseModel>: ConnectionTask {
             self.responseListeners.forEach {
                 $0.afterSuccess(responseModel: responseModel)
             }
-            self.listeners.forEach { $0.onEnd(response: response, responseModel: responseModel, error: nil) }
+            self.end(response: response, responseModel: responseModel, error: nil)
         }
     }
 
@@ -229,7 +229,7 @@ open class Connection<ResponseModel>: ConnectionTask {
                           error: connectionError)
         }
 
-        listeners.forEach { $0.onEnd(response: response, responseModel: responseModel, error: connectionError) }
+        end(response: response, responseModel: responseModel, error: connectionError)
     }
 
     /// 通信を再実行する
@@ -247,9 +247,13 @@ open class Connection<ResponseModel>: ConnectionTask {
 
         errorListeners.forEach { $0.onCanceled() }
         let error = ConnectionError(type: .canceled, nativeError: nil)
-        listeners.forEach { $0.onEnd(response: nil, responseModel: nil, error: error) }
+        end(response: nil, responseModel: nil, error: error)
         // TODO 通信コールバック内でキャンセルした場合に、onEndが二重で呼ばれないようにする必要がある
-        // TODO 個別登録のENDコールバックも呼び出すべきでは？
+    }
+
+    private func end(response: Response?, responseModel: Any?, error: ConnectionError?) {
+        listeners.forEach { $0.onEnd(response: response, responseModel: responseModel, error: error) }
+        onEnd?(response, responseModel, error)
     }
 
     open func callback(_ function: @escaping () -> Void) {
