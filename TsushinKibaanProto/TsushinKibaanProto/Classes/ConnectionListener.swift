@@ -9,7 +9,6 @@
 import Foundation
 
 /// 通信の開始と終了の通知を受け取るリスナー
-/// バックグラウンドスレッドから呼び出されるため、UIの操作を行う場合はメインスレッドに切り替える必要がある
 public protocol ConnectionListener: class {
     /// 通信の開始イベント
     func onStart(request: Request)
