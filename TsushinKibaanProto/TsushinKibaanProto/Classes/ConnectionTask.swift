@@ -29,7 +29,7 @@ public protocol ConnectionTask: class {
     /// キャンセルされたか
     var isCancelled: Bool { get }
 
-    /// startの引数に渡したコールバックをメインスレッドで呼び出すか
+    /// コールバックをメインスレッドで呼び出すか
     var callbackInMainThread: Bool { get }
 
     /// 直近のリクエスト内容
