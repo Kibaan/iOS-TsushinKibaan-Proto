@@ -19,9 +19,9 @@ public class Polling: ConnectionListener {
         self.callback = callback
     }
 
-    public func onStart(request: Request) {}
+    public func onStart(connection: ConnectionTask, request: Request) {}
 
-    public func onEnd(response: Response?, responseModel: Any?, error: ConnectionError?) {
+    public func onEnd(connection: ConnectionTask, response: Response?, responseModel: Any?, error: ConnectionError?) {
         if error == nil || error?.type == ConnectionErrorType.network {
             timer = Timer.scheduledTimer(withTimeInterval: delay, repeats: false) { timer in
                 timer.invalidate()

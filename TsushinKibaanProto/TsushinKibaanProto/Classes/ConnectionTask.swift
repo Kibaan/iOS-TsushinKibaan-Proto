@@ -47,8 +47,7 @@ public protocol ConnectionTask: class {
     ///
     /// - Parameters:
     ///   - cloneRequest: 直前のリクエストと全く同じリクエストをする場合は `true`。リクエスト内容を再構築する場合 `false` を指定する。
-    ///     多くの場合リクエスト内容はどちらも変わらないが、例えばリクエストパラメーターに現在時刻を含める場合、`true` では前回りクエストと同時刻になるが、 `false` では新しい時刻になる。
-    ///
+    ///     例えばリクエストパラメーターに現在時刻を動的に含める場合、`true` では前回リクエストと同時刻になるが、 `false` では新しい時刻が設定される。
     ///   - shouldNotify: 通信開始のコールバックを呼ぶ場合は `true`。
     ///     リスナーに通知せずこっそり再通信したい場合などに `false` を指定する。
     func restart(cloneRequest: Bool, shouldNotify: Bool)

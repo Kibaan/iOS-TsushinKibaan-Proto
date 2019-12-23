@@ -18,18 +18,24 @@ public protocol ConnectionResponseListener: class {
     /// レスポンスデータの受信イベント
     ///
     /// - Parameters:
+    ///   - connection: 通信オブジェクト
     ///   - response: 通信レスポンスデータ
     /// - Returns: レスポンスデータが正常の場合 `true`、エラーの場合 `false`
-    func onReceived(response: Response) -> Bool
+    func onReceived(connection: ConnectionTask, response: Response) -> Bool
 
     /// レスポンスデータモデルの受信イベント
     /// `ConnectionResponseSpec`で作られたデータモデルを処理する
     ///
     /// - Parameters:
+    ///   - connection: 通信オブジェクト
     ///   - responseModel: 通信レスポンスデータモデル。
     /// - Returns: レスポンスデータモデルが正常の場合 `true`、エラーの場合 `false`
-    func onReceivedModel(responseModel: Any) -> Bool
+    func onReceivedModel(connection: ConnectionTask, responseModel: Any) -> Bool
 
     /// 成功コールバック実行直後のイベント
-    func afterSuccess(responseModel: Any)
+    ///
+    /// - Parameters:
+    ///   - connection: 通信オブジェクト
+    ///   - responseModel: 通信レスポンスデータモデル。
+    func afterSuccess(connection: ConnectionTask, responseModel: Any)
 }

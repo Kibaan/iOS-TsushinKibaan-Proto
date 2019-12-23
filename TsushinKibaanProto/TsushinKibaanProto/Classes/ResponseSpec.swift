@@ -12,8 +12,6 @@ import Foundation
 /// HTTPレスポンスをassociated typeに指定された型に変換する
 /// また、HTTPステータスコードを見てエラーかどうかを判定する
 ///
-///
-///
 public protocol ResponseSpec {
     associatedtype ResponseModel
 

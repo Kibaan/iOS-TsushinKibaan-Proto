@@ -86,8 +86,6 @@ open class Connection<ResponseModel>: ConnectionTask {
     public func start() {
         connect()
     }
-
-    // TODO Listnerにキャンセルやリトライするための制御オブジェクトを渡す必要がある
     
     /// 通信処理を開始する
     ///
@@ -108,7 +106,7 @@ open class Connection<ResponseModel>: ConnectionTask {
 
         if shouldNotify {
             listeners.forEach {
-                $0.onStart(request: request)
+                $0.onStart(connection: self, request: request)
             }
         }
 
@@ -139,7 +137,7 @@ open class Connection<ResponseModel>: ConnectionTask {
 
         var isValidResponse = true
         responseListeners.forEach {
-            isValidResponse = isValidResponse && $0.onReceived(response: response)
+            isValidResponse = isValidResponse && $0.onReceived(connection: self, response: response)
         }
 
         guard isValidResponse && self.isValidResponse(response) else {
@@ -163,7 +161,7 @@ open class Connection<ResponseModel>: ConnectionTask {
 
         var isValidResponse = true
         responseListeners.forEach {
-            isValidResponse = isValidResponse && $0.onReceivedModel(responseModel: responseModel)
+            isValidResponse = isValidResponse && $0.onReceivedModel(connection: self, responseModel: responseModel)
         }
         if !isValidResponse {
             onValidationError(response: response, responseModel: responseModel)
@@ -173,31 +171,30 @@ open class Connection<ResponseModel>: ConnectionTask {
         callback {
             self.onSuccess?(responseModel)
             self.responseListeners.forEach {
-                $0.afterSuccess(responseModel: responseModel)
+                $0.afterSuccess(connection: self, responseModel: responseModel)
             }
             self.end(response: response, responseModel: responseModel, error: nil)
         }
     }
 
     func onNetworkError(error: Error?) {
-        errorListeners.forEach { $0.onNetworkError(error: error) }
-        // TODO onNetworkError で自動リトライする場合、外側にエラーを通知したくない
-        // そうすると後続のコールバックを呼ばないようにする機能が必要
+        errorListeners.forEach { $0.onNetworkError(connection: self, error: error) }
+        // TODO onNetworkError で自動リトライする場合、外側にエラーを通知したくないので、後続のコールバックを呼ばないようにする機能が必要
         handleError(.network, error: error)
     }
 
     func onResponseError(response: Response) {
-        errorListeners.forEach { $0.onResponseError(response: response) }
+        errorListeners.forEach { $0.onResponseError(connection: self, response: response) }
         handleError(.invalidResponse, response: response)
     }
 
     func onParseError(response: Response) {
-        errorListeners.forEach { $0.onParseError(response: response) }
+        errorListeners.forEach { $0.onParseError(connection: self, response: response) }
         handleError(.parse, response: response)
     }
 
     func onValidationError(response: Response, responseModel: ResponseModel) {
-        errorListeners.forEach { $0.onValidationError(response: response, responseModel: responseModel) }
+        errorListeners.forEach { $0.onValidationError(connection: self, response: response, responseModel: responseModel) }
         handleError(.validation, response: response, responseModel: responseModel)
     }
 
@@ -224,7 +221,8 @@ open class Connection<ResponseModel>: ConnectionTask {
         onError?(connectionError, response, responseModel)
 
         errorListeners.forEach {
-            $0.afterError(response: response,
+            $0.afterError(connection: self,
+                          response: response,
                           responseModel: responseModel,
                           error: connectionError)
         }
@@ -236,23 +234,21 @@ open class Connection<ResponseModel>: ConnectionTask {
     open func restart(cloneRequest: Bool, shouldNotify: Bool) {
         let request = cloneRequest ? latestRequest : nil
         connect(request: request, shouldNotify: shouldNotify)
-        // TODO 後続処理を止める？ どうやって？
-        // complete > onNetworkError > restart で onNetworkErrorの後続処理はしないみたいな制御が必要
     }
 
     /// 通信をキャンセルする
     open func cancel() {
+        // TODO 既に通信コールバックが走っている場合何もしない。通信コールバック内でキャンセルした場合に、onEndが二重で呼ばれないようにする必要がある
         isCancelled = true
         connector.cancel()
 
-        errorListeners.forEach { $0.onCanceled() }
+        errorListeners.forEach { $0.onCanceled(connection: self) }
         let error = ConnectionError(type: .canceled, nativeError: nil)
         end(response: nil, responseModel: nil, error: error)
-        // TODO 通信コールバック内でキャンセルした場合に、onEndが二重で呼ばれないようにする必要がある
     }
 
     private func end(response: Response?, responseModel: Any?, error: ConnectionError?) {
-        listeners.forEach { $0.onEnd(response: response, responseModel: responseModel, error: error) }
+        listeners.forEach { $0.onEnd(connection: self, response: response, responseModel: responseModel, error: error) }
         onEnd?(response, responseModel, error)
     }
 

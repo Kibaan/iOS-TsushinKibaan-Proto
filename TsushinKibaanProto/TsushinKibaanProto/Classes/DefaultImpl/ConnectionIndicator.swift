@@ -23,12 +23,12 @@ public class ConnectionIndicator: ConnectionListener {
         self.indicatorView = indicatorView
     }
 
-    public func onStart(request: Request) {
+    public func onStart(connection: ConnectionTask, request: Request) {
         referenceCount += 1
         updateViewInMainThread()
     }
 
-    public func onEnd(response: Response?, responseModel: Any?, error: ConnectionError?) {
+    public func onEnd(connection: ConnectionTask, response: Response?, responseModel: Any?, error: ConnectionError?) {
         referenceCount -= 1
         updateViewInMainThread()
     }
