@@ -29,7 +29,7 @@ open class Connection<ResponseModel>: ConnectionTask {
 
     /// キャンセルされたかどうか。このフラグが `true` だと通信終了してもコールバックが呼ばれない
     /// Cancel後の再通信は想定しない
-    public var isCancelled = false // TODO should be readonly
+    public private(set) var isCancelled = false
 
     /// コールバックをメインスレッドで呼び出すか
     public var callbackInMainThread = true
@@ -41,7 +41,7 @@ open class Connection<ResponseModel>: ConnectionTask {
     /// (response: Response?, responseModel: Any?, error: ConnectionError?) -> Void
     var onEnd: ((Response?, Any?, ConnectionError?) -> Void)?
 
-    public var latestRequest: Request?
+    public private(set) var latestRequest: Request?
 
     public weak var holder = ConnectionHolder.shared
 
