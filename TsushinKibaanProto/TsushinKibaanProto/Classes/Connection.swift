@@ -178,33 +178,57 @@ open class Connection<ResponseModel>: ConnectionTask {
     }
 
     func onNetworkError(error: Error?) {
-        errorListeners.forEach { $0.onNetworkError(connection: self, error: error) }
-        // TODO onNetworkError で自動リトライする場合、外側にエラーを通知したくないので、後続のコールバックを呼ばないようにする機能が必要
-        handleError(.network, error: error)
+        controlError(callListener: {
+            return $0.onNetworkError(connection: self, error: error)
+        }, callError: {
+            self.handleError(.network, error: error)
+        })
     }
 
     func onResponseError(response: Response) {
-        errorListeners.forEach { $0.onResponseError(connection: self, response: response) }
-        handleError(.invalidResponse, response: response)
+        controlError(callListener: {
+            return $0.onResponseError(connection: self, response: response)
+        }, callError: {
+            self.handleError(.invalidResponse, response: response)
+        })
     }
 
     func onParseError(response: Response) {
-        errorListeners.forEach { $0.onParseError(connection: self, response: response) }
-        handleError(.parse, response: response)
+        controlError(callListener: {
+            return $0.onParseError(connection: self, response: response)
+        }, callError: {
+            self.handleError(.parse, response: response)
+        })
     }
 
     func onValidationError(response: Response, responseModel: ResponseModel) {
-        errorListeners.forEach { $0.onValidationError(connection: self, response: response, responseModel: responseModel) }
-        handleError(.validation, response: response, responseModel: responseModel)
+        controlError(callListener: {
+            return $0.onValidationError(connection: self, response: response, responseModel: responseModel)
+        }, callError: {
+            self.handleError(.validation, response: response, responseModel: responseModel)
+        })
     }
 
     /// エラーを処理する
-    func callHandleError(_ type: ConnectionErrorType,
-                         error: Error? = nil,
-                         response: Response? = nil,
-                         responseModel: ResponseModel? = nil) {
+    private func controlError(callListener: (ConnectionErrorListener) -> EventChain, callError: @escaping () -> Void) {
+        var stopNext = false
+
+        for i in errorListeners.indices {
+            let result = callListener(errorListeners[i])
+            if result == .stopImmediately {
+                return
+            }
+            if result == .stop {
+                stopNext = true
+            }
+        }
+
+        if stopNext {
+            return
+        }
+
         callback {
-            self.handleError(type, error: error, response: response, responseModel: responseModel)
+            callError()
         }
     }
 

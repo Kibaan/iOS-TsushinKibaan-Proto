@@ -35,6 +35,7 @@
 		40AB633223320BB2009BD7CB /* ConnectionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40AB633123320BB2009BD7CB /* ConnectionError.swift */; };
 		40AB633423321142009BD7CB /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40AB633323321142009BD7CB /* Response.swift */; };
 		40AF223D2356FF4C00C01E3D /* ConnectionResponseListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40AF223C2356FF4C00C01E3D /* ConnectionResponseListener.swift */; };
+		40D787FF23B346BC000E5179 /* EventChain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40D787FE23B346BC000E5179 /* EventChain.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -68,6 +69,7 @@
 		40AB633123320BB2009BD7CB /* ConnectionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionError.swift; sourceTree = "<group>"; };
 		40AB633323321142009BD7CB /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
 		40AF223C2356FF4C00C01E3D /* ConnectionResponseListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionResponseListener.swift; sourceTree = "<group>"; };
+		40D787FE23B346BC000E5179 /* EventChain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventChain.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +100,7 @@
 			children = (
 				403188B0230FF3AD000AAABA /* HTTPMethod.swift */,
 				403188AC230D0E93000AAABA /* ConnectionErrorType.swift */,
+				40D787FE23B346BC000E5179 /* EventChain.swift */,
 			);
 			path = EnumType;
 			sourceTree = "<group>";
@@ -268,6 +271,7 @@
 			files = (
 				2356F69C22FDB9E2002A2047 /* ConnectionSpec.swift in Sources */,
 				405294CF232228AB00739998 /* SimplestSpec.swift in Sources */,
+				40D787FF23B346BC000E5179 /* EventChain.swift in Sources */,
 				2356F69822FDB9AC002A2047 /* HTTPConnector.swift in Sources */,
 				23168DB42350DCDB0030D263 /* ConnectionErrorListener.swift in Sources */,
 				234C34C62348EB7400AE45FF /* DefaultHTTPConnector.swift in Sources */,
@@ -437,6 +441,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7FVA3NE35B;
 				INFOPLIST_FILE = TsushinKibaanProto/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -454,6 +459,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7FVA3NE35B;
 				INFOPLIST_FILE = TsushinKibaanProto/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

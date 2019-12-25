@@ -19,7 +19,7 @@ public protocol ConnectionErrorListener: class {
     /// - Parameters:
     ///   - connection: 通信オブジェクト
     ///   - error: エラー情報
-    func onNetworkError(connection: ConnectionTask, error: Error?)
+    func onNetworkError(connection: ConnectionTask, error: Error?) -> EventChain
 
     /// レスポンス内容のパース前のバリデーションエラー時に呼ばれる。
     /// 具体的には、ResponseSpec.isValidResponse で `false` が返却された場合に呼ばれる
@@ -27,14 +27,14 @@ public protocol ConnectionErrorListener: class {
     /// - Parameters:
     ///   - connection: 通信オブジェクト
     ///   - response: HTTPレスポンスの情報
-    func onResponseError(connection: ConnectionTask, response: Response)
+    func onResponseError(connection: ConnectionTask, response: Response) -> EventChain
 
     /// パースエラー時に呼ばれる
     ///
     /// - Parameters:
     ///   - connection: 通信オブジェクト
     ///   - response: HTTPレスポンスの情報
-    func onParseError(connection: ConnectionTask, response: Response)
+    func onParseError(connection: ConnectionTask, response: Response) -> EventChain
 
     /// レスポンスモデルのバリデーションエラー時に呼ばれる。
     /// 具体的には、ConnectionResponseListener.onReceivedModel で `false` が返却された場合に呼ばれる
@@ -43,7 +43,7 @@ public protocol ConnectionErrorListener: class {
     ///   - connection: 通信オブジェクト
     ///   - response: HTTPレスポンスの情報
     ///   - responseModel: パースされたレスポンスデータモデル
-    func onValidationError(connection: ConnectionTask, response: Response, responseModel: Any)
+    func onValidationError(connection: ConnectionTask, response: Response, responseModel: Any) -> EventChain
 
     /// Connecion.startの引数に渡したエラーコールバックの実行直後に呼ばれる
     /// Connection.callbackInMainThread がtrueの場合はメインスレッド、falseの場合はバックグラウンドスレッドから呼ばれる
