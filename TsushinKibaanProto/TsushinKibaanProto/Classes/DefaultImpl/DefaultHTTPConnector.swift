@@ -12,7 +12,7 @@ import Foundation
 public class DefaultHTTPConnector: NSObject, HTTPConnector {
 
     /// データ転送のタイムアウト期間（秒）。この期間データ転送が中断するとタイムアウトする。
-    public var timeoutInterval: TimeInterval? = 30
+    public var timeoutInterval: TimeInterval? = 15
 
     /// 通信中の `URLSessionTask`
     public private(set) var urlSessionTask: URLSessionTask?
