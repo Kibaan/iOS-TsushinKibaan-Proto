@@ -11,22 +11,22 @@ import Foundation
 /// HTTP通信の標準実装
 public class DefaultHTTPConnector: NSObject, HTTPConnector {
 
-    public var timeoutIntervalShort: TimeInterval? = 30
-    public var timeoutInterval: TimeInterval? = 60
+    /// データ転送のタイムアウト期間（秒）。この期間データ転送が中断するとタイムアウトする。
+    public var timeoutInterval: TimeInterval? = 30
 
-    var urlSessionTask: URLSessionTask?
+    /// 通信中の `URLSessionTask`
+    public private(set) var urlSessionTask: URLSessionTask?
 
-    var isRedirectEnabled = true
+    /// 自動でリダイレクトするか
+    public var isRedirectEnabled = true
 
     public func execute(request: Request, complete: @escaping (Response?, Error?) -> Void) {
         let config = URLSessionConfiguration.default
         config.urlCache = nil // この指定がないとHTTPSでも平文でレスポンスが端末にキャッシュされてしまう
 
-        if let timeoutIntervalShort = timeoutIntervalShort {
-            config.timeoutIntervalForRequest = timeoutIntervalShort
-        }
         if let timeoutInterval = timeoutInterval {
-            config.timeoutIntervalForResource = timeoutInterval
+            // timeoutIntervalForResource は有効に使えるケースがあまりないので使わない（標準7日のまま）
+            config.timeoutIntervalForRequest = timeoutInterval
         }
 
         let urlRequest = makeURLRequest(request: request)
