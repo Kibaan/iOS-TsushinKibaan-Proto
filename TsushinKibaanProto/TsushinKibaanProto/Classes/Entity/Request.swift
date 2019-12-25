@@ -10,9 +10,13 @@ import Foundation
 
 /// HTTPのリクエスト
 public class Request {
+    /// リクエストするURL
     public let url: URL
+    /// HTTPリクエストメソッド
     public let method: HTTPMethod
+    /// HTTPリクエストボディ
     public let body: Data?
+    /// HTTPヘッダー
     public let headers: [String: String]
 
     public init(url: URL, method: HTTPMethod, body: Data?, headers: [String: String]) {

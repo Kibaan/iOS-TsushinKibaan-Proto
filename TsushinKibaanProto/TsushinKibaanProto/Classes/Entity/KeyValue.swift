@@ -11,9 +11,11 @@ import Foundation
 /// キーと値のペア
 /// クエリパラメーターを構築するのに用いる
 public struct KeyValue {
+    
     public let key: String
     public let value: String?
 
+    /// "キー=値" 形式の文字列。値が `nil` の場合はキーのみになり=がつかない。
     public var stringValue: String {
         if let value = value {
             return "\(key)=\(value)"
@@ -27,6 +29,7 @@ public struct KeyValue {
         self.value = value
     }
 
+    /// キーと値をURLEncodeして、キー=値の文字列にする
     public func encodedValue(encoder: URLEncoder) -> String {
         var item = encoder.encode(key)
         if let value = value {

@@ -19,6 +19,7 @@ public enum HTTPMethod: String {
     case trace
     case connect
 
+    /// HTTPメソッドの大文字文字列（`GET`など）
     var stringValue: String {
         return rawValue.uppercased()
     }
