@@ -1,3 +1,8 @@
+This project was moved to the following repository.
+
+https://github.com/Kibaan/AbstractHTTP-iOS
+
+
 # AbstractHTTP
 
 
